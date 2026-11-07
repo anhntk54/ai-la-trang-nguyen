@@ -40,7 +40,7 @@ const BPM: Record<Exclude<Mode, 'tat'>, number> = { vui: 104, hoi: 116, gap: 132
 
 class Sfx {
   volume = 0.35; // nhỏ hơn giọng ông đồ
-  musicVolume = 0.3;
+  musicVolume = 0.2; // chủ kênh thấy 0.3 hơi to (2026-11-07)
   private ctx: AudioContext | null = null;
   private files: Partial<Record<SfxName, HTMLAudioElement>> = {};
   private lastAt: Partial<Record<SfxName, number>> = {};
