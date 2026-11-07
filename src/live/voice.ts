@@ -25,6 +25,7 @@ class Voice {
   rate = 1;
   volume = 1;
   enabled = IS_STAGE && !MUTE;
+  onBlocked?: () => void;
 
   say(text: string, priority = false, done?: () => void) {
     if (!this.enabled || !text.trim()) return done?.();
@@ -79,7 +80,11 @@ class Voice {
       await new Promise<void>((resolve) => {
         audio.onended = () => resolve();
         audio.onerror = () => resolve();
-        audio.play().catch(() => resolve());
+        audio.play().catch((e) => {
+          // Chrome chặn tự phát tiếng khi chưa bấm vào trang: báo để hiện nút "Bấm để bật tiếng"
+          if (e?.name === 'NotAllowedError') this.onBlocked?.();
+          resolve();
+        });
       });
     } finally {
       line.done?.();
