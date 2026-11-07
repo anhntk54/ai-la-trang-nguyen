@@ -28,3 +28,21 @@ body,
     box-shadow: inset 0 0 220px 40px rgba(236, 72, 153, 0.55);
   }
 }
+
+/* Pháo giấy rơi lúc vinh quy */
+.phao-giay {
+  transform: translateY(-80px);
+  animation: phao-roi linear infinite;
+  border-radius: 2px;
+}
+@keyframes phao-roi {
+  0% {
+    transform: translate3d(0, -80px, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(40px, 900px, 0) rotate(360deg);
+  }
+  100% {
+    transform: translate3d(-30px, 1700px, 0) rotate(720deg);
+  }
+}

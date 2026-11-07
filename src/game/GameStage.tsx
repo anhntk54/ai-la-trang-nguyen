@@ -54,6 +54,29 @@ export function GameStage({ game }: { game: GameState }) {
       </div>
 
       <MC v={v} />
+      {v.phase === 'vinhQuy' && <PhaoGiay />}
+    </div>
+  );
+}
+
+/** Pháo giấy đỏ vàng rơi lúc vinh quy (40 mảnh, chỉ dùng transform cho nhẹ máy) */
+const MANH = Array.from({ length: 40 }, (_, i) => ({
+  left: (i * 137) % 1080,
+  delay: (i % 10) * 0.35,
+  dur: 3.2 + ((i * 7) % 10) / 5,
+  w: 14 + (i % 3) * 6,
+  color: ['#c8102e', '#ffd34d', '#e8a33d', '#ff5a3c'][i % 4],
+}));
+function PhaoGiay() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {MANH.map((m, i) => (
+        <div
+          key={i}
+          className="phao-giay absolute top-0"
+          style={{ left: m.left, width: m.w, height: m.w * 0.6, background: m.color, animationDelay: `${m.delay}s`, animationDuration: `${m.dur}s` }}
+        />
+      ))}
     </div>
   );
 }
@@ -80,9 +103,10 @@ function DongCau({ v }: { v: View }) {
       </div>
       {showTimer && (
         <motion.div
-          key={v.cauSo}
-          initial={{ scale: 0.6, opacity: 0 }}
+          key={low ? `${v.cauSo}-${v.con}` : v.cauSo}
+          initial={low ? { scale: 1.35 } : { scale: 0.6, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
+          transition={low ? { type: 'spring', stiffness: 500, damping: 14 } : undefined}
           className="absolute flex items-center justify-center rounded-full border-[5px] text-[52px] font-extrabold"
           style={{
             left: 600, top: 548, width: 118, height: 118, borderColor: GOLD,
@@ -114,7 +138,13 @@ function KhungCau({ v }: { v: View }) {
   } else if (v.phase === 'vong') {
     const i = v.vongInfo;
     body = (
-      <motion.div key={v.vongTen} initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center">
+      <motion.div
+        key={v.vongTen}
+        initial={{ scale: 2.2, rotate: -8, opacity: 0 }}
+        animate={{ scale: 1, rotate: 0, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 420, damping: 18 }}
+        className="text-center"
+      >
         <div className="text-[30px] font-bold opacity-75">Kỳ thi {v.vong + 1} / 4</div>
         <div className="text-[72px] font-extrabold leading-tight text-[#8a1c0c]">{v.vongTen}</div>
         <div className="mt-3 text-[32px] font-semibold">
@@ -167,8 +197,8 @@ function DapAn({ v }: { v: View }) {
           <motion.div
             key={`${v.cauSo}-${i}`}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: text ? (dim ? 0.55 : 1) : 0.35, y: 0, scale: right ? 1.04 : 1 }}
-            transition={{ delay: text && v.phase === 'hoi' ? i * 0.08 : 0 }}
+            animate={{ opacity: text ? (dim ? 0.55 : 1) : 0.35, y: 0, scale: right ? 1.04 : 1, x: dim ? [0, -10, 10, -6, 6, 0] : 0 }}
+            transition={{ delay: text && v.phase === 'hoi' ? i * 0.08 : 0, x: { duration: 0.45, delay: 0.5 } }}
             className="absolute flex flex-col justify-center rounded-[18px] border-[3px] px-5"
             style={{
               left: i % 2 ? 552 : 165, top: i < 2 ? 1072 : 1180, width: 363, height: 96,

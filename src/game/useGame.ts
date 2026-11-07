@@ -6,7 +6,8 @@ import { voice, speakableName } from '../live/voice';
 import { containsBanned } from '../live/bannedWords';
 import { NameBatcher } from '../live/scoreboard';
 import { detectWish, GiftThanker, makePicker, OncePerPerson, RecentPeople, WishLimiter } from '../live/chatter';
-import { IS_STAGE } from '../live/page';
+import { IS_STAGE, MUTE } from '../live/page';
+import { sfx } from './sfx';
 import { GAME } from './config';
 import { KyThi, parseMc, type Ev, type View } from './thi';
 import bankText from './cau-hoi/trac-nghiem.txt?raw';
@@ -141,6 +142,9 @@ export function useGame() {
     if (!IS_STAGE) return;
     let ready = false;
     let lastPost = 0;
+    let prev: View | null = null;
+    if (MUTE) sfx.volume = sfx.musicVolume = 0;
+    sfx.loadFiles();
     fetch('/api/da-hoi')
       .then((r) => r.json())
       .then((u) => Object.assign(room.used, u))
@@ -156,6 +160,8 @@ export function useGame() {
       room.lay().forEach(speak);
       const v = room.view(now);
       setView(v);
+      sfx.watch(prev, v, voice.busy);
+      prev = v;
       if (now - lastPost >= 500) {
         lastPost = now;
         void post('/api/game/state', v);

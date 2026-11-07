@@ -30,6 +30,7 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - `src/game/config.ts`: số liệu + lời quan chủ khảo (`GAME.loi`).
 - `src/game/useGame.ts`: nối sự kiện TikTok với lõi, giọng đọc. Trang stage chạy game và gửi ảnh chụp lên `/api/game/state`; trang điều khiển chỉ vẽ lại.
 - `src/game/GameStage.tsx`: màn hình 1080x1920 vẽ đè lên `public/assets/bg/nen.jpg`. Toạ độ khung câu hỏi x 165-917, y 642-1059.
+- `src/game/sfx.ts`: âm thanh tự tạo kiểu khoa cử (trống chầu mở kỳ, đàn tranh rải khi hiện đáp án, gảy nhỏ khi có người nộp, mõ 5 giây cuối, chiêng công bố, vuốt đàn lên/xuống đúng/không ai đúng, pháo + chiêng vinh quy) và nhạc nền ngũ cung Rê 92 BPM (nhỏ khi ông đồ nói, dồn 5 giây cuối, tắt lúc vinh quy). Bỏ mp3 cùng tên vào public/assets/sfx/ là dùng file thay.
 - `src/game/GameControls.tsx`: nút "Bắt đầu ván mới", "Bỏ câu này", giả lập 1 / 60 / 500 người.
 - `src/game/cau-hoi/trac-nghiem.txt`: TẠM mượn từ Lớp Học Chữ để chạy thử. Bộ câu thật chủ kênh muốn bàn riêng.
 - `data/da-hoi.json`: câu nào hỏi lúc nào, game ưu tiên câu lâu chưa hỏi.
