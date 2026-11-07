@@ -9,7 +9,7 @@ const pick = () => {
 };
 
 /**
- * Trang điều khiển (http://localhost:3000). Im lặng, không phát tiếng.
+ * Trang điều khiển (http://localhost:3007). Im lặng, không phát tiếng.
  * - Kết nối phòng live
  * - Gõ câu cho giọng đọc trên stage
  * - Nút giả lập sự kiện để test khi chưa live
@@ -96,7 +96,7 @@ export function Dashboard({
             </div>
             {(msg || status?.error) && <div className="mt-1 text-sm text-amber-300">{msg || status?.error}</div>}
             <div className="mt-3 rounded-lg bg-slate-800/60 p-3 text-xs text-slate-400">
-              Link cho TikTok LIVE Studio: <b className="text-slate-200">http://lvh.me:3000/?view=stage</b> · 1080 × 1920.
+              Link cho TikTok LIVE Studio: <b className="text-slate-200">http://lvh.me:3007/?view=stage</b> · 1080 × 1920.
               Chỉ trang đó phát tiếng.
             </div>
           </Card>
