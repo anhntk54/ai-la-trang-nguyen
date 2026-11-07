@@ -431,10 +431,13 @@ async function vieneuTts(text: string, res: express.Response): Promise<boolean> 
 
 app.get('/api/tts', async (req, res) => {
   try {
-    const text = String(req.query.text || '').trim().slice(0, 1500);
-    if (!text) return res.status(400).send('Thiếu text');
+    const raw = String(req.query.text || '').trim().slice(0, 1500);
+    if (!raw) return res.status(400).send('Thiếu text');
     const rate = Math.min(1.5, Math.max(0.5, Number(req.query.rate) || 1));
-    if (VIENEU_VOICE && (await vieneuTts(text, res))) return;
+    if (VIENEU_VOICE && (await vieneuTts(raw, res))) return;
+    // Edge / Google không hiểu thẻ cảm xúc [cười] [thở dài]...: bỏ đi để khỏi đọc thành chữ
+    const text = raw.replace(/\[[^\]]*\]\s*/g, '').trim();
+    if (!text) return res.status(204).end();
     const key = `${rate}|${text}`;
     let audio = ttsCache.get(key);
     if (!audio) {

@@ -76,7 +76,7 @@ export type Ev =
   | { t: 'cho' }
   | { t: 'vong'; vong: number }
   | { t: 'doc'; text: string }
-  | { t: 'dapAn'; chu: string; dap: string; soDung: number; nhanh?: string }
+  | { t: 'dapAn'; chu: string; dap: string; soDung: number; soNop: number; nhanh?: string; msNhanh?: number }
   | { t: 'bangVang'; vong: string; dau?: string }
   | { t: 'vinhQuy'; top: string[] };
 
@@ -279,7 +279,10 @@ export class KyThi {
     this.ketQua = { soDung: nhanh.length, nhanh: nhanh.slice(0, 3) };
     this.phase = 'dapAn';
     this.endsAt = now + GAME.dapAnSec * 1000;
-    this.events.push({ t: 'dapAn', chu: 'ABCD'[c.ans], dap: c.opts[c.ans], soDung: nhanh.length, nhanh: nhanh[0]?.name });
+    this.events.push({
+      t: 'dapAn', chu: 'ABCD'[c.ans], dap: c.opts[c.ans], soDung: nhanh.length, soNop: this.answers.size,
+      nhanh: nhanh[0]?.name, msNhanh: nhanh[0]?.ms,
+    });
   }
 
   private sauDapAn(now: number) {

@@ -51,33 +51,73 @@ export const GAME = {
     : hang <= 20 ? 'Tú tài'
     : 'Sĩ tử',
 
-  // ---------- Lời quan chủ khảo ----------
+  // ---------- Lời quan chủ khảo (ông đồ hóm hỉnh, hay trêu sĩ tử) ----------
+  // Thẻ cảm xúc của giọng VieNeu: [cười] [thở dài] [hắng giọng]. Giọng Edge tự bỏ thẻ, không đọc ra.
+  // Mỗi nhóm nhiều câu, bốc ngẫu nhiên cho đỡ lặp.
   loi: {
     cho: [
-      'Ván mới sắp bắt đầu. Ai muốn đỗ Trạng thì chuẩn bị gõ A, B, C hoặc D vào bình luận nhé.',
-      'Trường thi sắp mở cửa. Mọi người gõ A, B, C hoặc D để trả lời, đúng càng nhanh điểm càng cao.',
+      '[hắng giọng] Trường thi sắp mở cửa! Sĩ tử nào muốn đỗ Trạng thì mài mực sẵn đi, gõ A, B, C hoặc D vào bình luận.',
+      'Ván mới sắp bắt đầu rồi đây. Đúng càng nhanh điểm càng cao, mà sai là ông trừ điểm đấy nhé. [cười]',
+      'Ai vừa vào thì nghe ông dặn này: gõ A, B, C hoặc D là thành sĩ tử luôn, không cần nộp hồ sơ. [cười]',
     ],
     vong: [
-      'Khảo hạch trường làng bắt đầu. Năm câu dễ, mỗi câu mười giây. Gõ A, B, C hoặc D vào bình luận.',
-      'Qua được làng rồi, giờ lên thi Hương. Câu khó hơn, mỗi câu mười lăm giây.',
-      'Vào thi Hội. Từ đây sai một câu là mất kha khá điểm đấy, nghĩ kỹ rồi hãy gõ.',
-      'Thi Đình, năm câu cuối cùng. Mỗi câu tối đa năm trăm điểm, ai đỗ Trạng sẽ có ngay sau đây.',
+      [
+        '[hắng giọng] Khảo hạch trường làng bắt đầu! Năm câu dễ thôi, mười giây một câu, gõ A, B, C hoặc D nhé.',
+        'Vào khảo hạch trường làng nào. Câu dễ như ăn kẹo, ai sai thì về nhà ôn lại đi. [cười]',
+      ],
+      [
+        'Qua được làng rồi, giờ lên kinh thi Hương! Câu khó hơn, mười lăm giây một câu.',
+        '[hắng giọng] Thi Hương bắt đầu! Từ đây là bắt đầu phân loại sĩ tử rồi đấy.',
+      ],
+      [
+        'Vào thi Hội! Sai một câu là mất ba trăm điểm như chơi, nghĩ kỹ rồi hãy gõ.',
+        '[hắng giọng] Thi Hội đây. Câu bắt đầu khó, đừng có đoán bừa mà mất điểm oan nhé.',
+      ],
+      [
+        '[hắng giọng] Thi Đình! Năm câu cuối, mỗi câu năm trăm điểm. Trạng Nguyên hôm nay là ai, sắp biết rồi!',
+        'Đây là thi Đình rồi. Ai đang thua thì vẫn lật được kèo, chỉ cần trả lời nhanh và đúng. Bắt đầu!',
+      ],
     ],
     dapAn: (chu: string, dap: string) => `Đáp án ${chu}, ${dap}.`,
+    // gần như cả trường đúng
+    deQua: [
+      (n: number, name: string) => `[cười] Dễ quá phải không! ${n} người đúng, nhanh nhất là ${name}.`,
+      (n: number, name: string) => `Cả trường thi đúng gần hết! Nhanh tay nhất là ${name}.`,
+    ],
+    // bình thường
     dungNhieu: [
       (n: number, name: string) => `${n} người trả lời đúng, nhanh nhất là ${name}.`,
-      (n: number, name: string) => `Có ${n} người đúng. ${name} bấm nhanh nhất câu này.`,
+      (n: number, name: string) => `Có ${n} người đúng. ${name} bấm nhanh nhất câu này, giỏi!`,
     ],
-    dungMot: (name: string) => `Chỉ một mình ${name} trả lời đúng.`,
-    khongAi: ['Câu này chưa ai trả lời đúng.', 'Câu này làm khó cả trường thi rồi.'],
-    bangVang: (vong: string, name: string) => `Hết ${vong}. Đang đứng đầu bảng vàng là ${name}.`,
-    bangVangTrong: (vong: string) => `Hết ${vong}.`,
+    // ít người đúng
+    itDung: [
+      (n: number, name: string) => `Ối giời ơi, câu này lừa được cả khối người! Chỉ ${n} người đúng, nhanh nhất là ${name}.`,
+      (n: number, name: string) => `[cười] Câu này đánh rơi khối sĩ tử nhé. Có ${n} người đúng thôi, đứng đầu là ${name}.`,
+    ],
+    dungMot: [
+      (name: string) => `Cả trường thi chỉ mình ${name} đúng! [cười] Nhân tài đây chứ đâu.`,
+      (name: string) => `Một mình ${name} trả lời đúng, ông phải ghi tên vào sổ mới được.`,
+    ],
+    khongAi: [
+      '[thở dài] Không ai đúng câu nào. Sĩ tử bây giờ lười đọc sách quá.',
+      '[thở dài] Câu này ông hỏi cả trường mà không ai trả lời được. Thôi, sang câu khác.',
+    ],
+    // người nhanh nhất đúng trong 2 giây đầu
+    thanDong: [
+      (name: string) => `${name} mới nhìn đề đã trả lời, đúng là thần đồng!`,
+      (name: string) => `[cười] ${name} nhanh như chớp, ông còn chưa kịp vuốt râu.`,
+    ],
+    bangVang: [
+      (vong: string, name: string) => `Hết ${vong}. Đứng đầu bảng vàng lúc này là ${name}. Ai muốn giật ngôi thì cố lên!`,
+      (vong: string, name: string) => `Xong ${vong}. ${name} đang dẫn đầu, [cười] nhưng chưa đỗ Trạng đâu, đừng vội mừng.`,
+    ],
+    bangVangTrong: (vong: string) => `Hết ${vong}. Bảng vàng vẫn trống, ai vào thi đi chứ!`,
     vinhQuy: (tn: string, bn?: string, th?: string) =>
-      `Xin chúc mừng ${tn} đỗ Trạng Nguyên!` +
+      `[cười] Xin chúc mừng ${tn} đỗ Trạng Nguyên!` +
       (bn ? ` Bảng Nhãn là ${bn}.` : '') +
       (th ? ` Thám Hoa là ${th}.` : '') +
-      ' Vinh quy bái tổ thôi!',
-    khongAiThi: 'Ván này chưa có sĩ tử nào. Ván sau mọi người vào thi cùng nhé.',
+      ' Vinh quy bái tổ thôi, cả làng ra đón nào!',
+    khongAiThi: '[thở dài] Ván này trường thi vắng tanh. Ván sau mọi người vào thi cho vui nhé.',
   },
 
   // ---------- Chào người vào ----------

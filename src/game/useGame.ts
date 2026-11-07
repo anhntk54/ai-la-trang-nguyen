@@ -51,7 +51,7 @@ export function useGame() {
         return voice.say(pick(L.cho) ?? '', true);
       case 'vong':
         if (ev.vong === 0) void post('/api/da-hoi', room.used); // ván mới vừa bốc câu: lưu lại để lần sau ưu tiên câu khác
-        return voice.say(L.vong[ev.vong] ?? '', true);
+        return voice.say(pick(L.vong[ev.vong] ?? []) ?? '', true);
       case 'doc': {
         const cau = room.cau;
         // Đọc xong đề mới hiện 4 đáp án và tính giờ
@@ -59,12 +59,20 @@ export function useGame() {
       }
       case 'dapAn': {
         const nhanh = ev.nhanh ? speakableName(ev.nhanh) : 'bạn';
+        // Cảm xúc theo tỉ lệ đúng: gần hết đúng thì cười, ít đúng thì trêu, không ai đúng thì thở dài
+        const tile = ev.soNop ? ev.soDung / ev.soNop : 0;
+        const nhom = tile >= 0.75 ? L.deQua : tile < 0.3 ? L.itDung : L.dungNhieu;
         const them =
-          ev.soDung === 0 ? pick(L.khongAi) : ev.soDung === 1 ? L.dungMot(nhanh) : pick(L.dungNhieu)?.(ev.soDung, nhanh);
-        return voice.say(`${L.dapAn(ev.chu, ev.dap)} ${them ?? ''}`, true);
+          ev.soDung === 0 ? pick(L.khongAi)
+          : ev.soDung === 1 ? pick(L.dungMot)?.(nhanh)
+          : pick(nhom)?.(ev.soDung, nhanh);
+        const khen = ev.soDung > 0 && (ev.msNhanh ?? 9e9) < 2000 ? pick(L.thanDong)?.(nhanh) : '';
+        // không ai đúng: thở dài trước rồi mới đọc đáp án
+        const text = ev.soDung === 0 ? `${them} ${L.dapAn(ev.chu, ev.dap)}` : `${L.dapAn(ev.chu, ev.dap)} ${them ?? ''} ${khen ?? ''}`;
+        return voice.say(text.trim(), true);
       }
       case 'bangVang':
-        return voice.say(ev.dau ? L.bangVang(ev.vong, speakableName(ev.dau)) : L.bangVangTrong(ev.vong), true);
+        return voice.say(ev.dau ? pick(L.bangVang)!(ev.vong, speakableName(ev.dau)) : L.bangVangTrong(ev.vong), true);
       case 'vinhQuy': {
         const [tn, bn, th] = ev.top.map(speakableName);
         return voice.say(tn ? L.vinhQuy(tn, bn, th) : L.khongAiThi, true);
