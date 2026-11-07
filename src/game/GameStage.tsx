@@ -218,14 +218,32 @@ function DapAn({ v }: { v: View }) {
             {v.counts && (
               <div className="mt-1 flex items-center gap-2">
                 <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-black/35">
-                  <motion.div className="h-full rounded-full" style={{ background: right ? '#9dffb3' : '#ff7a5c' }} initial={{ width: 0 }} animate={{ width: `${pct}%` }} />
+                  <motion.div className="h-full rounded-full" style={{ background: right ? '#9dffb3' : '#ff7a5c' }} initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ delay: 1.6 }} />
                 </div>
                 <span className="w-14 text-right text-[22px] font-bold">{pct}%</span>
               </div>
             )}
+            {/* ô đúng nhấp nháy 4 lần lúc công bố rồi mới sáng xanh hẳn */}
+            {right && <div className="nhap-nhay pointer-events-none absolute -inset-[3px] rounded-[18px]" />}
           </motion.div>
         );
       })}
+      {/* Hết giờ: dấu đỏ đóng lên 4 ô, trống dồn */}
+      <AnimatePresence>
+        {v.phase === 'chot' && (
+          <motion.div
+            key={`chot-${v.cauSo}`}
+            initial={{ scale: 2.6, rotate: -14, opacity: 0 }}
+            animate={{ scale: 1, rotate: -8, opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ type: 'spring', stiffness: 520, damping: 16 }}
+            className="absolute flex items-center justify-center rounded-[16px] border-[7px] text-[78px] font-extrabold tracking-wider"
+            style={{ left: 290, top: 1110, width: 500, height: 130, borderColor: '#c8102e', color: '#c8102e', background: 'rgba(255,243,214,.92)', boxShadow: '0 8px 30px rgba(0,0,0,.35)' }}
+          >
+            HẾT GIỜ!
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

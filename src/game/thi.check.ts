@@ -56,6 +56,11 @@ assert.equal(k.view(t).soNop, 3);
 assert.equal(k.view(t).counts, null); // đang hỏi không lộ tỉ lệ
 
 step(GAME.vong[0].giay * 1000);
+assert.equal(k.phase, 'chot'); // hết giờ: hồi hộp trước khi công bố
+assert.equal(k.view(t).dung, -1); // chưa lộ đáp án
+assert.ok(k.view(t).top.every((h) => h.gain === 0)); // bảng điểm chưa lộ ai đúng ai sai
+assert.equal(k.chat({ id: 'tre', name: 'Trễ', avatar: '', comment: 'a' }, t), false); // hết giờ không nhận bài
+step(GAME.chotSec * 1000);
 assert.equal(k.phase, 'dapAn');
 const v = k.view(t);
 assert.equal(v.ketQua!.soDung, 2);

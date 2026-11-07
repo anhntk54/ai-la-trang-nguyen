@@ -12,10 +12,12 @@ import type { View } from './thi';
  *   truot   vuốt xuống buồn: không ai đúng
  *   phao    pháo nổ + trống: vinh quy Trạng Nguyên, quà to
  *   qua     đàn rải + chuông nhỏ: băng rôn cảm ơn quà
- * Nhạc nền: đàn tranh ngũ cung + mõ + trống, nhỏ hẳn khi ông đồ nói, dồn dập 5 giây cuối.
+ *   donTrong trống dồn hồi hộp: hết giờ, chờ công bố đáp án
+ * Nhạc nền nhiều lớp: nền ngân + trống, mõ, đàn tranh ngũ cung lúc chờ; nhịp tim + tích tắc lúc hỏi (sáng dần);
+ * dồn dập 5 giây cuối; nhỏ lại khi ông đồ nói; tắt lúc vinh quy.
  */
-export type SfxName = 'trong' | 'hien' | 'nop' | 'mo' | 'chieng' | 'dung' | 'truot' | 'phao' | 'qua';
-const NAMES: SfxName[] = ['trong', 'hien', 'nop', 'mo', 'chieng', 'dung', 'truot', 'phao', 'qua'];
+export type SfxName = 'trong' | 'hien' | 'nop' | 'mo' | 'chieng' | 'dung' | 'truot' | 'phao' | 'qua' | 'donTrong';
+const NAMES: SfxName[] = ['trong', 'hien', 'nop', 'mo', 'chieng', 'dung', 'truot', 'phao', 'qua', 'donTrong'];
 
 // Ngũ cung Rê: Rê Fa Sol La Đô (2 quãng tám)
 const NGU_CUNG = [293.7, 349.2, 392, 440, 523.3, 587.3, 698.5, 784, 880, 1046.5];
@@ -26,11 +28,19 @@ const GIAI_DIEU = [
   [4, -1, 6, 7, 8, -1, 7, 6, 4, -1, 6, 4, 3, -1, -1, -1],
   [3, -1, 2, 1, 0, -1, 2, 3, 0, -1, -1, -1, 0, -1, -1, -1],
 ];
-const BPM = 92;
+// Hợp âm nền (ngân dài), đổi mỗi câu nhạc: Rê-La, Đô-Sol, Fa-Đô, Sol-Rê
+const HOP_AM = [
+  [146.8, 220, 293.7, 349.2],
+  [130.8, 196, 261.6, 349.2],
+  [174.6, 261.6, 349.2, 440],
+  [196, 293.7, 392, 440],
+];
+type Mode = 'tat' | 'vui' | 'hoi' | 'gap' | 'lang';
+const BPM: Record<Exclude<Mode, 'tat'>, number> = { vui: 104, hoi: 116, gap: 132, lang: 90 };
 
 class Sfx {
   volume = 0.35; // nhỏ hơn giọng ông đồ
-  musicVolume = 0.22;
+  musicVolume = 0.3;
   private ctx: AudioContext | null = null;
   private files: Partial<Record<SfxName, HTMLAudioElement>> = {};
   private lastAt: Partial<Record<SfxName, number>> = {};
@@ -73,56 +83,94 @@ class Sfx {
     }
   }
 
-  // ---------- nhạc nền ----------
+  // ---------- nhạc nền nhiều lớp ----------
+  // nền ngân (pad) chạy suốt + theo kiểu: vui (chờ ván, bảng vàng) · hoi (nhịp tim + tích tắc, sáng dần) · gap (5 giây cuối) · lang (ông đồ đọc, chốt, công bố)
   private musicOut: GainNode | null = null;
+  private pad: { osc: OscillatorNode[]; loc: BiquadFilterNode; gain: GainNode } | null = null;
   private timer: ReturnType<typeof setInterval> | null = null;
   private nextAt = 0;
   private step = 0;
-  /** 0: ông đồ nói / màn chờ (nhỏ, thưa) · 1: đang chờ trả lời · 2: 5 giây cuối (dồn dập) */
-  private level = 0;
+  private mode: Mode = 'tat';
 
-  music(on: boolean, level: number) {
-    this.level = level;
-    if (!on || this.musicVolume <= 0) {
-      if (this.musicOut && this.ctx) {
-        const old = this.musicOut;
-        old.gain.setTargetAtTime(0.0001, this.ctx.currentTime, 0.3);
-        setTimeout(() => old.disconnect(), 1500);
-      }
-      if (this.timer) clearInterval(this.timer);
-      this.timer = null;
-      this.musicOut = null;
-      return;
-    }
+  /** tien: 0..1 thời gian câu đã trôi (nhạc sáng dần khi sắp hết giờ) */
+  music(mode: Mode, duck: boolean, tien = 0) {
+    if (mode === 'tat' || this.musicVolume <= 0) return this.tatNhac();
     try {
       const c = this.c;
-      const target = this.musicVolume * (level === 0 ? 0.45 : 1);
-      if (this.musicOut) {
-        this.musicOut.gain.setTargetAtTime(target, c.currentTime, 0.25);
-        return;
-      }
-      const out = c.createGain();
-      out.gain.value = 0.0001;
-      out.gain.setTargetAtTime(target, c.currentTime, 0.6);
-      out.connect(c.destination);
-      this.musicOut = out;
-      this.nextAt = c.currentTime + 0.1;
-      this.step = 0;
-      this.timer = setInterval(() => this.schedule(), 30);
+      if (!this.musicOut) this.batNhac(c);
+      this.mode = mode;
+      const t = c.currentTime;
+      this.musicOut!.gain.setTargetAtTime(this.musicVolume * (duck ? 0.45 : 1), t, 0.25);
+      const pad = this.pad!;
+      pad.gain.gain.setTargetAtTime({ vui: 0.07, hoi: 0.12, gap: 0.16, lang: 0.11 }[mode], t, 0.4);
+      pad.loc.frequency.setTargetAtTime(mode === 'hoi' ? 500 + tien * 1600 : mode === 'gap' ? 2600 : mode === 'vui' ? 1300 : 700, t, 0.3);
     } catch {
-      // bỏ qua
+      // trình duyệt không cho phát tiếng: bỏ qua
+    }
+  }
+
+  private batNhac(c: AudioContext) {
+    const out = c.createGain();
+    out.gain.value = 0.0001;
+    out.connect(c.destination);
+    const loc = c.createBiquadFilter();
+    loc.type = 'lowpass';
+    loc.frequency.value = 900;
+    loc.Q.value = 2;
+    const gain = c.createGain();
+    gain.gain.value = 0.0001;
+    loc.connect(gain).connect(out);
+    const osc = HOP_AM[0].flatMap((f) =>
+      [-7, 7].map((cent) => {
+        const o = c.createOscillator();
+        o.type = 'sawtooth';
+        o.frequency.value = f;
+        o.detune.value = cent;
+        o.connect(loc);
+        o.start();
+        return o;
+      }),
+    );
+    this.pad = { osc, loc, gain };
+    this.musicOut = out;
+    this.nextAt = c.currentTime + 0.1;
+    this.step = 0;
+    this.timer = setInterval(() => this.schedule(), 30);
+  }
+
+  private tatNhac() {
+    if (this.timer) clearInterval(this.timer);
+    this.timer = null;
+    this.mode = 'tat';
+    const out = this.musicOut;
+    const pad = this.pad;
+    this.musicOut = null;
+    this.pad = null;
+    if (out && this.ctx) {
+      out.gain.setTargetAtTime(0.0001, this.ctx.currentTime, 0.3);
+      setTimeout(() => {
+        pad?.osc.forEach((o) => o.stop());
+        out.disconnect();
+      }, 1500);
     }
   }
 
   private schedule() {
     const c = this.ctx;
     const out = this.musicOut;
-    if (!c || !out) return;
-    const eighth = 60 / BPM / 2;
+    if (!c || !out || this.mode === 'tat') return;
+    const eighth = 60 / BPM[this.mode] / 2;
     while (this.nextAt < c.currentTime + 0.15) {
-      const bar = Math.floor(this.step / 16) % GIAI_DIEU.length;
+      const bar = Math.floor(this.step / 16) % HOP_AM.length;
       const pos = this.step % 16;
-      nhip(c, out, GIAI_DIEU[bar][pos], pos, bar, this.nextAt, eighth, this.level);
+      if (pos === 0 && this.pad) {
+        // đổi hợp âm nền mỗi câu nhạc, luyến nhẹ
+        HOP_AM[bar].forEach((f, i) => {
+          this.pad!.osc[i * 2].frequency.setTargetAtTime(f, this.nextAt, 0.08);
+          this.pad!.osc[i * 2 + 1].frequency.setTargetAtTime(f, this.nextAt, 0.08);
+        });
+      }
+      nhip(c, out, this.mode, pos, bar, this.nextAt);
       this.nextAt += eighth;
       this.step++;
     }
@@ -133,9 +181,12 @@ class Sfx {
 
   /** So ảnh chụp trước và sau để phát tiếng đúng lúc */
   watch(a: View | null, b: View, speaking: boolean) {
-    // nhạc: màn chờ / bảng vàng / ông đang nói thì nhỏ; đang hỏi thì đủ; 5 giây cuối dồn
-    const level = b.phase === 'hoi' ? (b.con <= 5 ? 2 : speaking ? 0 : 1) : 0;
-    this.music(b.phase !== 'vinhQuy', level);
+    const mode: Mode =
+      b.phase === 'vinhQuy' ? 'tat'
+      : b.phase === 'hoi' ? (b.con <= 5 ? 'gap' : 'hoi')
+      : b.phase === 'cho' || b.phase === 'vong' || b.phase === 'bangVang' ? 'vui'
+      : 'lang';
+    this.music(mode, speaking && mode !== 'gap', b.phase === 'hoi' ? 1 - b.con / b.tongGiay : 0);
     if (!a) return;
     if (b.phase === 'vong' && a.phase !== 'vong') this.play('trong', 500);
     if (b.phase === 'hoi' && a.phase !== 'hoi') this.play('hien', 300);
@@ -145,6 +196,7 @@ class Sfx {
       this.play('mo', 0);
     }
     if (b.phase !== 'hoi') this.lastMo = -1;
+    if (b.phase === 'chot' && a.phase !== 'chot') this.play('donTrong', 500);
     if (b.phase === 'dapAn' && a.phase !== 'dapAn') {
       this.play('chieng', 300);
       setTimeout(() => this.play(b.ketQua?.soDung ? 'dung' : 'truot', 300), 450);
@@ -154,21 +206,68 @@ class Sfx {
   }
 }
 
-/** 1 phách nhạc nền: đàn tranh (giai điệu), mõ, trống trầm */
-function nhip(c: AudioContext, out: AudioNode, note: number, pos: number, bar: number, t: number, _len: number, level: number) {
-  // trống trầm đầu mỗi nửa câu
-  if (pos % 8 === 0) trongAt(c, out, t, level === 0 ? 0.5 : 0.9);
-  if (level === 0) {
-    // ông đồ nói: chỉ vài nốt đàn thưa, không mõ
-    if (note >= 0 && pos % 4 === 0) gay(c, out, NGU_CUNG[note], t, 1.4, 0.35);
+/** 1 nốt móc đơn của nhạc nền theo kiểu */
+function nhip(c: AudioContext, out: AudioNode, mode: Mode, pos: number, bar: number, t: number) {
+  const goc = HOP_AM[bar][0];
+  if (mode === 'lang') {
+    if (pos === 0) trongAt(c, out, t, 0.45);
+    if (pos === 8) gay(c, out, goc, t, 2, 0.25);
     return;
   }
-  if (note >= 0) gay(c, out, NGU_CUNG[note], t, 1.2, 0.5);
-  // nốt trầm giữ nhịp (đàn bầu tưởng tượng)
-  if (pos === 0) gay(c, out, NGU_CUNG[[0, 2, 0, 3][bar]] / 2, t, 2.2, 0.35);
-  // mõ: phách 2, 4; 5 giây cuối gõ dồn mọi phách
-  if (level === 2 || pos % 4 === 2) moAt(c, out, t, level === 2 ? 0.55 : 0.35, level === 2 && pos % 2 ? 1600 : 1250);
-  if (level === 2 && pos % 2 === 0) trongAt(c, out, t, 0.6);
+  if (mode === 'vui') {
+    if (pos % 8 === 0) trongAt(c, out, t, 0.9);
+    if (pos === 6 || pos === 14) trongAt(c, out, t, 0.45);
+    if (pos % 8 === 4) moAt(c, out, t, 0.35);
+    if (pos % 4 === 0) gay(c, out, goc / 2, t, 0.9, 0.45);
+    const n = GIAI_DIEU[bar][pos];
+    if (n >= 0) gay(c, out, NGU_CUNG[n], t, 1.1, 0.42);
+    return;
+  }
+  // hoi / gap: nhịp tim "thình thịch", bass đập, tích tắc đồng hồ
+  const gap = mode === 'gap';
+  if (pos % (gap ? 4 : 8) === 0) trongAt(c, out, t, 1);
+  if (pos % (gap ? 4 : 8) === 1) trongAt(c, out, t, 0.55);
+  if (gap || pos % 2 === 0) bassAt(c, out, goc / 2, t, gap ? 0.5 : 0.4);
+  moAt(c, out, t, gap ? 0.32 : pos % 2 ? 0.1 : 0.18, pos % 2 ? 2400 : 2000);
+  if (!gap && pos === 0 && bar % 2 === 1) gay(c, out, NGU_CUNG[7 + (bar % 3)], t, 1.6, 0.25);
+  if (gap && pos === 0) vutAt(c, out, t, 1.8, 0.28);
+}
+
+/** Bass ngắn, đục */
+function bassAt(c: AudioContext, out: AudioNode, f: number, t: number, gain: number) {
+  const o = c.createOscillator();
+  const v = c.createGain();
+  const lp = c.createBiquadFilter();
+  o.type = 'triangle';
+  o.frequency.value = f;
+  lp.type = 'lowpass';
+  lp.frequency.value = 400;
+  v.gain.setValueAtTime(0.0001, t);
+  v.gain.exponentialRampToValueAtTime(gain, t + 0.01);
+  v.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+  o.connect(lp).connect(v).connect(out);
+  o.start(t);
+  o.stop(t + 0.22);
+}
+
+/** Tiếng vút lên (nhiễu quét từ trầm lên cao) */
+function vutAt(c: AudioContext, out: AudioNode, t: number, dur: number, gain: number) {
+  const buf = c.createBuffer(1, Math.ceil(c.sampleRate * dur), c.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  const src = c.createBufferSource();
+  src.buffer = buf;
+  const f = c.createBiquadFilter();
+  f.type = 'bandpass';
+  f.Q.value = 4;
+  f.frequency.setValueAtTime(300, t);
+  f.frequency.exponentialRampToValueAtTime(5000, t + dur);
+  const v = c.createGain();
+  v.gain.setValueAtTime(0.0001, t);
+  v.gain.exponentialRampToValueAtTime(gain, t + dur * 0.9);
+  v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  src.connect(f).connect(v).connect(out);
+  src.start(t);
 }
 
 /** Tiếng gảy dây (giống đàn tranh): sóng tam giác + bội âm, tắt nhanh, hơi luyến xuống */
@@ -280,6 +379,17 @@ const SYNTH: Record<SfxName, Synth> = {
   truot: (c, v) => {
     const t = c.currentTime;
     [6, 4, 2, 0].forEach((n, i) => gay(c, c.destination, NGU_CUNG[n] / 2, t + i * 0.18, 1.2, v * 0.7));
+  },
+  // trống dồn 2,4 giây: nhanh dần, to dần
+  donTrong: (c, v) => {
+    const t = c.currentTime;
+    let s = 0;
+    for (let i = 0; i < 34 && s < 2.35; i++) {
+      const k = s / 2.4;
+      noiseAt(c, c.destination, t + s, 0.05, v * (0.35 + k * 0.9), 'bandpass', 1500 + k * 900);
+      if (i % 2 === 0) trongAt(c, c.destination, t + s, v * (0.4 + k * 0.6));
+      s += 0.12 - k * 0.07;
+    }
   },
   // rải đàn đi lên + 2 tiếng chuông nhỏ: cảm ơn quà
   qua: (c, v) => {

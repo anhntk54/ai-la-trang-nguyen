@@ -54,7 +54,7 @@ export function diemDung(max: number, ms: number, totalMs: number) {
   return Math.round(max * (GAME.diemSan + (1 - GAME.diemSan) * left));
 }
 
-export type Phase = 'cho' | 'vong' | 'doc' | 'hoi' | 'dapAn' | 'bangVang' | 'vinhQuy';
+export type Phase = 'cho' | 'vong' | 'doc' | 'hoi' | 'chot' | 'dapAn' | 'bangVang' | 'vinhQuy';
 
 export interface SiTu {
   id: string;
@@ -78,6 +78,8 @@ export type Ev =
   | { t: 'cho' }
   | { t: 'vong'; vong: number }
   | { t: 'doc'; text: string }
+  | { t: 'chot' }
+  | { t: 'nhac' }
   | { t: 'dapAn'; chu: string; dap: string; soDung: number; soNop: number; nhanh?: string; msNhanh?: number }
   | { t: 'bangVang'; vong: string; dau?: string }
   | { t: 'vinhQuy'; top: string[] };
@@ -122,6 +124,7 @@ export class KyThi {
 
   // ---------- quà: mỗi lần hiện 1 băng rôn, người khác xếp hàng (quà KHÔNG cho lợi thế trong game) ----------
   private quaCho: Qua[] = [];
+  private nhacDa = false; // đã nhắc giữa giờ ở câu này chưa
   qua: (Qua & { den: number }) | null = null;
 
   /** Có người tặng quà. Cùng người tặng liên tục thì gộp vào băng rôn đang chờ. */
@@ -170,6 +173,11 @@ export class KyThi {
   /** Lấy các sự kiện cần đọc từ lần gọi trước */
   lay(): Ev[] {
     return this.events.splice(0);
+  }
+
+  /** Số thứ tự câu đang hỏi (1-20); docText(cauSo) là đề câu kế tiếp */
+  get cauSo() {
+    return this.idx + 1;
   }
 
   get cau(): Cau | undefined {
@@ -222,8 +230,22 @@ export class KyThi {
     this.counts = [0, 0, 0, 0];
     this.recent = [];
     this.ketQua = null;
-    const opts = c.opts.map((o, i) => `${'ABCD'[i]}, ${o}.`).join(' ');
-    this.events.push({ t: 'doc', text: `Câu ${this.idx + 1}. ${c.q.q} ${opts}` });
+    this.nhacDa = false;
+    this.events.push({ t: 'doc', text: this.docText(this.idx)! });
+  }
+
+  /** Lời đọc đề câu thứ i (để tạo giọng sẵn trước khi tới câu đó) */
+  docText(i: number) {
+    const c = this.cauList[i];
+    if (!c) return null;
+    const opts = c.opts.map((o, k) => `${'ABCD'[k]}, ${o}.`).join(' ');
+    return `Câu ${i + 1}. ${c.q.q} ${opts}`;
+  }
+
+  /** Lời công bố đáp án câu đang hỏi (tạo giọng sẵn trong lúc mọi người trả lời) */
+  dapAnText() {
+    const c = this.cau;
+    return c ? `${'ABCD'[c.ans]}, ${c.opts[c.ans]}!` : '';
   }
 
   /** Giọng đọc xong đề: hiện 4 đáp án, bắt đầu tính giờ */
@@ -280,6 +302,11 @@ export class KyThi {
 
   tick(now: number) {
     this.chayQua(now);
+    // giữa giờ (câu từ 15 giây) ông đồ giục 1 câu, đỡ im lặng
+    if (this.phase === 'hoi' && !this.nhacDa && this.vong.giay >= 15 && now >= this.shownAt + this.vong.giay * 500) {
+      this.nhacDa = true;
+      this.events.push({ t: 'nhac' });
+    }
     if (now < this.endsAt) return;
     switch (this.phase) {
       case 'cho':
@@ -289,6 +316,12 @@ export class KyThi {
       case 'doc':
         return this.docXong(now);
       case 'hoi':
+        // hết giờ: khoá bài, trống dồn hồi hộp rồi mới công bố (chưa chấm để bảng điểm không lộ đáp án)
+        this.phase = 'chot';
+        this.endsAt = now + GAME.chotSec * 1000;
+        this.events.push({ t: 'chot' });
+        return;
+      case 'chot':
         return this.chamCau(now);
       case 'dapAn':
         return this.sauDapAn(now);
@@ -379,7 +412,7 @@ export class KyThi {
       cauSo: this.idx + 1,
       tongCau: this.cauList.length || GAME.vong.reduce((n, x) => n + x.cau, 0),
       q: c?.q.q ?? '',
-      opts: this.phase === 'hoi' || lo ? c?.opts ?? [] : [],
+      opts: this.phase === 'hoi' || this.phase === 'chot' || lo ? c?.opts ?? [] : [],
       con: Math.max(0, Math.ceil((this.endsAt - now) / 1000)),
       tongGiay: v.giay,
       soNop: this.answers.size,

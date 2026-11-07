@@ -35,6 +35,18 @@ class Voice {
     void this.next();
   }
 
+  /** Tạo giọng trước (server giữ sẵn), tới lúc đọc thì phát ngay không phải chờ */
+  private daTao = new Set<string>();
+  prefetch(text: string) {
+    const t = text.trim();
+    if (!this.enabled || !t || this.daTao.has(t)) return;
+    this.daTao.add(t);
+    if (this.daTao.size > 300) this.daTao.clear();
+    fetch(`/api/tts?rate=${this.rate}&text=${encodeURIComponent(t)}`)
+      .then((r) => r.arrayBuffer())
+      .catch(() => this.daTao.delete(t));
+  }
+
   stop() {
     [...this.normal, ...this.priority].forEach((l) => l.done?.());
     this.normal = [];

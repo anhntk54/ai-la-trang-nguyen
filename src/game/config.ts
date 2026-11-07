@@ -40,6 +40,7 @@ export const GAME = {
   choSec: 15, // đếm ngược trước ván mới
   vongSec: 5, // bảng giới thiệu vòng
   docMaxSec: 25, // giọng đọc đề hỏng thì tối đa chừng này giây là tự hiện đáp án
+  chotSec: 2.6, // "Hết giờ!" + trống dồn trước khi công bố
   dapAnSec: 7,
   bangVangSec: 9, // hết mỗi vòng hiện top 20
   vinhQuySec: 15,
@@ -81,7 +82,10 @@ export const GAME = {
         'Đây là thi Đình rồi. Ai đang thua thì vẫn lật được kèo, chỉ cần trả lời nhanh và đúng. Bắt đầu!',
       ],
     ],
-    dapAn: (chu: string, dap: string) => `Đáp án ${chu}, ${dap}.`,
+    // hết giờ, trống dồn: câu chung nên giọng được tạo sẵn từ đầu buổi, nói ngay không phải chờ
+    hetGio: ['Hết giờ! Đáp án đúng là...', 'Hết giờ rồi! Và đáp án chính xác là...', 'Dừng bút! Đáp án đúng là...'],
+    // giục giữa giờ
+    nhac: ['Nhanh tay lên các sĩ tử!', 'Ai chưa nộp bài thì gõ đi nào!', 'Thời gian không chờ đợi ai đâu nhé!', '[cười] Nghĩ kỹ chưa đấy?'],
     // gần như cả trường đúng
     deQua: [
       (n: number, name: string) => `[cười] Dễ quá phải không! ${n} người đúng, nhanh nhất là ${name}.`,

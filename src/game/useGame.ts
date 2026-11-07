@@ -27,7 +27,7 @@ export function useGame() {
   const [view, setView] = useState<View | null>(null);
   const [channelName, setChannelName] = useState(GAME.defaultChannelName);
   const [room] = useState(() => new KyThi(BANK));
-  if (import.meta.env.DEV) (window as any).__room = room; // để thử các màn trong trình duyệt
+  if (import.meta.env.DEV) Object.assign(window as any, { __room: room, __sfx: sfx }); // để thử các màn trong trình duyệt
   const [talk] = useState(() => ({
     greeter: new NameBatcher(
       GAME.greetEveryMs,
@@ -61,9 +61,14 @@ export function useGame() {
         return voice.say(pick(L.vong[ev.vong] ?? []) ?? '', true);
       case 'doc': {
         const cau = room.cau;
+        voice.prefetch(room.dapAnText()); // tạo sẵn giọng công bố đáp án trong lúc mọi người trả lời
         // Đọc xong đề mới hiện 4 đáp án và tính giờ
         return voice.say(ev.text, true, () => room.cau === cau && room.docXong(Date.now()));
       }
+      case 'chot':
+        return voice.say(pick(L.hetGio) ?? '', true);
+      case 'nhac':
+        return voice.say(pick(L.nhac) ?? '');
       case 'dapAn': {
         const nhanh = ev.nhanh ? speakableName(ev.nhanh) : 'bạn';
         // Cảm xúc theo tỉ lệ đúng: gần hết đúng thì cười, ít đúng thì trêu, không ai đúng thì thở dài
@@ -75,8 +80,12 @@ export function useGame() {
           : pick(nhom)?.(ev.soDung, nhanh);
         const khen = ev.soDung > 0 && (ev.msNhanh ?? 9e9) < 2000 ? pick(L.thanDong)?.(nhanh) : '';
         // không ai đúng: thở dài trước rồi mới đọc đáp án
-        const text = ev.soDung === 0 ? `${them} ${L.dapAn(ev.chu, ev.dap)}` : `${L.dapAn(ev.chu, ev.dap)} ${them ?? ''} ${khen ?? ''}`;
-        return voice.say(text.trim(), true);
+        // "B, chim sẻ!" đã tạo sẵn nên nói ngay lúc ô nhấp nháy; lời bình đọc tiếp theo
+        voice.say(room.dapAnText(), true);
+        voice.say(`${them ?? ''} ${khen ?? ''}`.trim(), true);
+        const sau = room.docText(room.cauSo); // đề câu kế: tạo sẵn giọng
+        if (sau) voice.prefetch(sau);
+        return;
       }
       case 'bangVang':
         return voice.say(ev.dau ? pick(L.bangVang)!(ev.vong, speakableName(ev.dau)) : L.bangVangTrong(ev.vong), true);
@@ -158,6 +167,8 @@ export function useGame() {
     let lastPost = 0;
     let prev: View | null = null;
     void layTuan(fetch('/api/bang-tuan'));
+    // câu chung đọc nhiều lần: tạo giọng sẵn ngay từ đầu
+    [...GAME.loi.hetGio, ...GAME.loi.nhac].forEach((t) => voice.prefetch(t));
     if (MUTE) sfx.volume = sfx.musicVolume = 0;
     sfx.loadFiles();
     fetch('/api/da-hoi')

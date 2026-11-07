@@ -46,3 +46,15 @@ body,
     transform: translate3d(-30px, 1700px, 0) rotate(720deg);
   }
 }
+
+/* Ô đáp án đúng nhấp nháy lúc công bố: 4 lần chớp vàng trắng trong 1,6 giây rồi tắt */
+.nhap-nhay {
+  animation: nhap-nhay 1.6s steps(1, end) 1 forwards;
+  background: rgba(255, 236, 140, 0.9);
+  box-shadow: 0 0 40px 10px rgba(255, 220, 90, 0.9);
+}
+@keyframes nhap-nhay {
+  0%, 25%, 50%, 75% { opacity: 1; }
+  12.5%, 37.5%, 62.5%, 87.5% { opacity: 0; }
+  100% { opacity: 0; }
+}
