@@ -10,11 +10,12 @@ import type { View } from './thi';
  *   chieng  chiêng đồng: hết giờ, công bố đáp án
  *   dung    đàn tranh vuốt lên: có người đúng
  *   truot   vuốt xuống buồn: không ai đúng
- *   phao    pháo nổ + trống: vinh quy Trạng Nguyên
+ *   phao    pháo nổ + trống: vinh quy Trạng Nguyên, quà to
+ *   qua     đàn rải + chuông nhỏ: băng rôn cảm ơn quà
  * Nhạc nền: đàn tranh ngũ cung + mõ + trống, nhỏ hẳn khi ông đồ nói, dồn dập 5 giây cuối.
  */
-export type SfxName = 'trong' | 'hien' | 'nop' | 'mo' | 'chieng' | 'dung' | 'truot' | 'phao';
-const NAMES: SfxName[] = ['trong', 'hien', 'nop', 'mo', 'chieng', 'dung', 'truot', 'phao'];
+export type SfxName = 'trong' | 'hien' | 'nop' | 'mo' | 'chieng' | 'dung' | 'truot' | 'phao' | 'qua';
+const NAMES: SfxName[] = ['trong', 'hien', 'nop', 'mo', 'chieng', 'dung', 'truot', 'phao', 'qua'];
 
 // Ngũ cung Rê: Rê Fa Sol La Đô (2 quãng tám)
 const NGU_CUNG = [293.7, 349.2, 392, 440, 523.3, 587.3, 698.5, 784, 880, 1046.5];
@@ -149,6 +150,7 @@ class Sfx {
       setTimeout(() => this.play(b.ketQua?.soDung ? 'dung' : 'truot', 300), 450);
     }
     if (b.phase === 'vinhQuy' && a.phase !== 'vinhQuy') this.play('phao', 1000);
+    if (b.qua && b.qua.at !== a.qua?.at) this.play(b.qua.big ? 'phao' : 'qua', 300);
   }
 }
 
@@ -278,6 +280,12 @@ const SYNTH: Record<SfxName, Synth> = {
   truot: (c, v) => {
     const t = c.currentTime;
     [6, 4, 2, 0].forEach((n, i) => gay(c, c.destination, NGU_CUNG[n] / 2, t + i * 0.18, 1.2, v * 0.7));
+  },
+  // rải đàn đi lên + 2 tiếng chuông nhỏ: cảm ơn quà
+  qua: (c, v) => {
+    const t = c.currentTime;
+    [5, 7, 8, 9].forEach((n, i) => gay(c, c.destination, NGU_CUNG[n], t + i * 0.06, 0.8, v * 0.7));
+    [0.3, 0.42].forEach((s) => gay(c, c.destination, NGU_CUNG[9] * 2, t + s, 0.6, v * 0.4));
   },
   // pháo đùng đoàng tràng dài + chiêng + trống
   phao: (c, v) => {

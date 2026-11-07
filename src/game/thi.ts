@@ -117,6 +117,34 @@ export class KyThi {
   siTu = new Map<string, SiTu>();
   /** Người chơi tự gõ "nam" / "nữ": nhớ cả buổi, qua nhiều ván */
   gioiChon = new Map<string, Gioi>();
+  /** Bảng vàng tuần (server cộng dồn điểm các ván trong tuần), chỉ để hiện */
+  tuan: { name: string; avatar: string; diem: number }[] = [];
+
+  // ---------- quà: mỗi lần hiện 1 băng rôn, người khác xếp hàng (quà KHÔNG cho lợi thế trong game) ----------
+  private quaCho: Qua[] = [];
+  qua: (Qua & { den: number }) | null = null;
+
+  /** Có người tặng quà. Cùng người tặng liên tục thì gộp vào băng rôn đang chờ. */
+  tangQua(q: Omit<Qua, 'at'>, now: number) {
+    const cu = this.qua?.id === q.id && this.qua.gift === q.gift ? this.qua : this.quaCho.find((x) => x.id === q.id && x.gift === q.gift);
+    if (cu) {
+      cu.count += q.count;
+      cu.coins += q.coins;
+      cu.big ||= q.big;
+      return;
+    }
+    this.quaCho.push({ ...q, at: now });
+    // quà to chen lên trước; hàng chờ có trần, quá thì bỏ quà nhỏ cũ nhất
+    this.quaCho.sort((a, b) => Number(b.big) - Number(a.big));
+    if (this.quaCho.length > 6) this.quaCho.pop(); // đã xếp quà to lên đầu nên cuối hàng là quà nhỏ mới nhất
+    this.chayQua(now);
+  }
+
+  private chayQua(now: number) {
+    if (this.qua && now < this.qua.den) return;
+    const q = this.quaCho.shift();
+    this.qua = q ? { ...q, at: now, den: now + (q.big ? GAME.quaToSec : GAME.quaSec) * 1000 } : null;
+  }
 
   constructor(
     private bank: McQ[],
@@ -251,6 +279,7 @@ export class KyThi {
   }
 
   tick(now: number) {
+    this.chayQua(now);
     if (now < this.endsAt) return;
     switch (this.phase) {
       case 'cho':
@@ -359,9 +388,22 @@ export class KyThi {
       ketQua: lo ? this.ketQua : null,
       recent: this.recent,
       soSiTu: this.siTu.size,
+      qua: this.qua && { id: this.qua.id, name: this.qua.name, avatar: this.qua.avatar, gift: this.qua.gift, count: this.qua.count, big: this.qua.big, at: this.qua.at },
+      tuan: this.tuan,
       top: this.bxh(this.phase === 'bangVang' || this.phase === 'vinhQuy' ? 20 : lo ? 10 : 5),
     };
   }
 }
 
 export type View = ReturnType<KyThi['view']>;
+
+export interface Qua {
+  id: string;
+  name: string;
+  avatar: string;
+  gift: string;
+  count: number;
+  coins: number;
+  big: boolean;
+  at: number;
+}

@@ -54,7 +54,8 @@ export function GameStage({ game }: { game: GameState }) {
       </div>
 
       <MC v={v} />
-      {v.phase === 'vinhQuy' && <PhaoGiay />}
+      {(v.phase === 'vinhQuy' || v.qua?.big) && <PhaoGiay />}
+      <BangQua v={v} />
     </div>
   );
 }
@@ -255,6 +256,7 @@ function Dong({ h, big }: { h: Hang; big?: boolean }) {
 
 /** Bảng vàng nhỏ phía trên: top 5 lúc hỏi, top 10 (2 cột) lúc hiện đáp án */
 function BangNho({ v }: { v: View }) {
+  if (v.phase === 'cho' && v.tuan.length) return <BangTuan v={v} />;
   const two = v.top.length > 5;
   return (
     <div className="absolute" style={{ left: 170, top: 282, width: 740, height: 270 }}>
@@ -274,6 +276,62 @@ function BangNho({ v }: { v: View }) {
         </div>
       )}
     </div>
+  );
+}
+
+/** Bảng vàng tuần (cộng điểm mọi ván trong tuần), hiện lúc chờ ván mới */
+function BangTuan({ v }: { v: View }) {
+  return (
+    <div className="absolute" style={{ left: 170, top: 282, width: 740, height: 270 }}>
+      <div className="mb-1 flex items-baseline justify-between">
+        <span className="text-[32px] font-extrabold text-[#8a1c0c]">🏆 BẢNG VÀNG TUẦN</span>
+        <span className="text-[24px] font-semibold opacity-75">cộng điểm mọi ván</span>
+      </div>
+      <div className="grid grid-cols-2 gap-x-6">
+        {v.tuan.slice(0, 10).map((t, i) => (
+          <div key={i} className="flex items-center gap-2 text-[27px] font-bold leading-[1.25]">
+            <span className="w-11 shrink-0 text-center">{crown(i + 1)}</span>
+            <span className="min-w-0 flex-1 truncate">{t.name}</span>
+            <span className="shrink-0 tabular-nums">{t.diem.toLocaleString('vi-VN')}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Băng rôn cảm ơn quà: đè lên biển tên game phía trên (không che câu hỏi) */
+function BangQua({ v }: { v: View }) {
+  const q = v.qua;
+  return (
+    <AnimatePresence>
+      {q && (
+        <motion.div
+          key={q.at}
+          initial={{ y: -260, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -260, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+          className="absolute flex items-center gap-6 rounded-[28px] border-[5px] px-8"
+          style={{
+            left: 70, top: 26, width: 940, height: 220, borderColor: GOLD,
+            background: q.big ? 'linear-gradient(135deg,#ffd34d,#e8a33d 55%,#b8741c)' : 'linear-gradient(135deg,#8a1c0c,#5a1409)',
+            color: q.big ? '#4a1a0c' : '#fff1cc',
+            boxShadow: q.big ? '0 0 50px rgba(255,211,77,.8)' : '0 10px 30px rgba(0,0,0,.45)',
+          }}
+        >
+          <Avatar h={{ hang: 0, id: q.id, name: q.name, avatar: q.avatar, diem: 0, danhHieu: '', gain: 0, gioi: 'nam' }} size={150} />
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-[54px] font-extrabold leading-tight">{q.name}</div>
+            <div className="truncate text-[36px] font-bold">
+              tặng {q.count > 1 ? `${q.count} × ` : ''}
+              {q.gift} 🎁
+            </div>
+            <div className="text-[28px] font-semibold opacity-85">{q.big ? 'Ông đồ vái tạ ơn tấm lòng!' : 'Ông đồ cảm ơn nhé!'}</div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

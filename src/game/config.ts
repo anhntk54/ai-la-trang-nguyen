@@ -120,6 +120,10 @@ export const GAME = {
       (bn ? ` Bảng Nhãn là ${bn}.` : '') +
       (th ? ` Thám Hoa là ${th}.` : '') +
       ' Vinh quy bái tổ thôi, cả làng ra đón nào!',
+    tuanDau: [
+      (name: string) => `Tuần này ${name} đang đứng đầu bảng vàng, ai muốn vượt thì vào thi đi!`,
+      (name: string) => `Bảng vàng tuần vẫn gọi tên ${name}. [cười] Có ai dám tranh ngôi không?`,
+    ],
     khongAiThi: '[thở dài] Ván này trường thi vắng tanh. Ván sau mọi người vào thi cho vui nhé.',
   },
 
@@ -130,6 +134,9 @@ export const GAME = {
 
   // ---------- Cảm ơn quà (quà KHÔNG cho lợi thế gì trong game) ----------
   giftThanksCooldownMs: 30_000,
+  quaSec: 4, // băng rôn cảm ơn quà nhỏ hiện bao lâu
+  quaToSec: 8, // quà to (từ bigGiftCoins xu)
+  tuanTop: 10, // bảng vàng tuần hiện bao nhiêu người
   bigGiftCoins: 99,
   thankGift: (name: string, gift: string, kenh: string) => `${kenh} cảm ơn ${name} đã tặng ${gift}.`,
   giftWishes: ['Chúc bạn thi đâu đỗ đó.', 'Chúc bạn một ngày thật vui.', 'Chúc bạn làm gì cũng suôn sẻ nha.'],

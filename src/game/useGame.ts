@@ -50,8 +50,12 @@ export function useGame() {
   const speak = (ev: Ev) => {
     const L = GAME.loi;
     switch (ev.t) {
-      case 'cho':
-        return voice.say(pick(L.cho) ?? '', true);
+      case 'cho': {
+        const dau = room.tuan[0];
+        // thỉnh thoảng nhắc người dẫn đầu bảng vàng tuần, để người chơi có lý do quay lại
+        const them = dau && Math.random() < 0.5 ? ` ${pick(L.tuanDau)?.(speakableName(dau.name))}` : '';
+        return voice.say((pick(L.cho) ?? '') + them, true);
+      }
       case 'vong':
         if (ev.vong === 0) void post('/api/da-hoi', room.used); // ván mới vừa bốc câu: lưu lại để lần sau ưu tiên câu khác
         return voice.say(pick(L.vong[ev.vong] ?? []) ?? '', true);
@@ -77,6 +81,9 @@ export function useGame() {
       case 'bangVang':
         return voice.say(ev.dau ? pick(L.bangVang)!(ev.vong, speakableName(ev.dau)) : L.bangVangTrong(ev.vong), true);
       case 'vinhQuy': {
+        // cộng điểm ván này vào bảng vàng tuần
+        const ds = [...room.siTu.values()].filter((s) => s.diem > 0).map(({ id, name, avatar, diem }) => ({ id, name, avatar, diem }));
+        if (ds.length) void layTuan(post('/api/bang-tuan', { ds }));
         const [tn, bn, th] = ev.top.map(speakableName);
         return voice.say(tn ? L.vinhQuy(tn, bn, th) : L.khongAiThi, true);
       }
@@ -102,6 +109,8 @@ export function useGame() {
       if (!IS_STAGE) return;
       const name = safeName(e.nickname, e.username);
       const coins = e.diamondCount * e.repeatCount;
+      // băng rôn cảm ơn trên màn hình (người tặng thấy mình); quà KHÔNG cho lợi thế trong game
+      room.tangQua({ id: e.username, name, avatar: e.avatar, gift: e.giftName, count: e.repeatCount, coins, big: coins >= GAME.bigGiftCoins }, Date.now());
       // Quà không cho lợi thế trong game, chỉ cảm ơn (combo 1 lần / 30 giây, quà to luôn cảm ơn)
       if (talk.gifts.shouldThank(e.username, coins, voice.waitingPriority)) {
         voice.say(GAME.thankGift(speakableName(name), e.giftName, kenh.current), true);
@@ -148,6 +157,7 @@ export function useGame() {
     let ready = false;
     let lastPost = 0;
     let prev: View | null = null;
+    void layTuan(fetch('/api/bang-tuan'));
     if (MUTE) sfx.volume = sfx.musicVolume = 0;
     sfx.loadFiles();
     fetch('/api/da-hoi')
@@ -181,6 +191,16 @@ export function useGame() {
       clearInterval(share);
     };
   }, []);
+
+  // Đọc bảng vàng tuần server trả về, gắn vào game để hiện lúc chờ ván mới
+  async function layTuan(r: Promise<Response | void>) {
+    try {
+      const res = await r;
+      if (res) room.tuan = (await res.json()).top ?? [];
+    } catch {
+      // server chưa bật: bỏ qua
+    }
+  }
 
   return { status, channelName, view };
 }

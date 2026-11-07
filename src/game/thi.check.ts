@@ -152,3 +152,27 @@ console.log('toan: OK');
   for (let i = 0; i < 30; i++) { k4.batDau(t2 + i); assert.ok(!k4['cauList'].some((c: any) => c.q.id === bi)); }
   console.log('bocau: OK');
 }
+
+// Quà: gộp cùng người, quà to chen lên trước, mỗi lần 1 băng rôn
+{
+  let t3 = 9_000_000;
+  const k5 = new KyThi(bank);
+  const q = (id: string, coins: number, count = 1) => ({ id, name: id, avatar: '', gift: 'Hoa hồng', count, coins, big: coins >= GAME.bigGiftCoins });
+  k5.tangQua(q('an', 1), t3);
+  k5.tangQua(q('an', 5, 5), t3 + 100); // An tặng tiếp: gộp vào băng rôn đang hiện
+  assert.equal(k5.qua!.count, 6);
+  k5.tangQua(q('binh', 1), t3 + 200);
+  k5.tangQua(q('chi', 500), t3 + 300); // quà to chen trước Bình
+  t3 += GAME.quaSec * 1000 + 1;
+  k5.tick(t3);
+  assert.equal(k5.qua!.id, 'chi');
+  t3 += GAME.quaToSec * 1000 + 1;
+  k5.tick(t3);
+  assert.equal(k5.qua!.id, 'binh');
+  t3 += GAME.quaSec * 1000 + 1;
+  k5.tick(t3);
+  assert.equal(k5.qua, null);
+  for (let i = 0; i < 50; i++) k5.tangQua(q('u' + i, 1), t3); // 50 người cùng tặng: hàng chờ có trần
+  assert.ok(k5['quaCho'].length <= 6);
+  console.log('qua: OK');
+}
