@@ -203,6 +203,8 @@ class Sfx {
     }
     if (b.phase === 'vinhQuy' && a.phase !== 'vinhQuy') this.play('phao', 1000);
     if (b.qua && b.qua.at !== a.qua?.at) this.play(b.qua.big ? 'phao' : 'qua', 300);
+    if (b.cuu?.loai.length && !a.cuu?.loai.length) this.play('dung', 300); // tim đủ, loại 2 đáp án sai
+    if (b.latKeo && !a.latKeo) this.play('trong', 500); // vào câu lật kèo
   }
 }
 

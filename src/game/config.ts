@@ -32,6 +32,8 @@ export const GAME = {
   ] as Vong[],
   saiTru: 0.5, // sai bị trừ nửa điểm tối đa của vòng; tổng điểm không xuống dưới 0
   diemSan: 0.5, // đúng sát giờ vẫn được 50% điểm tối đa
+  latKeoNhan: 2, // câu cuối ván (câu lật kèo): điểm cộng và trừ đều nhân đôi
+  cuuTroTim: 200, // Thi Đình: cả phòng thả đủ chừng này tim thì loại 2 đáp án sai
   chuoiMoi: 3, // đúng liền 3 câu thì thưởng
   chuoiThuong: 100,
   earlySendGraceMs: 500, // gửi trước lúc hiện đáp án quá 0,5 giây thì không tính (không mất lượt)
@@ -128,6 +130,46 @@ export const GAME = {
       (name: string) => `Tuần này ${name} đang đứng đầu bảng vàng, ai muốn vượt thì vào thi đi!`,
       (name: string) => `Bảng vàng tuần vẫn gọi tên ${name}. [cười] Có ai dám tranh ngôi không?`,
     ],
+    latKeo: [
+      '[hắng giọng] Câu cuối cùng, câu lật kèo! Điểm nhân đôi, ai đang thua vẫn còn cơ hội đấy!',
+      'Đây là câu lật kèo! Đúng được gấp đôi điểm, sai cũng mất gấp đôi. Cẩn thận nhé!',
+    ],
+    cuuTro: [
+      '[cười] Cả trường thả tim đủ rồi! Ông bỏ giúp hai đáp án sai nhé.',
+      'Tim đầy rồi! Ông đồ ra tay, loại bớt hai đáp án sai cho cả phòng.',
+    ],
+    mienThang: (mien: string, diem: number) => `Phe ${mien} thắng ván này với ${diem} điểm! Ai chưa chọn phe thì gõ Bắc, Trung hoặc Nam nhé.`,
+    // Trêu / đáp bình luận vào khoảng lặng (KHÔNG đọc nguyên văn bình luận). vong = tên kỳ thi đang thi
+    treu: {
+      kho: [
+        (n: string, vong: string) => `${n} than khó à? Mới ${vong} thôi đấy, lên thi Đình còn khó nữa cơ. [cười]`,
+        (n: string) => `${n} kêu khó, ông nghe thấy rồi nhé. Học đâu chắc đó, thi đâu đỗ đó!`,
+      ],
+      de: [
+        (n: string) => `${n} chê dễ hả? Được, câu sau ông cho khó hơn. [cười]`,
+        (n: string) => `Dễ thì ${n} trả lời nhanh lên cho ông xem nào!`,
+      ],
+      chao: [
+        (n: string) => `Chào ${n}! Vào thi luôn đi, gõ A, B, C hoặc D là được.`,
+        (n: string) => `À ${n} đến rồi. Mài mực đi, sắp có câu hỏi đấy.`,
+      ],
+      goiY: [
+        (n: string) => `${n} xin gợi ý à? [cười] Trường thi không có quay cóp đâu nhé!`,
+        (n: string) => `Ông không nhắc bài đâu ${n}. Đến thi Đình thả tim thì cả phòng được cứu trợ.`,
+      ],
+      cuoi: [
+        (n: string) => `${n} cười gì đấy? Trả lời đúng chưa mà cười. [cười]`,
+        (n: string) => `Nghe ${n} cười là biết vừa trả lời đúng rồi.`,
+      ],
+      yeu: [
+        (n: string) => `Cảm ơn ${n} nhé, ông đồ vui lắm. [cười]`,
+        (n: string) => `${n} khen thế thì ông phải ra câu hay hơn mới được.`,
+      ],
+      sai: [
+        (n: string) => `[thở dài] ${n} sai ba câu liền rồi. Bình tĩnh, đọc kỹ đề rồi hãy gõ nhé.`,
+        (n: string) => `${n} ơi, ba câu liền chưa trúng câu nào. [cười] Câu sau phải gỡ lại đấy!`,
+      ],
+    },
     khongAiThi: '[thở dài] Ván này trường thi vắng tanh. Ván sau mọi người vào thi cho vui nhé.',
   },
 

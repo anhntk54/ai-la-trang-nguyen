@@ -39,10 +39,17 @@ export function doanGioi(name: string): Gioi | null {
   return diem > 0 ? 'nu' : diem < 0 ? 'nam' : null;
 }
 
-/** Bình luận "nam", "nữ", "con trai", "con gái" -> lựa chọn của người chơi */
+/** Bình luận "trai", "gái", "con trai", "con gái", "nữ" -> lựa chọn của người chơi ("nam" dành cho chọn miền Nam) */
 export function lenhGioi(comment: string): Gioi | null {
   const w = tach(comment).join('');
-  if (w === 'nam' || w === 'contrai' || w === 'trai') return 'nam';
+  if (w === 'contrai' || w === 'trai') return 'nam';
   if (w === 'nu' || w === 'congai' || w === 'gai') return 'nu';
   return null;
+}
+
+export type Mien = 'bac' | 'trung' | 'nam';
+/** Bình luận "Bắc", "miền Trung", "nam bộ", "mien nam" -> chọn phe miền */
+export function lenhMien(comment: string): Mien | null {
+  const w = tach(comment).join('').replace(/^mien/, '').replace(/bo$/, '');
+  return w === 'bac' || w === 'trung' || w === 'nam' ? w : null;
 }

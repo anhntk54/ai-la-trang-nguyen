@@ -1,7 +1,7 @@
 // Lõi game Ai Là Trạng Nguyên: không React, thời gian truyền vào (now) để test được.
 // Trang stage chạy 1 bản KyThi, trang điều khiển chỉ vẽ lại ảnh chụp view().
 import { GAME, type Level, type Vong } from './config';
-import { doanGioi, lenhGioi, type Gioi } from './gioiTinh';
+import { doanGioi, lenhGioi, lenhMien, type Gioi, type Mien } from './gioiTinh';
 import { sinhToan } from './toan';
 
 export interface McQ {
@@ -65,6 +65,7 @@ export interface SiTu {
   msDung: number; // tổng thời gian các câu đúng, để xếp khi bằng điểm
   vaoLuc: number;
   gain: number; // điểm câu vừa rồi (để hiện +/-)
+  saiLien?: number; // sai liền mấy câu (để ông đồ trêu)
 }
 
 interface Cau {
@@ -82,7 +83,10 @@ export type Ev =
   | { t: 'nhac' }
   | { t: 'dapAn'; chu: string; dap: string; soDung: number; soNop: number; nhanh?: string; msNhanh?: number }
   | { t: 'bangVang'; vong: string; dau?: string }
-  | { t: 'vinhQuy'; top: string[] };
+  | { t: 'vinhQuy'; top: string[]; mien?: { mien: Mien; diem: number } }
+  | { t: 'cuuTro' }
+  | { t: 'saiLien'; id: string; name: string }
+  | { t: 'latKeo' };
 
 export interface Hang {
   hang: number;
@@ -93,6 +97,11 @@ export interface Hang {
   danhHieu: string;
   gain: number;
   gioi: Gioi; // chọn ảnh nhân vật nam / nữ
+  // dấu hiệu trên tên
+  mien?: Mien;
+  chuoi: number; // đang đúng liền mấy câu
+  trangTruoc: boolean; // Trạng Nguyên ván trước
+  dauTuan: boolean; // đang đứng đầu bảng vàng tuần
 }
 
 const shuffle = <T,>(a: T[], rand: () => number) => {
@@ -120,7 +129,13 @@ export class KyThi {
   /** Người chơi tự gõ "nam" / "nữ": nhớ cả buổi, qua nhiều ván */
   gioiChon = new Map<string, Gioi>();
   /** Bảng vàng tuần (server cộng dồn điểm các ván trong tuần), chỉ để hiện */
-  tuan: { name: string; avatar: string; diem: number }[] = [];
+  tuan: { id?: string; name: string; avatar: string; diem: number }[] = [];
+  /** Phe miền người chơi chọn (gõ Bắc / Trung / Nam): nhớ cả buổi */
+  mienChon = new Map<string, Mien>();
+  private trangTruoc: string | null = null; // id Trạng Nguyên ván trước
+  private trangMoi: string | null = null;
+  /** Cứu trợ bằng tim ở Thi Đình: đủ tim thì loại 2 đáp án sai cho cả phòng */
+  private cuu = { tim: 0, xong: false, loai: [] as number[] };
 
   // ---------- quà: mỗi lần hiện 1 băng rôn, người khác xếp hàng (quà KHÔNG cho lợi thế trong game) ----------
   private quaCho: Qua[] = [];
@@ -164,6 +179,7 @@ export class KyThi {
   }
 
   batDau(now: number) {
+    this.trangTruoc = this.trangMoi;
     this.siTu.clear();
     this.cauList = this.chonCau(now);
     this.idx = 0;
@@ -231,6 +247,8 @@ export class KyThi {
     this.recent = [];
     this.ketQua = null;
     this.nhacDa = false;
+    this.cuu = { tim: 0, xong: false, loai: [] };
+    if (this.laLatKeo) this.events.push({ t: 'latKeo' });
     this.events.push({ t: 'doc', text: this.docText(this.idx)! });
   }
 
@@ -240,6 +258,23 @@ export class KyThi {
     if (!c) return null;
     const opts = c.opts.map((o, k) => `${'ABCD'[k]}, ${o}.`).join(' ');
     return `Câu ${i + 1}. ${c.q.q} ${opts}`;
+  }
+
+  /** Câu cuối ván: điểm nhân đôi (cả cộng lẫn trừ) */
+  get laLatKeo() {
+    return this.cauList.length > 0 && this.idx === this.cauList.length - 1;
+  }
+
+  /** Cả phòng thả tim. Ở Thi Đình, đủ tim trong lúc đọc đề / trả lời thì loại 2 đáp án sai. */
+  tim(n: number) {
+    const c = this.cau;
+    if (!c || c.vong !== GAME.vong.length - 1 || this.cuu.xong || (this.phase !== 'doc' && this.phase !== 'hoi')) return;
+    this.cuu.tim += n;
+    if (this.cuu.tim < GAME.cuuTroTim) return;
+    this.cuu.xong = true;
+    const sai = shuffle([0, 1, 2, 3].filter((i) => i !== c.ans), this.rand);
+    this.cuu.loai = sai.slice(0, 2);
+    this.events.push({ t: 'cuuTro' });
   }
 
   /** Lời công bố đáp án câu đang hỏi (tạo giọng sẵn trong lúc mọi người trả lời) */
@@ -279,6 +314,11 @@ export class KyThi {
     const g = lenhGioi(e.comment);
     if (g) {
       this.gioiChon.set(e.id, g);
+      return false;
+    }
+    const m = lenhMien(e.comment);
+    if (m) {
+      this.mienChon.set(e.id, m);
       return false;
     }
     if (this.phase !== 'hoi') return false;
@@ -336,6 +376,8 @@ export class KyThi {
     const c = this.cau!;
     const v = this.vong;
     const total = v.giay * 1000;
+    const nhan = this.laLatKeo ? GAME.latKeoNhan : 1;
+    let treuSai: SiTu | null = null;
     const nhanh: { name: string; ms: number; diem: number }[] = [];
     for (const s of this.siTu.values()) s.gain = 0;
     for (const s of this.siTu.values()) {
@@ -345,22 +387,26 @@ export class KyThi {
         continue;
       }
       if (a.chon === c.ans) {
-        let p = diemDung(v.diem, a.ms, total);
+        let p = diemDung(v.diem, a.ms, total) * nhan;
         s.chuoi++;
         if (s.chuoi % GAME.chuoiMoi === 0) p += GAME.chuoiThuong;
         s.diem += p;
         s.gain = p;
         s.msDung += a.ms;
+        s.saiLien = 0;
         nhanh.push({ name: s.name, ms: a.ms, diem: p });
       } else {
-        const tru = Math.min(s.diem, Math.round(v.diem * GAME.saiTru));
+        const tru = Math.min(s.diem, Math.round(v.diem * GAME.saiTru) * nhan);
         s.diem -= tru;
         s.gain = -tru;
         s.chuoi = 0;
+        s.saiLien = (s.saiLien ?? 0) + 1;
+        if (s.saiLien === 3 && !treuSai) treuSai = s;
       }
     }
     nhanh.sort((a, b) => a.ms - b.ms);
     this.ketQua = { soDung: nhanh.length, nhanh: nhanh.slice(0, 3) };
+    if (treuSai) this.events.push({ t: 'saiLien', id: treuSai.id, name: treuSai.name });
     this.phase = 'dapAn';
     this.endsAt = now + GAME.dapAnSec * 1000;
     this.events.push({
@@ -381,7 +427,12 @@ export class KyThi {
   private moVinhQuy(now: number) {
     this.phase = 'vinhQuy';
     this.endsAt = now + GAME.vinhQuySec * 1000;
-    this.events.push({ t: 'vinhQuy', top: this.bxh(3).map((h) => h.name) });
+    const top = this.bxh(3);
+    this.trangMoi = top[0]?.id ?? null;
+    const mien = (Object.entries(this.diemMien()) as [Mien, { diem: number; nguoi: number }][])
+      .filter(([, x]) => x.diem > 0)
+      .sort((a, b) => b[1].diem - a[1].diem)[0];
+    this.events.push({ t: 'vinhQuy', top: top.map((h) => h.name), mien: mien && { mien: mien[0], diem: mien[1].diem } });
   }
 
   /** Bảng vàng: điểm cao trước; bằng điểm thì tổng thời gian đúng ngắn hơn, rồi ai vào trước */
@@ -390,7 +441,18 @@ export class KyThi {
       .filter((s) => s.diem > 0 || s.gain !== 0)
       .sort((a, b) => b.diem - a.diem || a.msDung - b.msDung || a.vaoLuc - b.vaoLuc)
       .slice(0, n)
-      .map((s, i) => ({ hang: i + 1, id: s.id, name: s.name, avatar: s.avatar, diem: s.diem, danhHieu: GAME.danhHieu(i + 1), gain: s.gain, gioi: this.gioiCua(s) }));
+      .map((s, i) => ({ hang: i + 1, id: s.id, name: s.name, avatar: s.avatar, diem: s.diem, danhHieu: GAME.danhHieu(i + 1), gain: s.gain, gioi: this.gioiCua(s),
+        mien: this.mienChon.get(s.id), chuoi: s.chuoi, trangTruoc: s.id === this.trangTruoc, dauTuan: !!s.id && this.tuan[0]?.id === s.id }));
+  }
+
+  /** Tổng điểm ván này của từng phe miền */
+  diemMien() {
+    const kq = { bac: { diem: 0, nguoi: 0 }, trung: { diem: 0, nguoi: 0 }, nam: { diem: 0, nguoi: 0 } };
+    for (const [id, m] of this.mienChon) {
+      kq[m].nguoi++;
+      kq[m].diem += this.siTu.get(id)?.diem ?? 0;
+    }
+    return kq;
   }
 
   /** Nam / nữ: người chơi tự chọn > đoán theo tên > cố định theo tài khoản */
@@ -423,6 +485,11 @@ export class KyThi {
       soSiTu: this.siTu.size,
       qua: this.qua && { id: this.qua.id, name: this.qua.name, avatar: this.qua.avatar, gift: this.qua.gift, count: this.qua.count, big: this.qua.big, at: this.qua.at },
       tuan: this.tuan,
+      mien: this.diemMien(),
+      latKeo: this.laLatKeo && ['doc', 'hoi', 'chot', 'dapAn'].includes(this.phase),
+      cuu: c && c.vong === GAME.vong.length - 1 && ['doc', 'hoi', 'chot', 'dapAn'].includes(this.phase)
+        ? { tim: Math.min(this.cuu.tim, GAME.cuuTroTim), can: GAME.cuuTroTim, loai: this.cuu.loai }
+        : null,
       top: this.bxh(this.phase === 'bangVang' || this.phase === 'vinhQuy' ? 20 : lo ? 10 : 5),
     };
   }

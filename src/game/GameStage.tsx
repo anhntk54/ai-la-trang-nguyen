@@ -25,9 +25,14 @@ export function GameStage({ game }: { game: GameState }) {
       {/* Tab vòng thi, đè lên chữ in sẵn trên nền */}
       {!bigBoard && <div
         className={`absolute flex items-center justify-center whitespace-nowrap rounded-t-[22px] border-x-[3px] border-t-[3px] px-2 ${v.vongNhan.length > 9 ? 'text-[23px] tracking-tight' : 'text-[30px]'} font-extrabold`}
-        style={{ left: 730, top: 556, width: 194, height: 82, borderColor: GOLD, background: 'linear-gradient(#7a2414,#561409)', color: '#ffd977' }}
+        style={{
+          left: 730, top: 556, width: 194, height: 82, borderColor: GOLD,
+          background: v.latKeo ? 'linear-gradient(#e8a33d,#b8741c)' : 'linear-gradient(#7a2414,#561409)',
+          color: v.latKeo ? '#4a1a0c' : '#ffd977',
+          boxShadow: v.latKeo ? '0 0 30px rgba(255,211,77,.9)' : undefined,
+        }}
       >
-        {v.phase === 'cho' ? 'SẮP THI' : v.vongNhan}
+        {v.phase === 'cho' ? 'SẮP THI' : v.latKeo ? 'LẬT KÈO ×2' : v.vongNhan}
       </div>}
 
       {bigBoard ? <BangVang v={v} /> : <BangNho v={v} />}
@@ -36,11 +41,19 @@ export function GameStage({ game }: { game: GameState }) {
       {!bigBoard && <KhungCau v={v} />}
       {!bigBoard && <DapAn v={v} />}
 
-      {/* Cách chơi + số người nộp */}
-      {!bigBoard && <div className="absolute text-[30px] font-bold" style={{ left: 170, top: 1290, width: 470 }}>
-        Gõ <b className="text-[#8a1c0c]">A, B, C, D</b> vào bình luận
-        {v.phase === 'hoi' && <div className="text-[26px] font-semibold opacity-80">{v.soNop} sĩ tử đã nộp bài</div>}
-      </div>}
+      {/* Thi Đình: thanh tim cứu trợ cả phòng; còn lại: cách chơi + số người nộp */}
+      {!bigBoard && v.cuu ? (
+        <CuuTro v={v} />
+      ) : (
+        !bigBoard && (
+          <div className="absolute text-[30px] font-bold" style={{ left: 170, top: 1290, width: 470 }}>
+            Gõ <b className="text-[#8a1c0c]">A, B, C, D</b> vào bình luận
+            <div className="text-[26px] font-semibold opacity-80">
+              {v.phase === 'hoi' ? `${v.soNop} sĩ tử đã nộp bài` : 'Gõ Bắc, Trung, Nam để chọn phe'}
+            </div>
+          </div>
+        )
+      )}
 
       {/* Dải tên vừa nộp bài, trên cuộn giấy dưới */}
       <div className="absolute flex items-center gap-2 overflow-hidden whitespace-nowrap text-[28px] font-semibold" style={{ left: 165, top: 1408, width: 470, height: 52 }}>
@@ -56,6 +69,27 @@ export function GameStage({ game }: { game: GameState }) {
       <MC v={v} />
       {(v.phase === 'vinhQuy' || v.qua?.big) && <PhaoGiay />}
       <BangQua v={v} />
+    </div>
+  );
+}
+
+/** Thi Đình: cả phòng thả tim, đủ thì ông đồ loại 2 đáp án sai */
+function CuuTro({ v }: { v: View }) {
+  const c = v.cuu!;
+  const xong = c.loai.length > 0;
+  return (
+    <div className="absolute" style={{ left: 170, top: 1288, width: 470 }}>
+      <div className="flex items-baseline justify-between text-[26px] font-bold">
+        <span>{xong ? '✂️ Đã loại 2 câu sai!' : '❤️ Thả tim cứu trợ'}</span>
+        {!xong && <span className="tabular-nums">{c.tim}/{c.can}</span>}
+      </div>
+      <div className="mt-1 h-5 overflow-hidden rounded-full border-2 bg-black/15" style={{ borderColor: GOLD }}>
+        <motion.div
+          className="h-full rounded-full"
+          style={{ background: xong ? 'linear-gradient(90deg,#2f7d3a,#7dff9a)' : 'linear-gradient(90deg,#c8102e,#ff6f91)' }}
+          animate={{ width: `${(c.tim / c.can) * 100}%` }}
+        />
+      </div>
     </div>
   );
 }
@@ -131,6 +165,7 @@ function KhungCau({ v }: { v: View }) {
         <div className="text-[46px] font-extrabold">Ván mới sau {v.con} giây</div>
         <div className="mt-5 space-y-2 text-[30px] font-semibold leading-snug">
           <div>4 kỳ thi · 20 câu · gõ A, B, C, D</div>
+          <div>Gõ Bắc, Trung, Nam để thi đua 3 miền</div>
           <div>Đúng càng nhanh điểm càng cao</div>
           <div>Sai bị trừ điểm, nghĩ kỹ rồi gõ</div>
         </div>
@@ -192,7 +227,8 @@ function DapAn({ v }: { v: View }) {
       {[0, 1, 2, 3].map((i) => {
         const text = v.opts[i];
         const right = v.dung === i;
-        const dim = v.dung >= 0 && !right;
+        const loai = !!v.cuu?.loai.includes(i);
+        const dim = (v.dung >= 0 && !right) || loai;
         const pct = v.counts && total ? Math.round((v.counts[i] / total) * 100) : 0;
         return (
           <motion.div
@@ -213,7 +249,8 @@ function DapAn({ v }: { v: View }) {
               <span className="text-[36px] font-extrabold" style={{ color: '#ffd977' }}>
                 {'ABCD'[i]}.
               </span>
-              <span className={`${(text?.length ?? 0) > 16 ? 'text-[26px]' : 'text-[32px]'} font-bold leading-tight`}>{text ?? '…'}</span>
+              <span className={`${(text?.length ?? 0) > 16 ? 'text-[26px]' : 'text-[32px]'} font-bold leading-tight ${loai ? 'line-through opacity-50' : ''}`}>{text ?? '…'}</span>
+              {loai && <span className="ml-auto text-[30px]">✂️</span>}
             </div>
             {v.counts && (
               <div className="mt-1 flex items-center gap-2">
@@ -250,11 +287,51 @@ function DapAn({ v }: { v: View }) {
 
 const crown = (h: number) => (h === 1 ? '👑' : h === 2 ? '🥈' : h === 3 ? '🥉' : `${h}.`);
 
+const MIEN = {
+  bac: { chu: 'B', ten: 'Bắc', mau: '#c8102e' },
+  trung: { chu: 'T', ten: 'Trung', mau: '#c98a12' },
+  nam: { chu: 'N', ten: 'Nam', mau: '#1e7a3a' },
+} as const;
+
+/** Dấu cạnh tên: 🏆 đầu bảng tuần · 🎓 Trạng Nguyên ván trước · 🔥N đúng liền · chấm màu phe miền */
+function DauHieu({ h }: { h: Hang }) {
+  return (
+    <span className="flex shrink-0 items-center gap-1 text-[22px]">
+      {h.dauTuan && <span>🏆</span>}
+      {h.trangTruoc && <span>🎓</span>}
+      {h.chuoi >= 3 && <span className="font-extrabold text-[#c8102e]">🔥{h.chuoi}</span>}
+      {h.mien && (
+        <span className="flex h-7 w-7 items-center justify-center rounded-full text-[17px] font-extrabold text-white" style={{ background: MIEN[h.mien].mau }}>
+          {MIEN[h.mien].chu}
+        </span>
+      )}
+    </span>
+  );
+}
+
+/** Điểm 3 miền ván này, gọn trên 1 dòng */
+function DiemMien({ v, big }: { v: View; big?: boolean }) {
+  const ds = (Object.keys(MIEN) as (keyof typeof MIEN)[]).map((k) => ({ k, ...v.mien[k] }));
+  if (!ds.some((x) => x.nguoi)) return null;
+  const max = Math.max(...ds.map((x) => x.diem));
+  return (
+    <span className={`flex items-center gap-3 ${big ? 'text-[30px]' : 'text-[22px]'} font-bold`}>
+      {ds.map((x) => (
+        <span key={x.k} className="flex items-center gap-1" style={{ color: MIEN[x.k].mau }}>
+          {x.diem === max && max > 0 && '👑'}
+          {MIEN[x.k].ten} {x.diem.toLocaleString('vi-VN')}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 function Dong({ h, big }: { h: Hang; big?: boolean }) {
   return (
     <div className={`flex items-center gap-2 ${big ? 'text-[30px]' : 'text-[27px]'} font-bold leading-[1.25]`}>
       <span className="w-11 shrink-0 text-center">{crown(h.hang)}</span>
       <span className="min-w-0 flex-1 truncate">{h.name}</span>
+      <DauHieu h={h} />
       <AnimatePresence>
         {h.gain !== 0 && (
           <motion.span
@@ -280,7 +357,7 @@ function BangNho({ v }: { v: View }) {
     <div className="absolute" style={{ left: 170, top: 282, width: 740, height: 270 }}>
       <div className="mb-1 flex items-baseline justify-between">
         <span className="text-[32px] font-extrabold text-[#8a1c0c]">🏮 BẢNG VÀNG</span>
-        <span className="text-[24px] font-semibold opacity-75">{v.soSiTu} sĩ tử</span>
+        {v.mien.bac.nguoi + v.mien.trung.nguoi + v.mien.nam.nguoi ? <DiemMien v={v} /> : <span className="text-[24px] font-semibold opacity-75">{v.soSiTu} sĩ tử</span>}
       </div>
       {v.top.length === 0 ? (
         <div className="mt-8 text-center text-[30px] font-semibold opacity-70">
@@ -338,7 +415,7 @@ function BangQua({ v }: { v: View }) {
             boxShadow: q.big ? '0 0 50px rgba(255,211,77,.8)' : '0 10px 30px rgba(0,0,0,.45)',
           }}
         >
-          <Avatar h={{ hang: 0, id: q.id, name: q.name, avatar: q.avatar, diem: 0, danhHieu: '', gain: 0, gioi: 'nam' }} size={150} />
+          <Avatar h={{ name: q.name, avatar: q.avatar }} size={150} />
           <div className="min-w-0 flex-1">
             <div className="truncate text-[54px] font-extrabold leading-tight">{q.name}</div>
             <div className="truncate text-[36px] font-bold">
@@ -362,6 +439,9 @@ function BangVang({ v }: { v: View }) {
     <div className="absolute" style={{ left: 165, top: 280, width: 750, height: 1000 }}>
       <div className={`text-center ${vinh ? 'text-[40px] italic' : 'text-[44px]'} font-extrabold text-[#8a1c0c]`}>
         {vinh ? '“Hiền tài là nguyên khí của quốc gia”' : `BẢNG VÀNG SAU ${v.vongTen.toUpperCase()}`}
+      </div>
+      <div className="mt-1 flex justify-center">
+        <DiemMien v={v} big />
       </div>
       {vinh && tn && (
         <div className="relative mt-2" style={{ height: 640 }}>
@@ -390,7 +470,7 @@ function BangVang({ v }: { v: View }) {
 const anh = (h: Hang) => h.gioi;
 
 /** Ảnh đại diện TikTok, viền vàng; không có ảnh thì hiện chữ cái đầu */
-function Avatar({ h, size }: { h: Hang; size: number }) {
+function Avatar({ h, size }: { h: { name: string; avatar: string }; size: number }) {
   const box = { width: size, height: size, borderColor: GOLD };
   return h.avatar ? (
     <img src={h.avatar} referrerPolicy="no-referrer" className="shrink-0 rounded-full border-[3px] object-cover" style={box} draggable={false} />

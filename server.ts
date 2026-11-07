@@ -349,7 +349,7 @@ const topTuan = (b: BangTuan, n = 10) =>
   Object.values(b.ds)
     .sort((a, c) => c.diem - a.diem)
     .slice(0, n)
-    .map(({ name, avatar, diem }) => ({ name, avatar, diem }));
+    .map((x) => ({ id: Object.keys(b.ds).find((k) => b.ds[k] === x), name: x.name, avatar: x.avatar, diem: x.diem }));
 app.get('/api/bang-tuan', (_req, res) => res.json({ top: topTuan(docTuan()) }));
 app.post('/api/bang-tuan', (req, res) => {
   const ds = Array.isArray(req.body?.ds) ? req.body.ds.slice(0, 2000) : null;

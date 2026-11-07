@@ -121,7 +121,7 @@ assert.equal(lenhGioi('Nữ'), 'nu');
 assert.equal(lenhGioi('con trai'), 'nam');
 assert.equal(lenhGioi('nam định'), null);
 const k3 = new KyThi(bank);
-k3.chat({ id: 'la', name: 'Lan Anh', avatar: '', comment: 'nam' }, t);
+k3.chat({ id: 'la', name: 'Lan Anh', avatar: '', comment: 'con trai' }, t);
 assert.equal(k3.gioiCua({ id: 'la', name: 'Lan Anh' }), 'nam'); // tự chọn thắng đoán tên
 assert.equal(k3.gioiCua({ id: 'mt', name: 'Minh Tuấn' }), 'nam');
 console.log('gioiTinh: OK');
@@ -180,4 +180,85 @@ console.log('toan: OK');
   for (let i = 0; i < 50; i++) k5.tangQua(q('u' + i, 1), t3); // 50 người cùng tặng: hàng chờ có trần
   assert.ok(k5['quaCho'].length <= 6);
   console.log('qua: OK');
+}
+
+// Thi đua miền, cứu trợ bằng tim, câu lật kèo, dấu hiệu trên tên
+{
+  let t4 = 20_000_000;
+  const k6 = new KyThi(bank, {}, () => 0.3);
+  const go = (ms: number) => { t4 += ms; k6.tick(t4); };
+  k6.chat({ id: 'a', name: 'An', avatar: '', comment: 'miền Bắc' }, t4);
+  k6.chat({ id: 'b', name: 'Bình', avatar: '', comment: 'Nam' }, t4);
+  k6.chat({ id: 'c', name: 'Chi', avatar: '', comment: 'trung bộ' }, t4);
+  assert.equal(k6.mienChon.get('b'), 'nam');
+  assert.equal(k6.gioiChon.has('b'), false); // "Nam" là chọn miền, không phải chọn nhân vật
+  k6.cho(t4);
+  go(GAME.choSec * 1000);
+  go(GAME.vongSec * 1000);
+  const ch = () => 'ABCD'[k6.cau!.ans];
+  // chạy tới câu cuối, An luôn đúng, Bình luôn sai
+  let kinds: string[] = [];
+  for (let g = 0; g < 4000 && k6.phase !== 'vinhQuy'; g++) {
+    if (k6.phase === 'doc') k6.docXong(t4);
+    if (k6.phase === 'hoi') {
+      // Thi Đình: thả đủ tim -> loại 2 đáp án sai, không bao giờ loại đáp án đúng
+      if (k6.cau!.vong === 3 && !k6.view(t4).cuu?.loai.length) {
+        k6.tim(GAME.cuuTroTim);
+        const cu = k6.view(t4).cuu!;
+        assert.equal(cu.loai.length, 2);
+        assert.ok(!cu.loai.includes(k6.cau!.ans));
+      }
+      const diemTruoc = k6.siTu.get('a')?.diem ?? 0;
+      const latKeo = k6.laLatKeo;
+      k6.chat({ id: 'a', name: 'An', avatar: '', comment: ch() }, t4);
+      k6.chat({ id: 'b', name: 'Bình', avatar: '', comment: 'ABCD'[(k6.cau!.ans + 1) % 4] }, t4);
+      go(k6['vong'].giay * 1000);
+      go(GAME.chotSec * 1000);
+      if (latKeo) assert.ok(k6.siTu.get('a')!.diem - diemTruoc >= 2 * k6['vong'].diem * GAME.diemSan * 0.99); // điểm nhân đôi
+    } else go(1000);
+    kinds.push(...k6.lay().map((e) => e.t));
+  }
+  assert.ok(kinds.includes('latKeo'));
+  assert.ok(kinds.includes('cuuTro'));
+  const vq = kinds.length; // event vinhQuy có phe miền thắng
+  const m = k6.diemMien();
+  assert.ok(m.bac.diem > 0 && m.nam.diem === 0 && m.bac.nguoi === 1);
+  const an = k6.bxh(3).find((h) => h.id === 'a')!;
+  assert.equal(an.mien, 'bac');
+  assert.ok(an.chuoi >= 3);
+  // ván sau: An mang dấu Trạng Nguyên ván trước
+  go(GAME.vinhQuySec * 1000);
+  go(GAME.choSec * 1000);
+  go(GAME.vongSec * 1000);
+  k6.docXong(t4);
+  k6.chat({ id: 'a', name: 'An', avatar: '', comment: ch() }, t4);
+  go(k6['vong'].giay * 1000);
+  go(GAME.chotSec * 1000);
+  assert.equal(k6.bxh(5).find((h) => h.id === 'a')!.trangTruoc, true);
+  void vq;
+  console.log('mien + cuuTro + latKeo + dau hieu: OK');
+}
+
+// Ông đồ trêu: nhận loại bình luận, không hiểu nhầm, có giới hạn
+import { loaiCmt, Treu } from './treu';
+{
+  assert.equal(loaiCmt('Khó quá!!'), 'kho');
+  assert.equal(loaiCmt('dễ quá'), 'de');
+  assert.equal(loaiCmt('chào ông đồ'), 'chao');
+  assert.equal(loaiCmt('hi'), 'chao');
+  assert.equal(loaiCmt('hiểu rồi'), null);
+  assert.equal(loaiCmt('hahaha'), 'cuoi');
+  assert.equal(loaiCmt('ông ơi gợi ý đi'), 'goiY');
+  assert.equal(loaiCmt('B'), null);
+  assert.equal(loaiCmt('câu này khó quá mà tôi nghĩ mãi không ra nổi'), null); // dài: không đoán bừa
+  const tr = new Treu(180_000, 12_000);
+  tr.them('a', 'An', 'kho', 0);
+  tr.them('a', 'An', 'de', 100); // cùng người đang chờ: không thêm
+  assert.equal(tr.lay(1000)?.name, 'An');
+  tr.them('a', 'An', 'kho', 2000); // vừa trêu An: 3 phút sau mới trêu lại
+  tr.them('b', 'Bình', 'cuoi', 2000);
+  assert.equal(tr.lay(5000), null); // chưa đủ 12 giây giãn cách
+  assert.equal(tr.lay(14_000)?.name, 'Bình');
+  assert.equal(tr.lay(40_000), null);
+  console.log('treu: OK');
 }

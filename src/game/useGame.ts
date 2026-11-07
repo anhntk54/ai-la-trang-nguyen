@@ -10,11 +10,13 @@ import { IS_STAGE, MUTE } from '../live/page';
 import { sfx } from './sfx';
 import { GAME } from './config';
 import { KyThi, parseMc, type Ev, type View } from './thi';
+import { loaiCmt, Treu } from './treu';
 // Mọi file câu hỏi trong src/game/cau-hoi/ (mỗi chủ đề 1 file)
 const bankFiles = import.meta.glob<string>('./cau-hoi/*.txt', { query: '?raw', import: 'default', eager: true });
 const BANK = Object.values(bankFiles).flatMap((t) => parseMc(t));
 
 const pick = makePicker();
+export const TEN_MIEN = { bac: 'miền Bắc', trung: 'miền Trung', nam: 'miền Nam' } as const;
 const post = (url: string, body: unknown) =>
   fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => {});
 
@@ -39,6 +41,7 @@ export function useGame() {
     follows: new OncePerPerson(),
     wishes: new WishLimiter(GAME.wishPerUserMs, GAME.wishGlobalMs),
     recent: new RecentPeople(),
+    treu: new Treu(),
   }));
   const [kenh] = useState(() => ({ current: GAME.defaultChannelName }));
   kenh.current = channelName;
@@ -69,6 +72,12 @@ export function useGame() {
         return voice.say(pick(L.hetGio) ?? '', true);
       case 'nhac':
         return voice.say(pick(L.nhac) ?? '');
+      case 'latKeo':
+        return voice.say(pick(L.latKeo) ?? '', true);
+      case 'saiLien':
+        return talk.treu.them(ev.id, ev.name, 'sai', Date.now());
+      case 'cuuTro':
+        return voice.say(pick(L.cuuTro) ?? '', true);
       case 'dapAn': {
         const nhanh = ev.nhanh ? speakableName(ev.nhanh) : 'bạn';
         // Cảm xúc theo tỉ lệ đúng: gần hết đúng thì cười, ít đúng thì trêu, không ai đúng thì thở dài
@@ -94,7 +103,9 @@ export function useGame() {
         const ds = [...room.siTu.values()].filter((s) => s.diem > 0).map(({ id, name, avatar, diem }) => ({ id, name, avatar, diem }));
         if (ds.length) void layTuan(post('/api/bang-tuan', { ds }));
         const [tn, bn, th] = ev.top.map(speakableName);
-        return voice.say(tn ? L.vinhQuy(tn, bn, th) : L.khongAiThi, true);
+        voice.say(tn ? L.vinhQuy(tn, bn, th) : L.khongAiThi, true);
+        if (ev.mien) voice.say(L.mienThang(TEN_MIEN[ev.mien.mien], ev.mien.diem), true);
+        return;
       }
     }
   };
@@ -108,6 +119,9 @@ export function useGame() {
       const name = safeName(e.nickname, e.username);
       room.chat({ id: e.username, name, avatar: e.avatar, comment: e.comment, createTime: e.createTime }, Date.now());
       talk.recent.note(e.username, speakableName(name));
+      // Bình luận kiểu "khó quá", "dễ", "chào", "haha"... -> xếp hàng để ông đồ trêu lại vào khoảng lặng
+      const loai = containsBanned(e.comment) ? null : loaiCmt(e.comment);
+      if (loai) talk.treu.them(e.username, name, loai, Date.now());
       // Comment có lời cầu chúc -> đọc 1 câu chúc soạn sẵn (không bao giờ đọc nguyên văn comment)
       const topic = containsBanned(e.comment) ? null : detectWish(e.comment);
       const reply = topic && pick(GAME.wishReplies[topic] ?? []);
@@ -132,6 +146,11 @@ export function useGame() {
       if (!IS_STAGE) return;
       const spoken = speakableName(safeName(e.nickname, e.username));
       if (spoken !== 'bạn') talk.greeter.add(e.username, spoken);
+    },
+
+    // Tim: Thi Đình đủ tim thì cứu trợ cả phòng (loại 2 đáp án sai)
+    onLike: (e) => {
+      if (IS_STAGE) room.tim(e.likeCount);
     },
 
     onFollow: (e) => {
@@ -168,7 +187,7 @@ export function useGame() {
     let prev: View | null = null;
     void layTuan(fetch('/api/bang-tuan'));
     // câu chung đọc nhiều lần: tạo giọng sẵn ngay từ đầu
-    [...GAME.loi.hetGio, ...GAME.loi.nhac].forEach((t) => voice.prefetch(t));
+    [...GAME.loi.hetGio, ...GAME.loi.nhac, ...GAME.loi.latKeo, ...GAME.loi.cuuTro].forEach((t) => voice.prefetch(t));
     if (MUTE) sfx.volume = sfx.musicVolume = 0;
     sfx.loadFiles();
     fetch('/api/da-hoi')
@@ -184,6 +203,13 @@ export function useGame() {
       const now = Date.now();
       room.tick(now);
       room.lay().forEach(speak);
+      // khoảng lặng: đang chờ trả lời (còn hơn 6 giây) hoặc chờ ván / bảng vàng, giọng đang rảnh -> trêu 1 câu
+      const lang = (room.phase === 'hoi' && room.endsAt - now > 6000) || room.phase === 'cho' || room.phase === 'bangVang';
+      if (lang && !voice.busy) {
+        const x = talk.treu.lay(now);
+        const line = x && pick(GAME.loi.treu[x.loai])?.(speakableName(x.name), room.view(now).vongTen);
+        if (line) voice.say(line);
+      }
       const v = room.view(now);
       setView(v);
       sfx.watch(prev, v, voice.busy);
