@@ -313,9 +313,19 @@ function BangVang({ v }: { v: View }) {
 
 // Ảnh nữ hạng 2, 3 đang ghi sai chữ trên bảng: tạm dùng ảnh nam tới khi chủ kênh vẽ lại
 const CO_ANH_NU: Record<number, boolean> = { 1: true, 2: false, 3: false };
-// Nam hay nữ cố định theo tên tài khoản (không biết giới tính thật người xem)
-const gioi = (id: string, hang: number) =>
-  CO_ANH_NU[hang] && [...id].reduce((s, c) => s + c.charCodeAt(0), 0) % 2 ? 'nu' : 'nam';
+const anh = (h: Hang) => (CO_ANH_NU[h.hang] ? h.gioi : 'nam');
+
+/** Ảnh đại diện TikTok, viền vàng; không có ảnh thì hiện chữ cái đầu */
+function Avatar({ h, size }: { h: Hang; size: number }) {
+  const box = { width: size, height: size, borderColor: GOLD };
+  return h.avatar ? (
+    <img src={h.avatar} referrerPolicy="no-referrer" className="shrink-0 rounded-full border-[3px] object-cover" style={box} draggable={false} />
+  ) : (
+    <span className="flex shrink-0 items-center justify-center rounded-full border-[3px] bg-[#8a1c0c] font-extrabold text-[#ffe9a8]" style={{ ...box, fontSize: size * 0.45 }}>
+      {[...h.name][0]?.toUpperCase()}
+    </span>
+  );
+}
 
 /** 1 trong tam khôi: nhân vật cầm bảng + tên + điểm */
 function TamKhoi({ h, left, top, imgH, delay, big }: { h: Hang; left: number; top: number; imgH: number; delay: number; big?: boolean }) {
@@ -328,11 +338,14 @@ function TamKhoi({ h, left, top, imgH, delay, big }: { h: Hang; left: number; to
       style={{ left, top, width: big ? 320 : 250 }}
     >
       <img
-        src={`/assets/nv/top/top${h.hang}-${gioi(h.id, h.hang)}.webp`}
+        src={`/assets/nv/top/top${h.hang}-${anh(h)}.webp`}
         style={{ height: imgH, filter: 'drop-shadow(0 10px 12px rgba(0,0,0,.35))' }}
         draggable={false}
       />
-      <div className={`${big ? 'text-[40px]' : 'text-[30px]'} mt-1 w-full truncate text-center font-extrabold text-[#8a1c0c]`}>{h.name}</div>
+      <div className="mt-1 flex w-full items-center justify-center gap-2">
+        <Avatar h={h} size={big ? 64 : 48} />
+        <span className={`${big ? 'text-[40px]' : 'text-[30px]'} min-w-0 truncate font-extrabold text-[#8a1c0c]`}>{h.name}</span>
+      </div>
       <div className={`${big ? 'text-[28px]' : 'text-[24px]'} font-bold`}>{h.diem} điểm</div>
     </motion.div>
   );

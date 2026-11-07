@@ -1,6 +1,7 @@
 // Lõi game Ai Là Trạng Nguyên: không React, thời gian truyền vào (now) để test được.
 // Trang stage chạy 1 bản KyThi, trang điều khiển chỉ vẽ lại ảnh chụp view().
 import { GAME, type Level, type Vong } from './config';
+import { doanGioi, lenhGioi, type Gioi } from './gioiTinh';
 
 export interface McQ {
   id: string;
@@ -88,6 +89,7 @@ export interface Hang {
   diem: number;
   danhHieu: string;
   gain: number;
+  gioi: Gioi; // chọn ảnh nhân vật nam / nữ
 }
 
 const shuffle = <T,>(a: T[], rand: () => number) => {
@@ -112,6 +114,8 @@ export class KyThi {
   private skewN = 0;
   private events: Ev[] = [];
   siTu = new Map<string, SiTu>();
+  /** Người chơi tự gõ "nam" / "nữ": nhớ cả buổi, qua nhiều ván */
+  gioiChon = new Map<string, Gioi>();
 
   constructor(
     private bank: McQ[],
@@ -208,6 +212,11 @@ export class KyThi {
       const d = now - e.createTime;
       this.skew = this.skewN ? Math.min(this.skew + 5, d) : d;
       this.skewN++;
+    }
+    const g = lenhGioi(e.comment);
+    if (g) {
+      this.gioiChon.set(e.id, g);
+      return false;
     }
     if (this.phase !== 'hoi') return false;
     const chon = choiceOf(e.comment);
@@ -306,7 +315,12 @@ export class KyThi {
       .filter((s) => s.diem > 0 || s.gain !== 0)
       .sort((a, b) => b.diem - a.diem || a.msDung - b.msDung || a.vaoLuc - b.vaoLuc)
       .slice(0, n)
-      .map((s, i) => ({ hang: i + 1, id: s.id, name: s.name, avatar: s.avatar, diem: s.diem, danhHieu: GAME.danhHieu(i + 1), gain: s.gain }));
+      .map((s, i) => ({ hang: i + 1, id: s.id, name: s.name, avatar: s.avatar, diem: s.diem, danhHieu: GAME.danhHieu(i + 1), gain: s.gain, gioi: this.gioiCua(s) }));
+  }
+
+  /** Nam / nữ: người chơi tự chọn > đoán theo tên > cố định theo tài khoản */
+  gioiCua(s: { id: string; name: string }): Gioi {
+    return this.gioiChon.get(s.id) ?? doanGioi(s.name) ?? ([...s.id].reduce((n, c) => n + c.charCodeAt(0), 0) % 2 ? 'nu' : 'nam');
   }
 
   /** Ảnh chụp cho màn hình (gửi cả sang trang điều khiển) */

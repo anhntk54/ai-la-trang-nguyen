@@ -48,3 +48,4 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - Ảnh nữ hạng 2 (ghi "Bảng Vàng") và hạng 3 (ghi "Bảng Nhãn") sai chữ trên bảng: tạm dùng ảnh nam (CO_ANH_NU trong GameStage.tsx), chờ chủ kênh vẽ lại.
 - Giọng quan chủ khảo: VieNeu "Adam bựa" (2026-11-07).
 - Lời ông đồ có cảm xúc (thẻ [cười] [thở dài] [hắng giọng] của VieNeu), đổi theo tỉ lệ đúng: >=75% cười, <30% trêu, 0 người thở dài; đúng trong 2 giây đầu khen thần đồng. Chủ kênh duyệt (2026-11-07).
+- Nam/nữ của tam khôi: người chơi gõ "nam"/"nữ" (nhớ cả buổi) > đoán theo tên tiếng Việt (src/game/gioiTinh.ts: Thị = nữ, Văn = nam, danh sách tên) > cố định theo tài khoản. Màn trao giải có avatar TikTok cạnh tên (2026-11-07).

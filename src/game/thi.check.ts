@@ -101,3 +101,20 @@ assert.equal(k2.view(t).soNop, 500);
 assert.equal(k2.view(t).recent.length, 5);
 
 console.log('thi.check: OK');
+
+// Đoán nam / nữ theo tên + lệnh tự chọn
+import { doanGioi, lenhGioi } from './gioiTinh';
+assert.equal(doanGioi('Minh_Tuan'), 'nam');
+assert.equal(doanGioi('Lan Anh 🌸'), 'nu');
+assert.equal(doanGioi('Hoàng Long'), 'nam');
+assert.equal(doanGioi('NguyenThiAnh99'), 'nu');
+assert.equal(doanGioi('Trần Văn An'), 'nam');
+assert.equal(doanGioi('Khánh An'), null);
+assert.equal(lenhGioi('Nữ'), 'nu');
+assert.equal(lenhGioi('con trai'), 'nam');
+assert.equal(lenhGioi('nam định'), null);
+const k3 = new KyThi(bank);
+k3.chat({ id: 'la', name: 'Lan Anh', avatar: '', comment: 'nam' }, t);
+assert.equal(k3.gioiCua({ id: 'la', name: 'Lan Anh' }), 'nam'); // tự chọn thắng đoán tên
+assert.equal(k3.gioiCua({ id: 'mt', name: 'Minh Tuấn' }), 'nam');
+console.log('gioiTinh: OK');
