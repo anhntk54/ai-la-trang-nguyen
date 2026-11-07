@@ -17,13 +17,18 @@ export function GameStage({ game }: { game: GameState }) {
   const bigBoard = v.phase === 'bangVang' || v.phase === 'vinhQuy';
   return (
     <div className="absolute inset-0 select-none" style={{ color: INK }}>
+      {/* Màn bảng lớn: phủ giấy che khung câu hỏi in sẵn trên nền */}
+      {bigBoard && (
+        <div className="absolute rounded-[10px]" style={{ left: 150, top: 268, width: 782, height: 1124, background: 'radial-gradient(ellipse at 50% 40%,#fbf0d6 0%,#f3e2bb 75%,#ead39f 100%)' }} />
+      )}
+
       {/* Tab vòng thi, đè lên chữ in sẵn trên nền */}
-      <div
-        className={`absolute flex items-center justify-center whitespace-nowrap rounded-t-[22px] border-x-[3px] border-t-[3px] ${v.vongNhan.length > 9 ? 'text-[26px]' : 'text-[32px]'} font-extrabold`}
-        style={{ left: 738, top: 556, width: 186, height: 82, borderColor: GOLD, background: 'linear-gradient(#7a2414,#561409)', color: '#ffd977' }}
+      {!bigBoard && <div
+        className={`absolute flex items-center justify-center whitespace-nowrap rounded-t-[22px] border-x-[3px] border-t-[3px] px-2 ${v.vongNhan.length > 9 ? 'text-[23px] tracking-tight' : 'text-[30px]'} font-extrabold`}
+        style={{ left: 730, top: 556, width: 194, height: 82, borderColor: GOLD, background: 'linear-gradient(#7a2414,#561409)', color: '#ffd977' }}
       >
         {v.phase === 'cho' ? 'SẮP THI' : v.vongNhan}
-      </div>
+      </div>}
 
       {bigBoard ? <BangVang v={v} /> : <BangNho v={v} />}
 
@@ -32,10 +37,10 @@ export function GameStage({ game }: { game: GameState }) {
       {!bigBoard && <DapAn v={v} />}
 
       {/* Cách chơi + số người nộp */}
-      <div className="absolute text-[30px] font-bold" style={{ left: 170, top: 1290, width: 470 }}>
+      {!bigBoard && <div className="absolute text-[30px] font-bold" style={{ left: 170, top: 1290, width: 470 }}>
         Gõ <b className="text-[#8a1c0c]">A, B, C, D</b> vào bình luận
         {v.phase === 'hoi' && <div className="text-[26px] font-semibold opacity-80">{v.soNop} sĩ tử đã nộp bài</div>}
-      </div>
+      </div>}
 
       {/* Dải tên vừa nộp bài, trên cuộn giấy dưới */}
       <div className="absolute flex items-center gap-2 overflow-hidden whitespace-nowrap text-[28px] font-semibold" style={{ left: 165, top: 1408, width: 470, height: 52 }}>
@@ -246,22 +251,18 @@ function BangNho({ v }: { v: View }) {
 function BangVang({ v }: { v: View }) {
   const vinh = v.phase === 'vinhQuy';
   const [tn, bn, th] = v.top;
-  const rest = vinh ? v.top.slice(3) : v.top;
+  const rest = vinh ? v.top.slice(3, 11) : v.top;
   return (
     <div className="absolute" style={{ left: 165, top: 280, width: 750, height: 1000 }}>
-      <div className="text-center text-[44px] font-extrabold text-[#8a1c0c]">
-        {vinh ? '🎉 VINH QUY BÁI TỔ 🎉' : `BẢNG VÀNG SAU ${v.vongTen.toUpperCase()}`}
+      <div className={`text-center ${vinh ? 'text-[40px] italic' : 'text-[44px]'} font-extrabold text-[#8a1c0c]`}>
+        {vinh ? '“Hiền tài là nguyên khí của quốc gia”' : `BẢNG VÀNG SAU ${v.vongTen.toUpperCase()}`}
       </div>
       {vinh && tn && (
-        <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', bounce: 0.5 }} className="mt-4 text-center">
-          <div className="text-[34px] font-bold">Trạng Nguyên</div>
-          <div className="text-[64px] font-extrabold leading-tight text-[#b3200c]">👑 {tn.name}</div>
-          <div className="text-[30px] font-bold">{tn.diem} điểm</div>
-          <div className="mt-3 flex justify-center gap-10 text-[28px] font-bold">
-            {bn && <div>Bảng Nhãn<div className="text-[34px] text-[#8a1c0c]">{bn.name}</div></div>}
-            {th && <div>Thám Hoa<div className="text-[34px] text-[#8a1c0c]">{th.name}</div></div>}
-          </div>
-        </motion.div>
+        <div className="relative mt-2" style={{ height: 640 }}>
+          {bn && <TamKhoi h={bn} left={0} top={150} imgH={380} delay={0.6} />}
+          {th && <TamKhoi h={th} left={500} top={150} imgH={380} delay={1.1} />}
+          <TamKhoi h={tn} left={215} top={0} imgH={500} delay={0.1} big />
+        </div>
       )}
       {vinh && !tn && <div className="mt-24 text-center text-[36px] font-bold">Ván này chưa có sĩ tử nào</div>}
       <div className={`mt-5 grid grid-cols-2 gap-x-6 gap-y-1 ${vinh ? 'border-t-2 border-[#c9a46a] pt-4' : ''}`}>
@@ -277,6 +278,33 @@ function BangVang({ v }: { v: View }) {
         <div className="absolute inset-x-0 bottom-0 text-center text-[30px] font-bold opacity-80">Người mới vào vẫn kịp thi kỳ sau!</div>
       )}
     </div>
+  );
+}
+
+// Ảnh nữ hạng 2, 3 đang ghi sai chữ trên bảng: tạm dùng ảnh nam tới khi chủ kênh vẽ lại
+const CO_ANH_NU: Record<number, boolean> = { 1: true, 2: false, 3: false };
+// Nam hay nữ cố định theo tên tài khoản (không biết giới tính thật người xem)
+const gioi = (id: string, hang: number) =>
+  CO_ANH_NU[hang] && [...id].reduce((s, c) => s + c.charCodeAt(0), 0) % 2 ? 'nu' : 'nam';
+
+/** 1 trong tam khôi: nhân vật cầm bảng + tên + điểm */
+function TamKhoi({ h, left, top, imgH, delay, big }: { h: Hang; left: number; top: number; imgH: number; delay: number; big?: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 60, scale: 0.7 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: 'spring', bounce: 0.45, delay }}
+      className="absolute flex flex-col items-center"
+      style={{ left, top, width: big ? 320 : 250 }}
+    >
+      <img
+        src={`/assets/nv/top/top${h.hang}-${gioi(h.id, h.hang)}.webp`}
+        style={{ height: imgH, filter: 'drop-shadow(0 10px 12px rgba(0,0,0,.35))' }}
+        draggable={false}
+      />
+      <div className={`${big ? 'text-[40px]' : 'text-[30px]'} mt-1 w-full truncate text-center font-extrabold text-[#8a1c0c]`}>{h.name}</div>
+      <div className={`${big ? 'text-[28px]' : 'text-[24px]'} font-bold`}>{h.diem} điểm</div>
+    </motion.div>
   );
 }
 

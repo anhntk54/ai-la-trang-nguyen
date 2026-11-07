@@ -42,3 +42,5 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - Tên game "Ai Là Trạng Nguyên", 20 câu, 4 kỳ: Khảo hạch trường làng, Thi Hương, Thi Hội, Thi Đình (2026-11-07).
 - Ảnh nền và nhân vật ông đồ do chủ kênh vẽ (2026-11-07).
 - Bộ câu hỏi bàn riêng, chưa làm (2026-11-07).
+- Màn cuối ván: tiêu đề "Hiền tài là nguyên khí của quốc gia" thay chữ Vinh quy bái tổ (2026-11-07). Tam khôi dùng ảnh public/assets/top/ (tách nền ra public/assets/nv/top/), nam hay nữ cố định theo tên tài khoản.
+- Ảnh nữ hạng 2 (ghi "Bảng Vàng") và hạng 3 (ghi "Bảng Nhãn") sai chữ trên bảng: tạm dùng ảnh nam (CO_ANH_NU trong GameStage.tsx), chờ chủ kênh vẽ lại.

@@ -24,6 +24,7 @@ export function useGame() {
   const [view, setView] = useState<View | null>(null);
   const [channelName, setChannelName] = useState(GAME.defaultChannelName);
   const [room] = useState(() => new KyThi(parseMc(bankText)));
+  if (import.meta.env.DEV) (window as any).__room = room; // để thử các màn trong trình duyệt
   const [talk] = useState(() => ({
     greeter: new NameBatcher(
       GAME.greetEveryMs,

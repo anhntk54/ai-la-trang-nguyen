@@ -7,19 +7,27 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const SRC = path.join(ROOT, 'public/assets/MC');
-const OUT = path.join(ROOT, 'public/assets/nv/mc');
-const OUT_H = 760;
 const TOL = 22; // lệch tối đa so với màu nền
-// Tên file gốc (đoạn đầu) -> tên tư thế
-const POSES = [
-  ['Elderly_teacher_celebrating', 'mung'],
-  ['Elderly_teacher_holding', 'suy-nghi'],
-  ['Teacher_holding_microphone_on_stage', 'chi'],
-  ['Teacher_holding_microphone_smiling', 'cuoi'],
-  ['Teacher_showing_regret', 'tiec'],
+// [thư mục gốc, thư mục ra, chiều cao ra, [[tên file gốc (đoạn đầu), tên ra]]]
+const JOBS = [
+  ['public/assets/MC', 'public/assets/nv/mc', 760, [
+    ['Elderly_teacher_celebrating', 'mung'],
+    ['Elderly_teacher_holding', 'suy-nghi'],
+    ['Teacher_holding_microphone_on_stage', 'chi'],
+    ['Teacher_holding_microphone_smiling', 'cuoi'],
+    ['Teacher_showing_regret', 'tiec'],
+  ]],
+  // Tam khôi (ảnh chủ kênh vẽ): top1/2/3, nam/nu
+  ['public/assets/top', 'public/assets/nv/top', 900, [
+    ['top1-nam', 'top1-nam'], ['top1-nu', 'top1-nu'],
+    ['top2-nam', 'top2-nam'], ['top2-nu', 'top2-nu'],
+    ['top3-nam', 'top3-nam'], ['top3-nu', 'top3-nu'],
+  ]],
 ];
 
+for (const [srcDir, outDir, OUT_H, POSES] of JOBS) {
+const SRC = path.join(ROOT, srcDir);
+const OUT = path.join(ROOT, outDir);
 fs.mkdirSync(OUT, { recursive: true });
 for (const file of fs.readdirSync(SRC)) {
   const pose = POSES.find(([p]) => file.startsWith(p))?.[1];
@@ -100,4 +108,5 @@ for (const file of fs.readdirSync(SRC)) {
     .webp({ quality: 90, alphaQuality: 90 })
     .toFile(out);
   console.log(pose, '->', path.relative(ROOT, out), `${maxX - minX + 1}x${maxY - minY + 1}`);
+}
 }
