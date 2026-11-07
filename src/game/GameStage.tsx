@@ -19,7 +19,7 @@ export function GameStage({ game }: { game: GameState }) {
     <div className="absolute inset-0 select-none" style={{ color: INK }}>
       {/* Tab vòng thi, đè lên chữ in sẵn trên nền */}
       <div
-        className="absolute flex items-center justify-center rounded-t-[22px] border-x-[3px] border-t-[3px] text-[34px] font-extrabold tracking-wide"
+        className={`absolute flex items-center justify-center whitespace-nowrap rounded-t-[22px] border-x-[3px] border-t-[3px] ${v.vongNhan.length > 9 ? 'text-[26px]' : 'text-[32px]'} font-extrabold`}
         style={{ left: 738, top: 556, width: 186, height: 82, borderColor: GOLD, background: 'linear-gradient(#7a2414,#561409)', color: '#ffd977' }}
       >
         {v.phase === 'cho' ? 'SẮP THI' : v.vongNhan}
@@ -228,7 +228,9 @@ function BangNho({ v }: { v: View }) {
         <span className="text-[24px] font-semibold opacity-75">{v.soSiTu} sĩ tử</span>
       </div>
       {v.top.length === 0 ? (
-        <div className="mt-8 text-center text-[30px] font-semibold opacity-70">Chưa ai ghi danh. Gõ đáp án để lên bảng!</div>
+        <div className="mt-8 text-center text-[30px] font-semibold opacity-70">
+          {v.soSiTu ? 'Chưa ai có điểm. Trả lời đúng để lên bảng!' : 'Chưa ai ghi danh. Gõ đáp án để lên bảng!'}
+        </div>
       ) : (
         <div className={two ? 'grid grid-cols-2 gap-x-6' : ''}>
           {v.top.map((h) => (
@@ -287,7 +289,7 @@ function MC({ v }: { v: View }) {
     : v.phase === 'doc' || v.phase === 'bangVang' ? 'chi'
     : 'cuoi';
   return (
-    <div className="pointer-events-none absolute" style={{ left: 640, top: 1240, height: 420 }}>
+    <div className="pointer-events-none absolute" style={{ left: 650, top: 1288, height: 400 }}>
       <AnimatePresence mode="popLayout">
         <motion.img
           key={pose}
@@ -296,7 +298,7 @@ function MC({ v }: { v: View }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          style={{ height: 420, filter: 'drop-shadow(0 8px 10px rgba(0,0,0,.35))' }}
+          style={{ height: 400, filter: 'drop-shadow(0 8px 10px rgba(0,0,0,.35))' }}
           draggable={false}
         />
       </AnimatePresence>

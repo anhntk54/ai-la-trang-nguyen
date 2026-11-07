@@ -137,7 +137,7 @@ export function useGame() {
       .then((u) => Object.assign(room.used, u))
       .catch(() => {})
       .finally(() => {
-        room.cho(Date.now());
+        if (!room.endsAt) room.cho(Date.now()); // chủ kênh đã bấm "Bắt đầu ngay" trong lúc chờ thì thôi
         ready = true;
       });
     const id = setInterval(() => {

@@ -7,5 +7,7 @@ export default defineConfig({
   server: {
     // lvh.me trỏ về 127.0.0.1; TikTok LIVE Studio không nhận "localhost"
     allowedHosts: ['lvh.me'],
+    // server ghi data/*.json lúc đang chơi: không được làm trang stage tải lại
+    watch: { ignored: ['**/data/**', '**/settings.json'] },
   },
 });

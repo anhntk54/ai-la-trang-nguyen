@@ -36,6 +36,9 @@ for (const file of fs.readdirSync(SRC)) {
   for (let i = 0; i < W * H; i++) {
     const p = px(i);
     diff[i] = Math.max(Math.abs(p[0] - bg[0]), Math.abs(p[1] - bg[1]), Math.abs(p[2] - bg[2]));
+    // bóng xám dưới chân (15% dưới cùng): xám nhạt, không màu -> coi là nền
+    const sat = Math.max(...p) - Math.min(...p);
+    if (i >= W * H * 0.85 && sat < 14 && Math.min(...p) > 150) diff[i] = 0;
   }
   // loang từ mép
   const isBg = new Uint8Array(W * H);
