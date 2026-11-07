@@ -17,6 +17,7 @@ const BANK = Object.values(bankFiles).flatMap((t) => parseMc(t));
 
 const pick = makePicker();
 export const TEN_MIEN = { bac: 'miền Bắc', trung: 'miền Trung', nam: 'miền Nam' } as const;
+const GOI_MIEN = { bac: 'Bắc', trung: 'Trung', nam: 'Nam' } as const;
 const post = (url: string, body: unknown) =>
   fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => {});
 
@@ -74,6 +75,12 @@ export function useGame() {
         return voice.say(pick(L.nhac) ?? '');
       case 'latKeo':
         return voice.say(pick(L.latKeo) ?? '', true);
+      case 'thach':
+        return voice.say(pick(L.thach) ?? '', true);
+      case 'dauBang':
+        return voice.say(pick(L.dauBang)?.(speakableName(ev.name)) ?? '', true);
+      case 'mienKem':
+        return voice.say(pick(L.mienKem)?.(TEN_MIEN[ev.mien], GOI_MIEN[ev.mien]) ?? '');
       case 'saiLien':
         return talk.treu.them(ev.id, ev.name, 'sai', Date.now());
       case 'cuuTro':
@@ -97,7 +104,9 @@ export function useGame() {
         return;
       }
       case 'bangVang':
-        return voice.say(ev.dau ? pick(L.bangVang)!(ev.vong, speakableName(ev.dau)) : L.bangVangTrong(ev.vong), true);
+        voice.say(ev.dau ? pick(L.bangVang)!(ev.vong, speakableName(ev.dau)) : L.bangVangTrong(ev.vong), true);
+        if (ev.dau && Math.random() < 0.6) voice.say(pick(L.coVuSau) ?? '', true);
+        return;
       case 'vinhQuy': {
         // cộng điểm ván này vào bảng vàng tuần
         const ds = [...room.siTu.values()].filter((s) => s.diem > 0).map(({ id, name, avatar, diem }) => ({ id, name, avatar, diem }));
@@ -187,7 +196,7 @@ export function useGame() {
     let prev: View | null = null;
     void layTuan(fetch('/api/bang-tuan'));
     // câu chung đọc nhiều lần: tạo giọng sẵn ngay từ đầu
-    [...GAME.loi.hetGio, ...GAME.loi.nhac, ...GAME.loi.latKeo, ...GAME.loi.cuuTro].forEach((t) => voice.prefetch(t));
+    [...GAME.loi.hetGio, ...GAME.loi.nhac, ...GAME.loi.latKeo, ...GAME.loi.cuuTro, ...GAME.loi.thach, ...GAME.loi.coVuSau].forEach((t) => voice.prefetch(t));
     if (MUTE) sfx.volume = sfx.musicVolume = 0;
     sfx.loadFiles();
     fetch('/api/da-hoi')

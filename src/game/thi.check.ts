@@ -262,3 +262,35 @@ import { loaiCmt, Treu } from './treu';
   assert.equal(tr.lay(40_000), null);
   console.log('treu: OK');
 }
+
+// Cổ vũ, thách thức: đổi ngôi đầu bảng, phe miền đang thua, thách trước câu
+{
+  let t5 = 30_000_000;
+  const k7 = new KyThi(bank, {}, Math.random);
+  const go = (ms: number) => { t5 += ms; k7.tick(t5); };
+  k7.chat({ id: 'a', name: 'An', avatar: '', comment: 'Bắc' }, t5);
+  k7.chat({ id: 'b', name: 'Bình', avatar: '', comment: 'Trung' }, t5);
+  k7.cho(t5);
+  go(GAME.choSec * 1000);
+  const ev: any[] = [];
+  let n = 0;
+  for (let g = 0; g < 4000 && k7.phase !== 'vinhQuy'; g++) {
+    if (k7.phase === 'doc') k7.docXong(t5);
+    if (k7.phase === 'hoi') {
+      n++;
+      const dung = 'ABCD'[k7.cau!.ans];
+      const sai = 'ABCD'[(k7.cau!.ans + 1) % 4];
+      // 5 câu đầu An đúng, Bình sai; sau đó ngược lại để Bình vượt lên
+      k7.chat({ id: 'a', name: 'An', avatar: '', comment: n <= 5 ? dung : sai }, t5);
+      k7.chat({ id: 'b', name: 'Bình', avatar: '', comment: n <= 5 ? sai : dung }, t5);
+      go(k7['vong'].giay * 1000);
+      go(GAME.chotSec * 1000);
+    } else go(1000);
+    ev.push(...k7.lay());
+  }
+  assert.ok(ev.some((e) => e.t === 'dauBang' && e.name === 'Bình'), 'hô đổi ngôi khi Bình vượt An');
+  assert.ok(ev.some((e) => e.t === 'mienKem' && e.mien === 'trung'), 'cổ vũ miền Trung lúc đang thua');
+  const thach = ev.filter((e) => e.t === 'thach').length;
+  assert.ok(thach >= 2 && thach <= 16, `số câu thách ${thach}`);
+  console.log('co vu + thach thuc: OK');
+}

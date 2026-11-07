@@ -33,7 +33,10 @@ export const GAME = {
   saiTru: 0.5, // sai bị trừ nửa điểm tối đa của vòng; tổng điểm không xuống dưới 0
   diemSan: 0.5, // đúng sát giờ vẫn được 50% điểm tối đa
   latKeoNhan: 2, // câu cuối ván (câu lật kèo): điểm cộng và trừ đều nhân đôi
-  cuuTroTim: 200, // Thi Đình: cả phòng thả đủ chừng này tim thì loại 2 đáp án sai
+  cuuTroTim: 200,
+  thachTiLe: 0.4, // bao nhiêu phần câu hỏi ông đồ thách thức trước khi đọc đề
+  dauBangCach: 3, // đổi ngôi đầu bảng: cách ít nhất 3 câu mới hô lại
+  mienCach: 5, // cổ vũ phe miền đang thua: 5 câu 1 lần // Thi Đình: cả phòng thả đủ chừng này tim thì loại 2 đáp án sai
   chuoiMoi: 3, // đúng liền 3 câu thì thưởng
   chuoiThuong: 100,
   earlySendGraceMs: 500, // gửi trước lúc hiện đáp án quá 0,5 giây thì không tính (không mất lượt)
@@ -87,7 +90,46 @@ export const GAME = {
     // hết giờ, trống dồn: câu chung nên giọng được tạo sẵn từ đầu buổi, nói ngay không phải chờ
     hetGio: ['Hết giờ! Đáp án đúng là...', 'Hết giờ rồi! Và đáp án chính xác là...', 'Dừng bút! Đáp án đúng là...'],
     // giục giữa giờ
-    nhac: ['Nhanh tay lên các sĩ tử!', 'Ai chưa nộp bài thì gõ đi nào!', 'Thời gian không chờ đợi ai đâu nhé!', '[cười] Nghĩ kỹ chưa đấy?'],
+    nhac: [
+      'Nhanh tay lên các sĩ tử!',
+      'Ai chưa nộp bài thì gõ đi nào!',
+      'Thời gian không chờ đợi ai đâu nhé!',
+      '[cười] Nghĩ kỹ chưa đấy?',
+      'Cố lên các sĩ tử, sai thì câu sau gỡ lại!',
+      'Không chắc thì loại dần đáp án sai đi, còn kịp đấy!',
+      'Cả trường cố lên nào, ông đang nhìn đây!',
+      '[cười] Ai đang phân vân thì nhắm mắt chọn đại cũng được, nhưng sai là trừ điểm đấy nhé.',
+    ],
+    // thách thức trước khi đọc đề
+    thach: [
+      'Câu này mà ai đúng thì ông xin bái phục!',
+      '[cười] Câu tiếp theo hơi xoắn não đấy, tập trung vào!',
+      'Sĩ tử nào tự nhận là giỏi thì chứng minh ở câu này đi!',
+      'Ông đoán câu này cả trường sẽ chia làm bốn phe. Thử xem nào!',
+      'Ai trả lời đúng câu này nhanh nhất, ông khen cả buổi!',
+      '[hắng giọng] Câu này phân biệt sĩ tử với trạng nguyên đây!',
+      'Nghe kỹ nhé, câu này ông ra để thử bản lĩnh.',
+      'Câu này dễ hay khó là tùy người đấy. [cười] Ông thì thấy dễ.',
+    ],
+    // có người vượt lên dẫn đầu ván
+    dauBang: [
+      (n: string) => `${n} vừa vượt lên dẫn đầu! Ai muốn giành lại thì nhanh tay lên!`,
+      (n: string) => `[cười] Ngôi đầu đổi chủ rồi, giờ là ${n}! Bảng vàng gay cấn quá.`,
+      (n: string) => `${n} lên đỉnh bảng vàng rồi. Có ai dám thách đấu không?`,
+      (n: string) => `Cả trường ơi, ${n} đang ngồi ghế đầu. Kéo xuống đi chứ!`,
+    ],
+    // phe miền đang thua điểm
+    mienKem: [
+      (m: string, goi: string) => `Phe ${m} đang bị bỏ lại phía sau, cố lên nào! Ai chưa chọn phe thì gõ ${goi}.`,
+      (m: string, goi: string) => `Bà con ${m} đâu cả rồi? Gõ ${goi} vào phe, kéo điểm lên đi!`,
+      (m: string) => `[cười] ${m} ơi, điểm thấp nhất trường rồi đấy. Gỡ lại đi chứ!`,
+    ],
+    // cổ vũ người xếp sau, đọc thêm ở bảng vàng
+    coVuSau: [
+      'Ai đang xếp sau đừng nản, câu phía sau điểm cao lắm!',
+      'Còn cơ hội lật kèo, cố lên các sĩ tử!',
+      'Bảng vàng còn đổi chỗ dài dài, chưa ai chắc đỗ đâu.',
+    ],
     // gần như cả trường đúng
     deQua: [
       (n: number, name: string) => `[cười] Dễ quá phải không! ${n} người đúng, nhanh nhất là ${name}.`,

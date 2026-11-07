@@ -85,6 +85,9 @@ export type Ev =
   | { t: 'bangVang'; vong: string; dau?: string }
   | { t: 'vinhQuy'; top: string[]; mien?: { mien: Mien; diem: number } }
   | { t: 'cuuTro' }
+  | { t: 'thach' }
+  | { t: 'dauBang'; name: string }
+  | { t: 'mienKem'; mien: Mien }
   | { t: 'saiLien'; id: string; name: string }
   | { t: 'latKeo' };
 
@@ -136,6 +139,9 @@ export class KyThi {
   private trangMoi: string | null = null;
   /** Cứu trợ bằng tim ở Thi Đình: đủ tim thì loại 2 đáp án sai cho cả phòng */
   private cuu = { tim: 0, xong: false, loai: [] as number[] };
+  private dauTruoc: string | null = null; // ai đang dẫn đầu ván
+  private dauBaoCau = -99; // câu lần cuối hô đổi ngôi
+  private mienBaoCau = 0;
 
   // ---------- quà: mỗi lần hiện 1 băng rôn, người khác xếp hàng (quà KHÔNG cho lợi thế trong game) ----------
   private quaCho: Qua[] = [];
@@ -180,6 +186,9 @@ export class KyThi {
 
   batDau(now: number) {
     this.trangTruoc = this.trangMoi;
+    this.dauTruoc = null;
+    this.dauBaoCau = -99;
+    this.mienBaoCau = 0;
     this.siTu.clear();
     this.cauList = this.chonCau(now);
     this.idx = 0;
@@ -249,6 +258,7 @@ export class KyThi {
     this.nhacDa = false;
     this.cuu = { tim: 0, xong: false, loai: [] };
     if (this.laLatKeo) this.events.push({ t: 'latKeo' });
+    else if (this.idx > 0 && this.rand() < GAME.thachTiLe) this.events.push({ t: 'thach' });
     this.events.push({ t: 'doc', text: this.docText(this.idx)! });
   }
 
@@ -407,6 +417,26 @@ export class KyThi {
     nhanh.sort((a, b) => a.ms - b.ms);
     this.ketQua = { soDung: nhanh.length, nhanh: nhanh.slice(0, 3) };
     if (treuSai) this.events.push({ t: 'saiLien', id: treuSai.id, name: treuSai.name });
+    // đổi ngôi đầu bảng: hô tên người mới dẫn đầu (giãn cách vài câu cho đỡ lặp)
+    const dau = this.bxh(1)[0];
+    if (dau && dau.id !== this.dauTruoc) {
+      if (this.dauTruoc && this.idx - this.dauBaoCau >= GAME.dauBangCach) {
+        this.events.push({ t: 'dauBang', name: dau.name });
+        this.dauBaoCau = this.idx;
+      }
+      this.dauTruoc = dau.id;
+    }
+    // phe miền đang thua (có người chơi, kém xa miền dẫn đầu): cổ vũ 5 câu 1 lần
+    if (this.idx - this.mienBaoCau >= GAME.mienCach) {
+      const ds = (Object.entries(this.diemMien()) as [Mien, { diem: number; nguoi: number }][]).filter(([, x]) => x.nguoi > 0);
+      if (ds.length >= 2) {
+        ds.sort((a, b) => a[1].diem - b[1].diem);
+        if (ds[ds.length - 1][1].diem > ds[0][1].diem * 1.5) {
+          this.events.push({ t: 'mienKem', mien: ds[0][0] });
+          this.mienBaoCau = this.idx;
+        }
+      }
+    }
     this.phase = 'dapAn';
     this.endsAt = now + GAME.dapAnSec * 1000;
     this.events.push({
