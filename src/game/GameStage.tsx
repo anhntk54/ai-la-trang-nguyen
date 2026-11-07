@@ -311,9 +311,7 @@ function BangVang({ v }: { v: View }) {
   );
 }
 
-// Ảnh nữ hạng 2, 3 đang ghi sai chữ trên bảng: tạm dùng ảnh nam tới khi chủ kênh vẽ lại
-const CO_ANH_NU: Record<number, boolean> = { 1: true, 2: false, 3: false };
-const anh = (h: Hang) => (CO_ANH_NU[h.hang] ? h.gioi : 'nam');
+const anh = (h: Hang) => h.gioi;
 
 /** Ảnh đại diện TikTok, viền vàng; không có ảnh thì hiện chữ cái đầu */
 function Avatar({ h, size }: { h: Hang; size: number }) {

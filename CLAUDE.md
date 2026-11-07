@@ -46,7 +46,7 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - Ảnh nền và nhân vật ông đồ do chủ kênh vẽ (2026-11-07).
 - Bộ câu hỏi bàn riêng, chưa làm (2026-11-07).
 - Màn cuối ván: tiêu đề "Hiền tài là nguyên khí của quốc gia" thay chữ Vinh quy bái tổ (2026-11-07). Tam khôi dùng ảnh public/assets/top/ (tách nền ra public/assets/nv/top/), nam hay nữ cố định theo tên tài khoản.
-- Ảnh nữ hạng 2 (ghi "Bảng Vàng") và hạng 3 (ghi "Bảng Nhãn") sai chữ trên bảng: tạm dùng ảnh nam (CO_ANH_NU trong GameStage.tsx), chờ chủ kênh vẽ lại.
+- Ảnh nữ hạng 2 (Bảng Nhãn) và hạng 3 (Thám Hoa) chủ kênh đã vẽ lại đúng chữ, dùng đủ nam/nữ cho cả tam khôi (2026-11-07).
 - Giọng quan chủ khảo: VieNeu "Adam bựa" (2026-11-07).
 - Lời ông đồ có cảm xúc (thẻ [cười] [thở dài] [hắng giọng] của VieNeu), đổi theo tỉ lệ đúng: >=75% cười, <30% trêu, 0 người thở dài; đúng trong 2 giây đầu khen thần đồng. Chủ kênh duyệt (2026-11-07).
 - Nam/nữ của tam khôi: người chơi gõ "nam"/"nữ" (nhớ cả buổi) > đoán theo tên tiếng Việt (src/game/gioiTinh.ts: Thị = nữ, Văn = nam, danh sách tên) > cố định theo tài khoản. Màn trao giải có avatar TikTok cạnh tên (2026-11-07).
