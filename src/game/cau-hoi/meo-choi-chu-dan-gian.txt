@@ -6,7 +6,6 @@
 "Bằng cái vung, vùng xuống ao, đào chẳng thấy, lấy chẳng được" là gì? | Bóng trăng | Con rùa | Hòn đá | Lá sen
 "Thân em xưa ở bụi tre, mùa đông xếp lại, mùa hè mở ra" là cái gì? | Cái quạt nan | Cái nón lá | Cái rổ | Đôi đũa
 "Da cóc mà bọc bột lọc, bột lọc mà bọc hòn than" là quả gì? | Quả nhãn | Quả chôm chôm | Quả măng cụt | Quả mít
-"Da cóc mà bọc trứng gà, bổ ra thơm phức" là quả gì? | Quả mít | Quả dứa | Quả bưởi | Quả na
 "Nhà xanh lại đóng đố xanh, tra đỗ trồng hành, thả lợn vào trong" là gì? | Bánh chưng | Bánh giò | Bánh cốm | Bánh khúc
 "Mồm bò không phải mồm bò, mà lại là mồm bò" là con gì? | Con ốc sên | Con bò | Con trâu | Con dê
 "Chuồn chuồn bay thấp thì mưa, bay cao thì nắng, bay vừa thì ..." - từ còn thiếu? | Râm | Gió | Lạnh | Bão
@@ -14,7 +13,6 @@ Con gì đầu dê, mình ốc? | Con dốc | Con dê | Con ốc | Con sên
 Con gì đập thì sống, không đập thì chết? | Con tim | Con cá | Con muỗi | Con gà
 Con gì sáng đi bốn chân, trưa đi hai chân, chiều đi ba chân? | Con người | Con khỉ | Con gà | Con gấu
 Con gì bay cao mà không có cánh, phải có dây mới bay được? | Con diều | Con dơi | Con ong | Chuồn chuồn
-Con gì đứng thì thấp, ngồi xuống lại cao hơn? | Con chó | Con gà | Con rắn | Con ngựa
 Con gì ăn no, bụng to mắt híp, mồm kêu ụt ịt? | Con lợn | Con gấu | Con chó | Con dê
 Con gì đuôi ngắn tai dài, mắt hồng lông mượt? | Con thỏ | Con mèo | Con sóc | Con chuột
 Con gì chân có màng, mỏ bẹt màu vàng, kêu cạp cạp? | Con vịt | Con gà | Con ngỗng | Con ếch
@@ -25,7 +23,6 @@ Con gì có sừng, ăn cỏ, trẻ chăn ngồi trên lưng thổi sáo? | Con 
 Con gì ngày thì ngủ, đêm thì bay, lúc ngủ treo ngược trên cành? | Con dơi | Con cú | Chim sẻ | Con quạ
 Con gì mỏ cong, lông sặc sỡ, bắt chước được tiếng người? | Con vẹt | Con cò | Con công | Con sẻ
 Con gì có túi trước bụng để đựng con? | Chuột túi | Khỉ đột | Gấu trúc | Sóc bay
-Con gì ngủ mà mắt vẫn mở thao láo? | Con cá | Con mèo | Con chó | Con gà
 Con gì tự kêu tên mình trên vách nhà lúc đêm khuya? | Tắc kè | Thằn lằn | Kỳ nhông | Rắn mối
 Con gì có vòi mà không phải voi, đêm đêm hút máu người? | Con muỗi | Con ruồi | Con kiến | Con gián
 Con gì có mai cứng, tám cẳng hai càng, bò ngang? | Con cua | Con tôm | Con ốc | Con rùa
@@ -95,7 +92,6 @@ Cái gì cho ăn gì cũng ăn, nhưng cho uống nước thì chết? | Ngọn 
 Cái gì một chân, đội cái ô, mọc lên sau cơn mưa? | Cây nấm | Con cò | Cây chuối | Cột điện
 Cái gì một chân đứng suốt đêm bên đường, đầu sáng rực? | Cột đèn | Cây nấm | Con cò | Cột cờ
 Cái gì to hơn con voi mà không nặng chút nào? | Bóng con voi | Đám mây | Cá voi | Ngọn núi
-Cái gì người đứng thì nó nằm, người nằm thì nó đứng? | Bàn chân | Cái gối | Đôi giày | Cái bóng
 Cái gì không có mắt mà ai nhìn vào cũng thấy chính mình? | Cái gương | Bức tranh | Tấm ảnh | Cửa sổ
 Cái gì nhiều răng, đi sau trâu để làm nhỏ đất? | Cái bừa | Cái cày | Cái cuốc | Cái liềm
 Cái gì cong như vầng trăng non, có răng, dùng để cắt lúa? | Cái liềm | Cái cuốc | Cái xẻng | Cái cày
@@ -257,7 +253,6 @@ Người miền Nam gọi "quả na" là trái gì? | Mãng cầu | Vú sữa | 
 Trái "mận" của miền Nam, ngoài Bắc thường gọi là quả gì? | Quả roi | Quả mận | Quả mơ | Quả đào
 "Ngô" của miền Bắc, người miền Nam gọi là gì? | Bắp | Khoai | Mì | Đậu
 "Lạc" của miền Bắc, người miền Nam gọi là gì? | Đậu phộng | Đậu xanh | Hạt điều | Hạt mè
-Người miền Nam nói "ốm" thì nghĩa giống từ nào của miền Bắc? | Gầy | Bệnh | Mệt | Béo
 Cái "muỗng" của miền Nam, ngoài Bắc gọi là gì? | Cái thìa | Đôi đũa | Cái dĩa | Cái muôi
 Người miền Nam nói "mắc cỡ" nghĩa là gì? | Xấu hổ | Đắt tiền | Bận việc | Tức giận
 "Con heo" của miền Nam, ngoài Bắc gọi là con gì? | Con lợn | Con bò | Con dê | Con chó
@@ -269,7 +264,6 @@ Người miền Nam nói "bông", ngoài Bắc thường nói là gì? | Hoa | L
 "Cây viết" của miền Nam, ngoài Bắc gọi là gì? | Cái bút | Cái thước | Quyển vở | Cục tẩy
 "Cục gôm" của học trò miền Nam, ngoài Bắc gọi là gì? | Cục tẩy | Hồ dán | Cái bút | Viên phấn
 Cái "ly" của miền Nam, ngoài Bắc thường gọi là gì? | Cái cốc | Cái bát | Cái đĩa | Cái thìa
-"Củ sắn" của miền Bắc, người miền Nam gọi là gì? | Khoai mì | Khoai lang | Khoai môn | Củ đậu
 "Cái dù" của miền Nam, ngoài Bắc gọi là gì? | Cái ô | Cái nón | Cái mũ | Áo mưa
 # --- Ví von dân gian bằng con vật ---
 Người ăn rất ít, dân gian bảo "ăn như" con gì? | Mèo | Hổ | Rồng | Voi

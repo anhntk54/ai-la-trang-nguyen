@@ -138,3 +138,17 @@ for (let cap = 1; cap <= 4; cap++) {
   }
 }
 console.log('toan: OK');
+
+// Bỏ câu: không bao giờ được bốc lại trước câu khác
+{
+  let t2 = 5_000_000;
+  const k4 = new KyThi(bank);
+  k4.cho(t2);
+  t2 += GAME.choSec * 1000; k4.tick(t2);
+  t2 += GAME.vongSec * 1000; k4.tick(t2);
+  const bi = k4.cau!.q.id;
+  k4.boCau(t2);
+  assert.equal(k4.used[bi], Number.MAX_SAFE_INTEGER);
+  for (let i = 0; i < 30; i++) { k4.batDau(t2 + i); assert.ok(!k4['cauList'].some((c: any) => c.q.id === bi)); }
+  console.log('bocau: OK');
+}

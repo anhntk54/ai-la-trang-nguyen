@@ -114,8 +114,6 @@ Người Viking thời trung cổ đến từ vùng nào? | Bắc Âu | Nam Âu 
 
 Bán đảo Triều Tiên nằm ở khu vực nào của châu Á? | Đông Á | Nam Á | Tây Á | Trung Á
 Thái Bình Dương nằm giữa châu Á và châu lục nào? | Châu Mỹ | Châu Phi | Châu Âu | Châu Đại Dương
-Liên Xô trước đây là liên bang do nước nào đứng đầu? | Nga | Ba Lan | Đức | Mông Cổ
-Tiếng Anh là ngôn ngữ chính của nước nào sau đây? | New Zealand | Brazil | Mexico | Argentina
 Quốc kỳ Indonesia gồm hai màu nào? | Đỏ và trắng | Đỏ và vàng | Xanh và trắng | Đen và đỏ
 Lá cờ Liên Hợp Quốc có nền màu gì? | Xanh da trời | Trắng | Đỏ | Xanh lá
 Tổ chức Y tế Thế giới (WHO) lo về lĩnh vực nào? | Sức khỏe | Lương thực | Giáo dục | Thương mại
@@ -305,7 +303,7 @@ Ai là thầy dạy của Alexander Đại đế? | Aristotle | Plato | Socrates
 Ai lãnh đạo phong trào Nước Pháp Tự do chống phát xít Đức? | Charles de Gaulle | Philippe Pétain | Léon Blum | Georges Clemenceau
 Napoléon bị lưu đày và qua đời trên hòn đảo nào? | Saint Helena | Elba | Corse | Malta
 Ai là Thủ tướng Anh trong phần lớn thời gian Thế chiến thứ hai? | Winston Churchill | Neville Chamberlain | Clement Attlee | Lloyd George
-Ngày 6/6/1944, quân Đồng Minh đổ bộ lên vùng nào của Pháp? | Normandie | Provence | Bretagne | Alsace
+Ngày 6 tháng 6 năm 1944, quân Đồng Minh đổ bộ lên vùng nào của Pháp? | Normandie | Provence | Bretagne | Alsace
 Năm 1871, nước Đức được thống nhất dưới sự dẫn dắt của vương quốc nào? | Phổ | Bavaria | Áo | Saxony
 Chiến tranh thuốc phiện lần thứ nhất là cuộc chiến giữa nhà Thanh và nước nào? | Anh | Pháp | Nhật Bản | Nga
 Sa hoàng nào cho xây dựng thành phố Xanh Pê-téc-bua? | Pyotr Đại đế | Ivan Bạo chúa | Nicholas II | Alexander I

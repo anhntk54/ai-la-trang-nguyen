@@ -2,10 +2,10 @@
 # Định dạng: câu hỏi | ĐÁP ÁN ĐÚNG | sai | sai | sai
 
 [de]
-Bác Hồ đọc bản Tuyên ngôn Độc lập vào ngày nào? | 2/9/1945 | 19/8/1945 | 2/9/1946 | 30/8/1945
+Bác Hồ đọc bản Tuyên ngôn Độc lập vào ngày nào? | 2 tháng 9 năm 1945 | 19 tháng 8 năm 1945 | 2 tháng 9 năm 1946 | 30 tháng 8 năm 1945
 Bác Hồ đọc Tuyên ngôn Độc lập tại quảng trường nào ở Hà Nội? | Ba Đình | Cửa Nam | Long Biên | Đông Kinh Nghĩa Thục
-Chiến dịch Hồ Chí Minh toàn thắng vào ngày nào? | 30/4/1975 | 30/4/1976 | 2/9/1975 | 1/5/1975
-Chiến dịch Điện Biên Phủ toàn thắng vào ngày nào? | 7/5/1954 | 7/5/1955 | 21/7/1954 | 19/5/1954
+Chiến dịch Hồ Chí Minh toàn thắng vào ngày nào? | 30 tháng 4 năm 1975 | 30 tháng 4 năm 1976 | 2 tháng 9 năm 1975 | 1 tháng 5 năm 1975
+Chiến dịch Điện Biên Phủ toàn thắng vào ngày nào? | 7 tháng 5 năm 1954 | 7 tháng 5 năm 1955 | 21 tháng 7 năm 1954 | 19 tháng 5 năm 1954
 Ai là tác giả bài Tiến quân ca, Quốc ca Việt Nam? | Văn Cao | Lưu Hữu Phước | Đỗ Nhuận | Nguyễn Đình Thi
 Ai là Tổng chỉ huy chiến dịch Điện Biên Phủ? | Võ Nguyên Giáp | Văn Tiến Dũng | Nguyễn Chí Thanh | Hoàng Văn Thái
 Năm 1911, Nguyễn Tất Thành ra đi tìm đường cứu nước từ bến cảng nào? | Bến Nhà Rồng | Cảng Hải Phòng | Cảng Đà Nẵng | Bến Ninh Kiều
@@ -14,14 +14,14 @@ Thực dân Pháp nổ súng mở đầu cuộc xâm lược nước ta ở đâ
 Thực dân Pháp bắt đầu xâm lược nước ta vào năm nào? | 1858 | 1862 | 1884 | 1885
 "Hùm xám Yên Thế" là biệt danh của ai? | Hoàng Hoa Thám | Phan Đình Phùng | Nguyễn Thiện Thuật | Tôn Thất Thuyết
 Chị Võ Thị Sáu bị thực dân Pháp xử bắn ở đâu? | Côn Đảo | Hỏa Lò | Phú Quốc | Sơn La
-Ngày Toàn quốc kháng chiến chống thực dân Pháp là ngày nào? | 19/12/1946 | 23/9/1945 | 22/12/1944 | 6/3/1946
-Ngày Thương binh - Liệt sĩ là ngày nào? | 27/7 | 22/12 | 19/8 | 20/11
-Ngày thành lập Quân đội nhân dân Việt Nam là ngày nào? | 22/12 | 19/12 | 27/7 | 19/5
-Đoàn Thanh niên Cộng sản Hồ Chí Minh thành lập ngày nào? | 26/3 | 15/5 | 20/10 | 19/5
-Chủ tịch Hồ Chí Minh sinh ngày nào? | 19/5 | 2/9 | 3/2 | 15/5
-Ngày Phụ nữ Việt Nam là ngày nào? | 20/10 | 8/3 | 20/11 | 1/6
-Ngày Nhà giáo Việt Nam là ngày nào? | 20/11 | 20/10 | 15/10 | 26/3
-Đội Thiếu niên Tiền phong Hồ Chí Minh thành lập ngày nào? | 15/5 | 26/3 | 1/6 | 19/5
+Ngày Toàn quốc kháng chiến chống thực dân Pháp là ngày nào? | 19 tháng 12 năm 1946 | 23 tháng 9 năm 1945 | 22 tháng 12 năm 1944 | 6 tháng 3 năm 1946
+Ngày Thương binh - Liệt sĩ là ngày nào? | 27 tháng 7 | 22 tháng 12 | 19 tháng 8 | 20 tháng 11
+Ngày thành lập Quân đội nhân dân Việt Nam là ngày nào? | 22 tháng 12 | 19 tháng 12 | 27 tháng 7 | 19 tháng 5
+Đoàn Thanh niên Cộng sản Hồ Chí Minh thành lập ngày nào? | 26 tháng 3 | 15 tháng 5 | 20 tháng 10 | 19 tháng 5
+Chủ tịch Hồ Chí Minh sinh ngày nào? | 19 tháng 5 | 2 tháng 9 | 3 tháng 2 | 15 tháng 5
+Ngày Phụ nữ Việt Nam là ngày nào? | 20 tháng 10 | 8 tháng 3 | 20 tháng 11 | 1 tháng 6
+Ngày Nhà giáo Việt Nam là ngày nào? | 20 tháng 11 | 20 tháng 10 | 15 tháng 10 | 26 tháng 3
+Đội Thiếu niên Tiền phong Hồ Chí Minh thành lập ngày nào? | 15 tháng 5 | 26 tháng 3 | 1 tháng 6 | 19 tháng 5
 Chủ tịch nước đầu tiên của nước Việt Nam Dân chủ Cộng hòa là ai? | Hồ Chí Minh | Tôn Đức Thắng | Huỳnh Thúc Kháng | Trường Chinh
 Vị vua cuối cùng của triều Nguyễn là ai? | Bảo Đại | Khải Định | Duy Tân | Hàm Nghi
 Theo Hiệp định Giơ-ne-vơ, nước ta tạm thời chia cắt ở vĩ tuyến nào? | Vĩ tuyến 17 | Vĩ tuyến 16 | Vĩ tuyến 18 | Vĩ tuyến 13
@@ -37,18 +37,18 @@ Việt Nam gia nhập Hiệp hội các quốc gia Đông Nam Á năm nào? | 19
 Công cuộc Đổi mới ở nước ta bắt đầu từ năm nào? | 1986 | 1976 | 1995 | 1991
 Đại lễ kỷ niệm 1000 năm Thăng Long - Hà Nội diễn ra năm nào? | 2010 | 2000 | 2005 | 2015
 Nhà tù Hỏa Lò, di tích thời Pháp thuộc, nằm ở thành phố nào? | Hà Nội | Hải Phòng | Huế | Nam Định
-Thủ đô Hà Nội được giải phóng vào ngày nào? | 10/10/1954 | 19/8/1945 | 7/5/1955 | 2/9/1954
+Thủ đô Hà Nội được giải phóng vào ngày nào? | 10 tháng 10 năm 1954 | 19 tháng 8 năm 1945 | 7 tháng 5 năm 1955 | 2 tháng 9 năm 1954
 Chủ tịch Hồ Chí Minh qua đời năm nào? | 1969 | 1975 | 1965 | 1968
 Năm 1941, Nguyễn Ái Quốc về nước, sống ở hang Cốc Bó thuộc khu di tích nào? | Pác Bó | Tân Trào | Định Hóa | Bắc Sơn
-Cách mạng tháng Tám giành chính quyền ở Hà Nội vào ngày nào? | 19/8/1945 | 2/9/1945 | 23/8/1945 | 25/8/1945
+Cách mạng tháng Tám giành chính quyền ở Hà Nội vào ngày nào? | 19 tháng 8 năm 1945 | 2 tháng 9 năm 1945 | 23 tháng 8 năm 1945 | 25 tháng 8 năm 1945
 Cuộc kháng chiến chống Pháp sau Cách mạng tháng Tám thường gọi là mấy năm kháng chiến? | 9 năm | 7 năm | 12 năm | 21 năm
 Đường Trường Sơn thời chống Mỹ còn mang tên gọi nào? | Đường Hồ Chí Minh | Đường số 9 | Đường số 4 | Quốc lộ 1A
-Ngày 3/2 hằng năm kỷ niệm ngày thành lập tổ chức nào? | Đảng Cộng sản Việt Nam | Quân đội nhân dân | Đoàn Thanh niên | Mặt trận Việt Minh
+Ngày 3 tháng 2 hằng năm kỷ niệm ngày thành lập tổ chức nào? | Đảng Cộng sản Việt Nam | Quân đội nhân dân | Đoàn Thanh niên | Mặt trận Việt Minh
 Nhà xuất bản sách thiếu nhi nổi tiếng mang tên anh hùng nhỏ tuổi nào? | Kim Đồng | Lý Tự Trọng | Vừ A Dính | Nguyễn Bá Ngọc
 Anh hùng nào lấy thân mình lấp lỗ châu mai ở Điện Biên Phủ? | Phan Đình Giót | Tô Vĩnh Diện | Bế Văn Đàn | Cù Chính Lan
 "Năm điều Bác Hồ dạy" là lời Bác dạy dành cho ai? | Thiếu niên, nhi đồng | Công an | Bộ đội | Phụ nữ
 Chiến dịch Điện Biên Phủ kéo dài bao nhiêu ngày đêm? | 56 ngày đêm | 12 ngày đêm | 81 ngày đêm | 60 ngày đêm
-Trưa 30/4/1975, lá cờ giải phóng tung bay trên nóc công trình nào? | Dinh Độc Lập | Bưu điện Sài Gòn | Nhà hát Thành phố | Chợ Bến Thành
+Trưa 30 tháng 4 năm 1975, lá cờ giải phóng tung bay trên nóc công trình nào? | Dinh Độc Lập | Bưu điện Sài Gòn | Nhà hát Thành phố | Chợ Bến Thành
 Thời Pháp thuộc, Liên bang Đông Dương gồm Việt Nam, Lào và nước nào? | Campuchia | Thái Lan | Miến Điện | Mã Lai
 "Cần Vương" trong phong trào Cần Vương có nghĩa là gì? | Giúp vua cứu nước | Chống lại nhà vua | Đi tìm minh chủ | Mời vua về triều
 Ai là tác giả "Bài thơ về tiểu đội xe không kính"? | Phạm Tiến Duật | Chính Hữu | Tố Hữu | Huy Cận
@@ -116,9 +116,9 @@ Phong trào "Hũ gạo cứu đói" sau năm 1945 nhằm chống giặc gì? | G
 "Đội quân tóc dài" ở miền Nam là cách gọi lực lượng nào? | Phụ nữ | Thiếu nhi | Học sinh | Người cao tuổi
 Thời bao cấp trước Đổi mới, người dân mua lương thực, thực phẩm chủ yếu bằng gì? | Tem phiếu | Thẻ ngân hàng | Vàng miếng | Ngoại tệ
 Ở nhà tù Côn Đảo, loại phòng giam khét tiếng có song sắt trên nóc gọi là gì? | Chuồng cọp | Lồng sắt | Giếng sâu | Hầm đá
-Ngày Thầy thuốc Việt Nam là ngày nào? | 27/2 | 27/7 | 20/11 | 21/6
-Ngày Báo chí Cách mạng Việt Nam là ngày nào? | 21/6 | 27/2 | 13/10 | 28/6
-Ngày Gia đình Việt Nam là ngày nào? | 28/6 | 21/6 | 20/10 | 1/6
+Ngày Thầy thuốc Việt Nam là ngày nào? | 27 tháng 2 | 27 tháng 7 | 20 tháng 11 | 21 tháng 6
+Ngày Báo chí Cách mạng Việt Nam là ngày nào? | 21 tháng 6 | 27 tháng 2 | 13 tháng 10 | 28 tháng 6
+Ngày Gia đình Việt Nam là ngày nào? | 28 tháng 6 | 21 tháng 6 | 20 tháng 10 | 1 tháng 6
 Đại tướng Võ Nguyên Giáp từ trần năm nào? | 2013 | 2010 | 2015 | 2008
 Thời Pháp thuộc, thành phố nào được mệnh danh "Hòn ngọc Viễn Đông"? | Sài Gòn | Hà Nội | Hải Phòng | Đà Lạt
 Thành phố nghỉ mát nào trên cao nguyên Lâm Viên do người Pháp xây dựng? | Đà Lạt | Sa Pa | Tam Đảo | Buôn Ma Thuột
@@ -148,12 +148,12 @@ Tổng Bí thư đầu tiên của Đảng là ai? | Trần Phú | Lê Hồng Ph
 Đỉnh cao phong trào cách mạng 1930 - 1931 là Xô viết nào? | Xô viết Nghệ - Tĩnh | Xô viết Bắc Sơn | Xô viết Nam Kỳ | Xô viết Thái Bình
 Mặt trận Việt Minh được thành lập năm nào? | 1941 | 1930 | 1945 | 1936
 Lúc mới thành lập, Đội Việt Nam Tuyên truyền Giải phóng quân có bao nhiêu chiến sĩ? | 34 | 12 | 56 | 100
-Khu giải phóng Việt Bắc thành lập tháng 6/1945 lấy nơi nào làm thủ đô? | Tân Trào | Pác Bó | Định Hóa | Bắc Sơn
-Ngày Nam Bộ kháng chiến là ngày nào? | 23/9/1945 | 19/12/1946 | 25/8/1945 | 2/9/1945
-Ngày truyền thống Công an nhân dân Việt Nam là ngày nào? | 19/8 | 22/12 | 3/3 | 7/5
+Khu giải phóng Việt Bắc thành lập tháng 6 năm 1945 lấy nơi nào làm thủ đô? | Tân Trào | Pác Bó | Định Hóa | Bắc Sơn
+Ngày Nam Bộ kháng chiến là ngày nào? | 23 tháng 9 năm 1945 | 19 tháng 12 năm 1946 | 25 tháng 8 năm 1945 | 2 tháng 9 năm 1945
+Ngày truyền thống Công an nhân dân Việt Nam là ngày nào? | 19 tháng 8 | 22 tháng 12 | 3 tháng 3 | 7 tháng 5
 "Thà làm dân một nước tự do còn hơn làm vua một nước nô lệ" là câu của vị vua nào? | Bảo Đại | Duy Tân | Hàm Nghi | Khải Định
 Câu mở đầu bản Tuyên ngôn Độc lập 1945 trích từ Tuyên ngôn Độc lập của nước nào? | Mỹ | Pháp | Anh | Nga
-Cuộc Tổng tuyển cử bầu Quốc hội khóa I diễn ra ngày nào? | 6/1/1946 | 2/9/1945 | 19/12/1946 | 25/4/1976
+Cuộc Tổng tuyển cử bầu Quốc hội khóa I diễn ra ngày nào? | 6 tháng 1 năm 1946 | 2 tháng 9 năm 1945 | 19 tháng 12 năm 1946 | 25 tháng 4 năm 1976
 Bản Hiến pháp đầu tiên của nước ta được thông qua năm nào? | 1946 | 1945 | 1959 | 1980
 Phong trào quyên góp vàng cho Chính phủ cách mạng năm 1945 có tên gì? | Tuần lễ vàng | Ngày đồng tâm | Quỹ độc lập | Tháng thi đua
 Đường lối kháng chiến chống Pháp: "Toàn dân, toàn diện, trường kỳ và..." gì? | tự lực cánh sinh | đánh nhanh thắng nhanh | dựa vào ngoại viện | phòng ngự tích cực
@@ -161,7 +161,7 @@ Chiến dịch Việt Bắc thu - đông diễn ra năm nào? | 1947 | 1950 | 19
 Trong chiến dịch Việt Bắc thu - đông, nhiều tàu chiến Pháp bị đánh chìm trên sông nào? | Sông Lô | Sông Đà | Sông Hồng | Sông Cầu
 Trận mở màn chiến dịch Điện Biên Phủ đánh vào cứ điểm nào? | Him Lam | Độc Lập | Bản Kéo | Hồng Cúm
 Viên tướng chỉ huy tập đoàn cứ điểm Điện Biên Phủ bị bắt sống là ai? | Đờ Cát-xtơ-ri | Na-va | Rơ-ve | Gác-ni-ê
-Chiến dịch Điện Biên Phủ mở màn vào ngày nào? | 13/3/1954 | 7/5/1953 | 13/3/1953 | 20/11/1953
+Chiến dịch Điện Biên Phủ mở màn vào ngày nào? | 13 tháng 3 năm 1954 | 7 tháng 5 năm 1953 | 13 tháng 3 năm 1953 | 20 tháng 11 năm 1953
 Hội nghị Giơ-ne-vơ về Đông Dương năm 1954 họp ở nước nào? | Thụy Sĩ | Pháp | Bỉ | Áo
 Nữ tướng Nguyễn Thị Định gắn liền với phong trào nào ở Bến Tre? | Đồng Khởi | Đông Du | Duy Tân | Cần Vương
 Phong trào Đồng Khởi ở miền Nam bùng nổ năm nào? | 1960 | 1959 | 1954 | 1965
@@ -192,7 +192,7 @@ Lúc ra đi tìm đường cứu nước năm 1911, Nguyễn Tất Thành lấy 
 Bộ đội thường gọi Đại tướng Võ Nguyên Giáp bằng tên thân mật nào? | Anh Văn | Anh Ba | Anh Sáu | Anh Hai
 "Thóc không thiếu một cân, quân không thiếu một..." gì? | người | ai | tên | đội
 Khẩu hiệu thời chống Mỹ: "Xe chưa qua, nhà không..." gì? | tiếc | cần | giữ | xây
-Ngày Doanh nhân Việt Nam là ngày nào? | 13/10 | 21/6 | 28/6 | 14/10
+Ngày Doanh nhân Việt Nam là ngày nào? | 13 tháng 10 | 21 tháng 6 | 28 tháng 6 | 14 tháng 10
 Vua Hàm Nghi bị Pháp bắt rồi đày sang nước nào? | An-giê-ri | Ai Cập | Ma-đa-ga-xca | Xê-nê-gan
 Nữ chiến sĩ nào từng là Bí thư Thành ủy Sài Gòn, hy sinh năm 1941? | Nguyễn Thị Minh Khai | Võ Thị Sáu | Nguyễn Thị Định | Mạc Thị Bưởi
 Thiếu niên anh hùng người H'Mông nào hy sinh năm 1949? | Vừ A Dính | Kim Đồng | Lý Tự Trọng | Nguyễn Bá Ngọc
@@ -224,13 +224,13 @@ Dinh Độc Lập ngày nay còn được gọi là gì? | Hội trường Thố
 Bài "Văn tế nghĩa sĩ Cần Giuộc" của Nguyễn Đình Chiểu ca ngợi những ai? | Nông dân nghĩa sĩ | Quan quân triều đình | Thương nhân | Sĩ phu nho học
 Năm 1908, phong trào đấu tranh lớn nào của nông dân bùng nổ ở Trung Kỳ? | Chống thuế | Đông Du | Đồng Khởi | Cần Vương
 Tác phẩm "Bản án chế độ thực dân Pháp" là của ai? | Nguyễn Ái Quốc | Phan Châu Trinh | Nguyễn An Ninh | Phan Văn Trường
-Phát xít Nhật đảo chính lật đổ Pháp ở Đông Dương vào ngày nào? | 9/3/1945 | 9/3/1944 | 12/3/1945 | 15/8/1945
+Phát xít Nhật đảo chính lật đổ Pháp ở Đông Dương vào ngày nào? | 9 tháng 3 năm 1945 | 9 tháng 3 năm 1944 | 12 tháng 3 năm 1945 | 15 tháng 8 năm 1945
 Trận Vạn Tường năm 1965 được coi là trận "Ấp Bắc" đối với quân đội nước nào? | Mỹ | Pháp | Hàn Quốc | Úc
 Nhà khoa học nào chế tạo súng ba-dô-ca, súng không giật thời chống Pháp? | Trần Đại Nghĩa | Tôn Thất Tùng | Tạ Quang Bửu | Lê Văn Thiêm
 Bác sĩ nào nổi tiếng thế giới với phương pháp mổ gan khô? | Tôn Thất Tùng | Đặng Văn Ngữ | Phạm Ngọc Thạch | Hồ Đắc Di
-Hiệp định Sơ bộ giữa ta và Pháp được ký vào ngày nào? | 6/3/1946 | 14/9/1946 | 19/12/1946 | 6/1/1946
-Cách mạng tháng Tám giành chính quyền ở Sài Gòn vào ngày nào? | 25/8/1945 | 23/8/1945 | 28/8/1945 | 30/8/1945
-Vua Bảo Đại thoái vị vào ngày nào? | 30/8/1945 | 2/9/1945 | 23/8/1945 | 25/8/1945
+Hiệp định Sơ bộ giữa ta và Pháp được ký vào ngày nào? | 6 tháng 3 năm 1946 | 14 tháng 9 năm 1946 | 19 tháng 12 năm 1946 | 6 tháng 1 năm 1946
+Cách mạng tháng Tám giành chính quyền ở Sài Gòn vào ngày nào? | 25 tháng 8 năm 1945 | 23 tháng 8 năm 1945 | 28 tháng 8 năm 1945 | 30 tháng 8 năm 1945
+Vua Bảo Đại thoái vị vào ngày nào? | 30 tháng 8 năm 1945 | 2 tháng 9 năm 1945 | 23 tháng 8 năm 1945 | 25 tháng 8 năm 1945
 Năm 1964, anh Nguyễn Văn Trỗi đặt mìn ở cây cầu nào tại Sài Gòn? | Cầu Công Lý | Cầu Bông | Cầu Khánh Hội | Cầu Chữ Y
 Nữ dân quân nào nổi tiếng vác hòm đạn nặng gấp đôi người ở Thanh Hóa năm 1965? | Ngô Thị Tuyển | Mạc Thị Bưởi | Nguyễn Thị Định | Võ Thị Sáu
 Bà mẹ anh hùng nào chèo đò đưa bộ đội qua sông Nhật Lệ dưới mưa bom? | Mẹ Suốt | Mẹ Tơm | Mẹ Thứ | Mẹ Lành
@@ -241,7 +241,7 @@ Hầm đường bộ qua đèo Hải Vân được đưa vào sử dụng năm n
 Đường lối Đổi mới được đề ra tại Đại hội Đảng lần thứ mấy? | Lần thứ sáu | Lần thứ năm | Lần thứ bảy | Lần thứ tư
 Cây đào gắn với tên chiến sĩ cách mạng Tô Hiệu nằm ở nhà tù nào? | Nhà tù Sơn La | Nhà tù Hỏa Lò | Nhà tù Côn Đảo | Nhà tù Hà Giang
 Đơn vị nào chiến đấu ở Hà Nội đầu kháng chiến với khẩu hiệu "Quyết tử để Tổ quốc quyết sinh"? | Trung đoàn Thủ đô | Đại đoàn 308 | Trung đoàn Sông Lô | Đội Tự vệ đỏ
-Tháng 3/1965, lính thủy đánh bộ Mỹ đổ bộ lên đâu? | Đà Nẵng | Vũng Tàu | Cam Ranh | Quy Nhơn
+Tháng 3 năm 1965, lính thủy đánh bộ Mỹ đổ bộ lên đâu? | Đà Nẵng | Vũng Tàu | Cam Ranh | Quy Nhơn
 Vua Duy Tân bị thực dân Pháp đày ra đảo nào? | Rê-uy-ni-ông | Ma-đa-ga-xca | Coóc-xơ | Ta-hi-ti
 Tác phẩm "Việt Nam vong quốc sử" là của ai? | Phan Bội Châu | Phan Châu Trinh | Huỳnh Thúc Kháng | Nguyễn Thái Học
 Năm 1919, Nguyễn Ái Quốc gửi Bản yêu sách của nhân dân An Nam tới hội nghị nào? | Hội nghị Véc-xai | Hội nghị Giơ-ne-vơ | Hội nghị Pốt-xđam | Hội nghị I-an-ta
@@ -249,7 +249,7 @@ Tờ báo Nguyễn Ái Quốc sáng lập ở Pháp năm 1922 có tên là gì? 
 Ngôi nhà nơi Bác Hồ soạn Tuyên ngôn Độc lập là của gia đình nhà tư sản nào? | Trịnh Văn Bô | Bạch Thái Bưởi | Nguyễn Sơn Hà | Lương Văn Can
 Ai là thục trưởng (hiệu trưởng) trường Đông Kinh nghĩa thục? | Lương Văn Can | Phan Châu Trinh | Huỳnh Thúc Kháng | Nguyễn Thái Học
 Nữ anh hùng Võ Thị Sáu yên nghỉ ở nghĩa trang nào? | Hàng Dương | Trường Sơn | Mai Dịch | Văn Điển
-Năm 1975, cố đô Huế được giải phóng vào ngày nào? | 26/3/1975 | 29/3/1975 | 10/3/1975 | 30/4/1975
+Năm 1975, cố đô Huế được giải phóng vào ngày nào? | 26 tháng 3 năm 1975 | 29 tháng 3 năm 1975 | 10 tháng 3 năm 1975 | 30 tháng 4 năm 1975
 Trong chiến dịch Hồ Chí Minh, quân ta chia làm mấy cánh quân tiến vào Sài Gòn? | Năm cánh | Ba cánh | Bốn cánh | Sáu cánh
 Cuốn nhật ký "Mãi mãi tuổi hai mươi" là của liệt sĩ nào? | Nguyễn Văn Thạc | Đặng Thùy Trâm | Nguyễn Văn Trỗi | Lý Tự Trọng
 Đại tướng Võ Nguyên Giáp được an táng ở đâu? | Vũng Chùa - Đảo Yến | Nghĩa trang Mai Dịch | Nghĩa trang Trường Sơn | Đồi A1
@@ -298,13 +298,13 @@ Phong trào dân chủ 1936 - 1939 có cuộc vận động lớn mang tên gì?
 Khởi nghĩa nào năm 1940 đã sinh ra đội du kích, tiền thân của Cứu quốc quân? | Bắc Sơn | Nam Kỳ | Đô Lương | Yên Bái
 Lá cờ đỏ sao vàng lần đầu xuất hiện trong cuộc khởi nghĩa nào? | Nam Kỳ | Bắc Sơn | Yên Bái | Ba Đình
 Binh biến Đô Lương năm 1941 do ai chỉ huy? | Đội Cung | Đội Cấn | Đề Thám | Lương Ngọc Quyến
-Nguyễn Ái Quốc về nước tại Pác Bó vào ngày nào? | 28/1/1941 | 19/5/1941 | 3/2/1941 | 22/12/1941
+Nguyễn Ái Quốc về nước tại Pác Bó vào ngày nào? | 28 tháng 1 năm 1941 | 19 tháng 5 năm 1941 | 3 tháng 2 năm 1941 | 22 tháng 12 năm 1941
 Năm 1941, Bác Hồ vượt qua cột mốc biên giới số bao nhiêu để về nước? | 108 | 109 | 101 | 118
 Đội Việt Nam Tuyên truyền Giải phóng quân thành lập trong khu rừng mang tên ai? | Trần Hưng Đạo | Lê Lợi | Quang Trung | Lý Thường Kiệt
 Hai chiến thắng đầu tiên của Đội Việt Nam Tuyên truyền Giải phóng quân là Phai Khắt và đâu? | Nà Ngần | Nà Nưa | Đông Khê | Bản Kéo
-Tháng 5/1945, Đội Tuyên truyền Giải phóng quân hợp nhất với Cứu quốc quân thành lực lượng nào? | Giải phóng quân | Vệ quốc đoàn | Tự vệ chiến đấu | Dân quân du kích
+Tháng 5 năm 1945, Đội Tuyên truyền Giải phóng quân hợp nhất với Cứu quốc quân thành lực lượng nào? | Giải phóng quân | Vệ quốc đoàn | Tự vệ chiến đấu | Dân quân du kích
 Bài Tiến quân ca ra đời năm nào? | 1944 | 1945 | 1946 | 1941
-Ngày 18/8/1945, Bắc Giang, Hải Dương, Hà Tĩnh và tỉnh nào giành chính quyền sớm nhất? | Quảng Nam | Quảng Ngãi | Thái Bình | Nghệ An
+Ngày 18 tháng 8 năm 1945, Bắc Giang, Hải Dương, Hà Tĩnh và tỉnh nào giành chính quyền sớm nhất? | Quảng Nam | Quảng Ngãi | Thái Bình | Nghệ An
 Cuộc mít tinh mở đầu khởi nghĩa giành chính quyền ở Hà Nội năm 1945 diễn ra trước công trình nào? | Nhà hát Lớn | Văn Miếu | Ga Hàng Cỏ | Phủ Toàn quyền
 Vua Bảo Đại đọc chiếu thoái vị tại đâu? | Ngọ Môn | Điện Thái Hòa | Cửa Hiển Nhơn | Điện Kiến Trung
 Sau năm 1945, quân Đồng minh vào giải giáp quân Nhật lấy vĩ tuyến nào làm ranh giới? | Vĩ tuyến 16 | Vĩ tuyến 17 | Vĩ tuyến 18 | Vĩ tuyến 13
@@ -316,7 +316,7 @@ Trận mở màn chiến dịch Biên giới thu - đông 1950 đánh vào cứ 
 Anh hùng nào nổi tiếng đuổi đánh xe tăng Pháp trong chiến dịch Hòa Bình? | Cù Chính Lan | Bế Văn Đàn | Phan Đình Giót | Tô Vĩnh Diện
 Anh hùng nào đã lấy thân mình làm giá súng cho đồng đội bắn? | Bế Văn Đàn | Cù Chính Lan | Nguyễn Viết Xuân | Trần Can
 Năm 1953, bộ đội ta phối hợp với quân Pa-thét Lào mở chiến dịch ở đâu? | Thượng Lào | Hạ Lào | Trung Lào | Đông Bắc Campuchia
-Thực dân Pháp cho quân nhảy dù chiếm đóng Điện Biên Phủ vào thời gian nào? | Tháng 11/1953 | Tháng 3/1954 | Tháng 5/1953 | Tháng 12/1952
+Thực dân Pháp cho quân nhảy dù chiếm đóng Điện Biên Phủ vào thời gian nào? | Tháng 11 năm 1953 | Tháng 3 năm 1954 | Tháng 5 năm 1953 | Tháng 12 năm 1952
 Tập đoàn cứ điểm Điện Biên Phủ gồm bao nhiêu cứ điểm? | 49 | 56 | 34 | 81
 Ở Điện Biên Phủ, phương châm tác chiến đổi từ "đánh nhanh thắng nhanh" sang gì? | Đánh chắc tiến chắc | Đánh nhanh rút nhanh | Lấy ít địch nhiều | Vây lấn kéo dài
 Tượng đài Chiến thắng Điện Biên Phủ được đặt trên ngọn đồi nào? | Đồi D1 | Đồi A1 | Đồi C1 | Đồi Him Lam
@@ -335,13 +335,13 @@ Năm 1971, quân ta đập tan cuộc hành quân "Lam Sơn 719" trong chiến d
 Đoàn quân mở tuyến đường Trường Sơn năm 1959 mang phiên hiệu nào? | Đoàn 559 | Đoàn 759 | Đoàn 125 | Đoàn 316
 Xác máy bay B-52 bị bắn rơi năm 1972 vẫn nằm giữa hồ nào ở Hà Nội? | Hồ Hữu Tiệp | Hồ Trúc Bạch | Hồ Thủ Lệ | Hồ Thành Công
 Câu "Không có gì quý hơn độc lập, tự do" được Bác Hồ nói năm nào? | 1966 | 1945 | 1954 | 1969
-Theo sách giáo khoa, toán lính Mỹ cuối cùng rút khỏi nước ta vào ngày nào? | 29/3/1973 | 27/1/1973 | 30/4/1975 | 2/9/1973
-Đầu tháng 1/1975, quân ta giải phóng đường 14 và tỉnh nào? | Phước Long | Tây Ninh | Bình Long | Long Khánh
-Năm 1975, thành phố Đà Nẵng được giải phóng vào ngày nào? | 29/3/1975 | 26/3/1975 | 10/3/1975 | 2/4/1975
-Tỉnh cuối cùng của miền Nam được giải phóng ngày 2/5/1975 là tỉnh nào? | Châu Đốc | Cà Mau | Rạch Giá | Bạc Liêu
+Theo sách giáo khoa, toán lính Mỹ cuối cùng rút khỏi nước ta vào ngày nào? | 29 tháng 3 năm 1973 | 27 tháng 1 năm 1973 | 30 tháng 4 năm 1975 | 2 tháng 9 năm 1973
+Đầu tháng 1 năm 1975, quân ta giải phóng đường 14 và tỉnh nào? | Phước Long | Tây Ninh | Bình Long | Long Khánh
+Năm 1975, thành phố Đà Nẵng được giải phóng vào ngày nào? | 29 tháng 3 năm 1975 | 26 tháng 3 năm 1975 | 10 tháng 3 năm 1975 | 2 tháng 4 năm 1975
+Tỉnh cuối cùng của miền Nam được giải phóng ngày 2 tháng 5 năm 1975 là tỉnh nào? | Châu Đốc | Cà Mau | Rạch Giá | Bạc Liêu
 Ai là Tư lệnh Chiến dịch Hồ Chí Minh năm 1975? | Văn Tiến Dũng | Võ Nguyên Giáp | Lê Đức Anh | Trần Văn Trà
-Chiến dịch Hồ Chí Minh chính thức mở màn vào ngày nào? | 26/4/1975 | 9/4/1975 | 21/4/1975 | 29/4/1975
-Cuộc Tổng tuyển cử bầu Quốc hội chung của cả nước diễn ra ngày nào? | 25/4/1976 | 2/7/1976 | 30/4/1976 | 6/1/1976
+Chiến dịch Hồ Chí Minh chính thức mở màn vào ngày nào? | 26 tháng 4 năm 1975 | 9 tháng 4 năm 1975 | 21 tháng 4 năm 1975 | 29 tháng 4 năm 1975
+Cuộc Tổng tuyển cử bầu Quốc hội chung của cả nước diễn ra ngày nào? | 25 tháng 4 năm 1976 | 2 tháng 7 năm 1976 | 30 tháng 4 năm 1976 | 6 tháng 1 năm 1976
 Việt Nam là thành viên thứ bao nhiêu của Liên Hợp Quốc? | 149 | 150 | 159 | 139
 Nghị quyết "Khoán 10" trong nông nghiệp ra đời năm nào? | 1988 | 1981 | 1986 | 1993
 Sau Đổi mới, Việt Nam bắt đầu xuất khẩu gạo từ năm nào? | 1989 | 1986 | 1995 | 1992
@@ -368,16 +368,16 @@ Chiến sĩ cách mạng người Tày nào bị thực dân Pháp xử bắn �
 Thiếu niên nào hy sinh năm 1965 khi lấy thân che cho em nhỏ lúc máy bay Mỹ ném bom? | Nguyễn Bá Ngọc | Vừ A Dính | Kim Đồng | Lý Tự Trọng
 Nhà văn Nguyễn Thi viết truyện ký "Người mẹ cầm súng" về nữ anh hùng nào? | Út Tịch | Nguyễn Thị Định | Võ Thị Sáu | Mạc Thị Bưởi
 Tượng đài Mẹ Việt Nam Anh hùng ở Tam Kỳ lấy nguyên mẫu từ mẹ nào? | Mẹ Nguyễn Thị Thứ | Mẹ Suốt | Mẹ Tơm | Mẹ Lê Thị Tự
-Ngày Thể thao Việt Nam là ngày nào? | 27/3 | 26/3 | 28/3 | 27/7
-Ngày Pháp luật Việt Nam là ngày nào? | 9/11 | 23/11 | 18/11 | 6/1
-Ngày Đại đoàn kết toàn dân tộc là ngày nào? | 18/11 | 9/11 | 20/11 | 23/11
-Ngày Công đoàn Việt Nam là ngày nào? | 28/7 | 27/7 | 1/5 | 14/10
-Ngày Bộ đội Biên phòng là ngày nào? | 3/3 | 7/5 | 19/8 | 28/3
-Ngày truyền thống Hải quân nhân dân Việt Nam là ngày nào? | 7/5 | 3/3 | 22/12 | 2/9
-Ngày Thi đua yêu nước là ngày nào? | 11/6 | 19/5 | 27/3 | 13/10
-Ngày Khoa học và Công nghệ Việt Nam là ngày nào? | 18/5 | 19/5 | 21/6 | 9/11
-Ngày Di sản văn hóa Việt Nam là ngày nào? | 23/11 | 18/11 | 9/11 | 21/4
-Ngày truyền thống học sinh, sinh viên Việt Nam là ngày nào? | 9/1 | 26/3 | 15/10 | 20/11
-Ngày thành lập Hội Nông dân Việt Nam là ngày nào? | 14/10 | 13/10 | 15/10 | 28/7
-Ngày truyền thống Hội Cựu chiến binh Việt Nam là ngày nào? | 6/12 | 22/12 | 27/7 | 19/12
-Ngày truyền thống Dân quân tự vệ là ngày nào? | 28/3 | 27/3 | 3/3 | 22/12
+Ngày Thể thao Việt Nam là ngày nào? | 27 tháng 3 | 26 tháng 3 | 28 tháng 3 | 27 tháng 7
+Ngày Pháp luật Việt Nam là ngày nào? | 9 tháng 11 | 23 tháng 11 | 18 tháng 11 | 6 tháng 1
+Ngày Đại đoàn kết toàn dân tộc là ngày nào? | 18 tháng 11 | 9 tháng 11 | 20 tháng 11 | 23 tháng 11
+Ngày Công đoàn Việt Nam là ngày nào? | 28 tháng 7 | 27 tháng 7 | 1 tháng 5 | 14 tháng 10
+Ngày Bộ đội Biên phòng là ngày nào? | 3 tháng 3 | 7 tháng 5 | 19 tháng 8 | 28 tháng 3
+Ngày truyền thống Hải quân nhân dân Việt Nam là ngày nào? | 7 tháng 5 | 3 tháng 3 | 22 tháng 12 | 2 tháng 9
+Ngày Thi đua yêu nước là ngày nào? | 11 tháng 6 | 19 tháng 5 | 27 tháng 3 | 13 tháng 10
+Ngày Khoa học và Công nghệ Việt Nam là ngày nào? | 18 tháng 5 | 19 tháng 5 | 21 tháng 6 | 9 tháng 11
+Ngày Di sản văn hóa Việt Nam là ngày nào? | 23 tháng 11 | 18 tháng 11 | 9 tháng 11 | 21 tháng 4
+Ngày truyền thống học sinh, sinh viên Việt Nam là ngày nào? | 9 tháng 1 | 26 tháng 3 | 15 tháng 10 | 20 tháng 11
+Ngày thành lập Hội Nông dân Việt Nam là ngày nào? | 14 tháng 10 | 13 tháng 10 | 15 tháng 10 | 28 tháng 7
+Ngày truyền thống Hội Cựu chiến binh Việt Nam là ngày nào? | 6 tháng 12 | 22 tháng 12 | 27 tháng 7 | 19 tháng 12
+Ngày truyền thống Dân quân tự vệ là ngày nào? | 28 tháng 3 | 27 tháng 3 | 3 tháng 3 | 22 tháng 12

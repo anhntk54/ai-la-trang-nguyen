@@ -135,7 +135,10 @@ export function useGame() {
         voice.stop();
         room.batDau(now);
       }
-      if (c.action === 'custom' && c.text === 'bocau') room.boCau(now);
+      if (c.action === 'custom' && c.text === 'bocau') {
+        room.boCau(now);
+        void post('/api/da-hoi', room.used); // nhớ câu bị bỏ, tắt bật lại vẫn không hỏi
+      }
     },
   });
 

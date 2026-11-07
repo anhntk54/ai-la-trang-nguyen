@@ -209,6 +209,9 @@ export class KyThi {
   /** Bỏ câu đang hỏi (câu lỗi): không ai được điểm, sang câu tiếp */
   boCau(now: number) {
     if (this.phase !== 'doc' && this.phase !== 'hoi') return;
+    // câu viết tay bị bỏ: đẩy xuống cuối hàng mãi mãi (chỉ hỏi lại khi đã hết sạch câu khác)
+    const id = this.cau?.q.id;
+    if (id && !id.startsWith('toan:')) this.used[id] = Number.MAX_SAFE_INTEGER;
     this.answers.clear();
     this.sauDapAn(now);
   }

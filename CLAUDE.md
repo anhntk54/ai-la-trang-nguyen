@@ -12,6 +12,7 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - Ai cũng chơi được, không cần gõ từ khoá tham gia. Gõ đáp án là có tên trong trường thi.
 - 4 kỳ thi, mỗi kỳ 5 câu (`GAME.vong` trong config.ts):
   Khảo hạch trường làng 10 giây +100 / −50 · Thi Hương 15 giây +200 / −100 · Thi Hội 20 giây +300 / −150 · Thi Đình 25 giây +500 / −250.
+- Mỗi kỳ: 4 câu viết sẵn + 1 câu toán tự sinh ở vị trí thứ 3 (khó dần: cộng trừ 2 chữ số, nhân/cộng số lớn, nhân 2 chữ số/chia, phép tính 2 bước). Thi Đình: 2 câu [dinh] + 2 câu đố mẹo [meo] + 1 toán.
 - Điểm tốc độ: đúng ngay giây đầu được tối đa, sát giờ được 50% (`diemSan`). Tính theo giờ TikTok gắn lúc gửi (`createTime`), không theo lúc server nhận.
 - Sai bị trừ nửa điểm tối đa của kỳ; tổng điểm không xuống dưới 0. Không trả lời thì 0 điểm.
 - Đúng liền 3 câu thì +100 (`chuoiMoi`, `chuoiThuong`); sai hoặc bỏ câu thì chuỗi tính lại.
@@ -32,7 +33,7 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - `src/game/GameStage.tsx`: màn hình 1080x1920 vẽ đè lên `public/assets/bg/nen.jpg`. Toạ độ khung câu hỏi x 165-917, y 642-1059.
 - `src/game/sfx.ts`: âm thanh tự tạo kiểu khoa cử (trống chầu mở kỳ, đàn tranh rải khi hiện đáp án, gảy nhỏ khi có người nộp, mõ 5 giây cuối, chiêng công bố, vuốt đàn lên/xuống đúng/không ai đúng, pháo + chiêng vinh quy) và nhạc nền ngũ cung Rê 92 BPM (nhỏ khi ông đồ nói, dồn 5 giây cuối, tắt lúc vinh quy). Bỏ mp3 cùng tên vào public/assets/sfx/ là dùng file thay.
 - `src/game/GameControls.tsx`: nút "Bắt đầu ván mới", "Bỏ câu này", giả lập 1 / 60 / 500 người.
-- `src/game/cau-hoi/trac-nghiem.txt`: TẠM mượn từ Lớp Học Chữ để chạy thử. Bộ câu thật chủ kênh muốn bàn riêng.
+- `src/game/cau-hoi/*.txt`: 4975 câu, 14 file theo chủ đề (cách viết: `cau-hoi/HUONG-DAN.md`). Nhóm [de] [vua] [kho] [dinh] [meo]. Kiểm tra: `node tools/kiem-tra-cau-hoi.mjs`. Câu toán do `src/game/toan.ts` tự sinh. Nút "Bỏ câu này" đẩy câu xuống cuối hàng vĩnh viễn (lưu data/da-hoi.json).
 - `data/da-hoi.json`: câu nào hỏi lúc nào, game ưu tiên câu lâu chưa hỏi.
 - Ông đồ MC: ảnh gốc `public/assets/MC/` (nền trắng), tách nền bằng `node tools/tach-nen.mjs` ra `public/assets/nv/mc/` (mung, suy-nghi, chi, cuoi, tiec).
 - Ảnh nền gốc `ai-la-trang-nguyen.png` (1536x2752, đã xoá logo sao Gemini góc phải dưới khi xuất `nen.jpg`).

@@ -284,7 +284,6 @@ Tai giữa người có tổng cộng mấy xương nhỏ? | 3 | 2 | 4 | 5
 Bộ phận nào ở tai trong tiếp nhận kích thích âm thanh? | Ốc tai | Vành tai | Màng nhĩ | Vòi nhĩ
 Bộ phận nào đậy kín đường thở khi ta nuốt thức ăn? | Nắp thanh quản | Lưỡi gà | Amiđan | Vòm họng
 Lớp màng trong suốt phía trước mắt, có thể ghép từ người hiến, gọi là gì? | Giác mạc | Võng mạc | Mống mắt | Kết mạc
-Cơ lớn nhất cơ thể người là cơ nào? | Cơ mông lớn | Cơ bắp chân | Cơ ngực lớn | Cơ lưng rộng
 Gân A-sin nối bắp chân với xương nào? | Xương gót | Xương bánh chè | Xương đùi | Xương chậu
 Cơ nào hoạt động không theo ý muốn và có ở thành ruột? | Cơ trơn | Cơ vân | Cơ tim | Cơ hoành
 Xương dài ra nhờ bộ phận nào? | Sụn tăng trưởng | Màng xương | Tủy xương | Mô xương xốp
@@ -337,7 +336,6 @@ Hormone glucagon tác động thế nào đến đường huyết? | Làm tăng 
 Bệnh Parkinson liên quan đến thiếu chất dẫn truyền thần kinh nào? | Dopamin | Serotonin | Insulin | Histamin
 Chất nào được cơ thể tiết ra gây ngứa, sưng khi dị ứng? | Histamin | Dopamin | Insulin | Melatonin
 Thể thủy tinh của mắt bị mờ đục gây ra bệnh gì? | Đục thủy tinh thể | Tăng nhãn áp | Viêm kết mạc | Lẹo mắt
-Bệnh glôcôm (tăng nhãn áp) dân gian còn gọi là gì? | Cườm nước | Cườm khô | Mộng mắt | Lẹo mắt
 Người lớn tuổi bị lão thị cần đeo kính loại gì để đọc sách? | Thấu kính hội tụ | Thấu kính phân kì | Kính phẳng | Kính màu
 Trong hệ mạch, huyết áp lớn nhất ở đâu? | Động mạch chủ | Tĩnh mạch chủ | Mao mạch | Tĩnh mạch phổi
 Máu chảy chậm nhất trong loại mạch nào? | Mao mạch | Động mạch | Tĩnh mạch | Động mạch chủ
@@ -368,7 +366,6 @@ Nơi phát nhịp tự động cho tim đập gọi là gì? | Nút xoang nhĩ |
 Theo sách giáo khoa, mỗi chu kỳ co dãn của tim kéo dài khoảng bao lâu? | 0,8 giây | 2 giây | 5 giây | 0,1 giây
 Răng khôn là chiếc răng hàm lớn thứ mấy? | Thứ ba | Thứ hai | Thứ nhất | Thứ tư
 Bệnh hồng cầu hình liềm thuộc loại bệnh nào? | Bệnh di truyền | Bệnh truyền nhiễm | Bệnh do dinh dưỡng | Bệnh nghề nghiệp
-Tật có túm lông ở vành tai di truyền theo nhiễm sắc thể nào? | Nhiễm sắc thể Y | Nhiễm sắc thể X | Nhiễm sắc thể 13 | Nhiễm sắc thể 18
 Người mắc hội chứng Tớcnơ có cặp nhiễm sắc thể giới tính là gì? | XO | XXY | XXX | XY
 Thể đột biến có ba nhiễm sắc thể ở một cặp gọi là gì? | Thể ba | Thể một | Thể đa bội | Thể khảm
 Ai đặt ra tên gọi "tế bào" khi soi lát bần qua kính hiển vi năm 1665? | Robert Hooke | Van Leeuwenhoek | Louis Pasteur | Robert Koch

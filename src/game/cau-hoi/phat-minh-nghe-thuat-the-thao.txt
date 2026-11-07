@@ -229,7 +229,6 @@ Mỗi đội bóng chuyền được chạm bóng tối đa mấy lần (không 
 Mỗi đội bóng chuyền bãi biển có mấy người? | 2 | 3 | 4 | 6
 Mỗi đội futsal (bóng đá trong nhà) có mấy người trên sân? | 5 | 6 | 7 | 4
 Quả bóng đá tiêu chuẩn cho người lớn là bóng số mấy? | Số 5 | Số 4 | Số 3 | Số 6
-Lỗi cầu thủ tấn công đứng gần khung thành đối phương hơn bóng và hậu vệ áp chót gọi là gì? | Việt vị | Phạt góc | Ném biên | Phạt gián tiếp
 Giải Wimbledon thi đấu trên loại mặt sân nào? | Sân cỏ | Sân đất nện | Sân cứng | Sân thảm
 Để thắng một set quần vợt, tay vợt cần thắng ít nhất bao nhiêu game? | 6 | 5 | 7 | 10
 Ba môn phối hợp gồm bơi, đạp xe và môn gì? | Chạy bộ | Bắn súng | Đấu kiếm | Cưỡi ngựa

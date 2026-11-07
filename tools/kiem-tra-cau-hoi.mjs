@@ -37,7 +37,7 @@ for (const f of files) {
     if (q.length > 110) bao(f, i, 'câu hỏi dài quá 110 ký tự', line);
     if (!VI.test(q)) bao(f, i, 'câu hỏi không có chữ tiếng Việt có dấu', line);
     if (NHAY_CAM.test(q)) bao(f, i, 'câu có "hiện nay / mới nhất..." dễ sai theo thời gian', line);
-    if (/[%×÷=<>]/.test(line)) bao(f, i, 'có ký hiệu ông đồ khó đọc', line);
+    if (/[%×÷=<>]|\d\/\d/.test(line)) bao(f, i, 'có ký hiệu ông đồ khó đọc', line);
     const key = plain(q) + '|' + plain(opts[0]);
     if (seen.has(key)) bao(f, i, `trùng câu với ${seen.get(key)}`, line);
     else seen.set(key, `${path.basename(f)}:${i + 1}`);

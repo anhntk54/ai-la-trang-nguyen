@@ -233,7 +233,6 @@ Một héc-ta bằng bao nhiêu mét vuông? | 10 000 | 1000 | 100 | 100 000
 Năm nhuận dương lịch thường cứ bao nhiêu năm lại có một lần? | 4 năm | 2 năm | 3 năm | 5 năm
 Một mét khối bằng bao nhiêu lít? | 1000 lít | 100 lít | 10 lít | 10 000 lít
 Ký hiệu hoá học của vàng là gì? | Au | Ag | Al | Fe
-Ký hiệu hoá học của đồng là gì? | Cu | Zn | Fe | Pb
 Mặc nhiều lớp áo mỏng thường ấm hơn một áo dày là nhờ đâu? | Không khí giữa các lớp | Áo mỏng nặng hơn | Vải mỏng tự sinh nhiệt | Áo mỏng dẫn nhiệt tốt
 Mặt Trời mọc ở đông, lặn ở tây vì Trái Đất tự quay theo hướng nào? | Từ tây sang đông | Từ đông sang tây | Từ bắc xuống nam | Từ nam lên bắc
 Đường đi của Trái Đất quanh Mặt Trời gọi là gì? | Quỹ đạo | Kinh tuyến | Vĩ tuyến | Xích đạo
@@ -302,7 +301,6 @@ Dây tóc bóng đèn sợi đốt thường làm bằng kim loại nào? | Vonf
 Ký hiệu hoá học Na là của nguyên tố nào? | Natri | Nitơ | Neon | Niken
 Ký hiệu hoá học của bạc là gì? | Ag | Au | Pb | Sn
 Ký hiệu hoá học K là của nguyên tố nào? | Kali | Canxi | Kẽm | Cacbon
-Ký hiệu hoá học của chì là gì? | Pb | Sn | Cu | Zn
 Hg là ký hiệu hoá học của nguyên tố nào? | Thủy ngân | Heli | Hydro | Bạc
 Thổi khí nào vào nước vôi trong sẽ làm nước vẩn đục? | Khí cacbonic | Khí oxy | Khí nitơ | Khí hydro
 Vôi sống có tên hoá học là gì? | Canxi oxit | Canxi cacbonat | Canxi clorua | Natri oxit

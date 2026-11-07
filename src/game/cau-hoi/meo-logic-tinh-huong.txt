@@ -17,7 +17,6 @@ Nhân tất cả các số từ 0 đến 9 với nhau, kết quả bằng bao nh
 Viết các số từ 1 đến 100, phải viết bao nhiêu chữ số 9? | 20 | 10 | 11 | 19
 Viên gạch nặng 1 ký cộng thêm nửa viên gạch. Cả viên gạch nặng bao nhiêu? | 2 ký | 1 ký rưỡi | 1 ký | 3 ký
 Gậy và bóng giá 110 nghìn, gậy đắt hơn bóng 100 nghìn. Quả bóng giá bao nhiêu? | 5 nghìn | 10 nghìn | 15 nghìn | 1 nghìn
-Mua con gà 60 nghìn, bán 70, mua lại 80, rồi bán 90 nghìn. Lãi tất cả bao nhiêu? | 20 nghìn | 10 nghìn | 30 nghìn | Hòa vốn
 Một ký sắt và một ký bông, cái nào nặng hơn? | Nặng bằng nhau | Sắt nặng hơn | Bông nặng hơn | Không so được
 5 người gặp nhau, mỗi người bắt tay mỗi người khác đúng 1 lần. Có mấy cái bắt tay? | 10 | 25 | 20 | 5
 Đồng hồ điểm 6 tiếng chuông mất 5 giây. Cùng nhịp đó, điểm 12 tiếng mất mấy giây? | 11 giây | 10 giây | 12 giây | 13 giây
@@ -33,11 +32,9 @@ Ngăn kéo tối có tất đen và tất trắng. Lấy ít nhất mấy chiế
 Hộp có 5 bi đỏ, 5 bi xanh. Nhắm mắt lấy ít nhất mấy viên thì chắc có 2 viên đỏ? | 7 viên | 2 viên | 3 viên | 6 viên
 Hộp có 5 đôi găng tay giống hệt bị trộn lẫn. Lấy ít nhất mấy chiếc thì chắc đeo được 1 đôi? | 6 chiếc | 2 chiếc | 3 chiếc | 5 chiếc
 Nhóm có 13 người. Chắc chắn có ít nhất 2 người sinh cùng gì? | Cùng tháng | Cùng ngày | Cùng tuần | Cùng giờ
-Trên bàn có 5 cây nến đang cháy, gió thổi tắt 2 cây. Sáng hôm sau còn lại mấy cây nến? | 2 cây | 3 cây | 5 cây | 0 cây
 Hai người chơi cờ, mỗi người thắng 3 ván, không ván nào hòa. Vì sao? | Không đấu với nhau | Chơi đúng 6 ván | Có người ăn gian | Trọng tài tính nhầm
 Hai tờ tiền cộng lại 15 nghìn, một tờ không phải tờ 5 nghìn. Đó là hai tờ gì? | 10 nghìn và 5 nghìn | 12 nghìn và 3 nghìn | 14 nghìn và 1 nghìn | 7 nghìn và 8 nghìn
 Viết số 86 lên giấy rồi xoay ngược đầu tờ giấy, bạn đọc được số mấy? | 98 | 89 | 68 | 86
-Có 6 quả trứng, đập vỡ 2 quả, rán 2 quả, ăn 2 quả. Còn mấy quả chưa đụng tới? | 4 quả | 0 quả | 2 quả | 6 quả
 Lấy 100 chia cho 0,5 thì được bao nhiêu? | 200 | 50 | 100 | 150
 Sợi dây cháy hết trong 60 phút. Châm lửa cả hai đầu cùng lúc thì bao lâu cháy hết? | 30 phút | 60 phút | 120 phút | 15 phút
 Một người đi bộ 1 cây số hết 10 phút. Hai người đi cùng nhau quãng đó hết bao lâu? | 10 phút | 5 phút | 20 phút | 15 phút
@@ -52,7 +49,6 @@ Hai chị em có số kẹo bằng nhau. Chị cho em 2 cái. Em có nhiều hơ
 Con gà nặng 2 ký khi đứng hai chân. Khi đứng một chân, nó nặng bao nhiêu? | 2 ký | 1 ký | 4 ký | 3 ký
 Nhỏ 1 giọt nước vào 1 giọt nước khác, được mấy giọt nước? | 1 giọt | 2 giọt | 3 giọt | Nửa giọt
 Tuổi bố và con cộng lại là 36, bố hơn con 30 tuổi. Con mấy tuổi? | 3 tuổi | 6 tuổi | 4 tuổi | 5 tuổi
-Cái bàn vuông có 4 góc, cưa bớt đi 1 góc thì còn mấy góc? | 5 góc | 3 góc | 4 góc | 2 góc
 Viết các số từ 1 đến 20 thì phải viết tất cả bao nhiêu chữ số? | 31 | 20 | 29 | 40
 Sách đánh số từ trang 1 đến trang 100, in hai mặt. Sách có bao nhiêu tờ giấy? | 50 tờ | 100 tờ | 25 tờ | 200 tờ
 Sách in hai mặt, xé tờ có trang 7 thì trang nào mất theo? | Trang 8 | Trang 6 | Trang 9 | Trang 14
@@ -79,7 +75,6 @@ Dãy số 5, 10, 20, 40... Số tiếp theo là số mấy? | 80 | 50 | 60 | 45
 Ba hộp lớn, mỗi hộp có 3 hộp nhỏ, mỗi hộp nhỏ có 3 viên kẹo. Có tất cả mấy viên kẹo? | 27 viên | 9 viên | 39 viên | 12 viên
 Một tá có 12 cái. Hai tá trừ đi 1 chục thì còn mấy cái? | 14 cái | 12 cái | 10 cái | 22 cái
 Lấy 30 chia đôi rồi cộng thêm 10 thì được bao nhiêu? | 25 | 70 | 20 | 40
-Tính theo quy tắc nhân chia trước, cộng trừ sau: 2 cộng 2 nhân 2 bằng mấy? | 6 | 8 | 4 | 16
 Số nào khác 0 mà cộng với chính nó hay nhân với chính nó đều ra cùng kết quả? | 2 | 1 | 4 | 3
 Số nào chia cho bất kỳ số nào khác 0 cũng ra kết quả bằng 0? | 0 | 1 | 10 | 100
 Bạn có 3 cái kẹo, mẹ cho thêm gấp đôi số kẹo bạn đang có. Giờ bạn có mấy cái? | 9 cái | 6 cái | 5 cái | 12 cái
@@ -124,7 +119,6 @@ Chủ nhật tuần này là ngày 10. Chủ nhật tuần sau là ngày mấy? 
 Ngày 1 tháng 1 là thứ hai thì ngày 1 tháng 2 năm đó là thứ mấy? | Thứ năm | Thứ hai | Thứ tư | Thứ sáu
 Hôm nay không phải thứ bảy, cũng không phải Chủ nhật, mà ngày mai là cuối tuần. Hôm nay thứ mấy? | Thứ sáu | Thứ năm | Thứ hai | Thứ tư
 Hôm nay là ngày 31. Ngày mai chắc chắn là ngày mấy? | Ngày 1 | Ngày 32 | Ngày 30 | Ngày 2
-Trong 12 tiếng đồng hồ, kim giờ và kim phút trùng nhau bao nhiêu lần? | 11 lần | 12 lần | 24 lần | 10 lần
 Lúc 3 giờ 15 phút, kim giờ đang chỉ ở đâu? | Giữa số 3 và số 4 | Đúng số 3 | Đúng số 4 | Giữa số 2 và số 3
 Trong một ngày đêm, kim giờ quay được mấy vòng? | 2 vòng | 1 vòng | 24 vòng | 12 vòng
 Từ 1 giờ đến 2 giờ, kim giờ quay được bao nhiêu độ? | 30 độ | 360 độ | 60 độ | 15 độ
