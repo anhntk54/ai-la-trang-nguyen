@@ -1,103 +1,118 @@
 // =====================================================
-//  CẤU HÌNH GAME - phần lớn thay đổi nhỏ chỉ cần sửa file này
+//  CẤU HÌNH GAME "AI LÀ TRẠNG NGUYÊN" - thay đổi nhỏ chỉ cần sửa file này
 //  Câu đọc: `name` = tên người xem (đã làm sạch), `kenh` = tên kênh (ô "Tên kênh" ở trang điều khiển)
-//  Muốn tắt tính năng nào thì để số thời gian = 0 hoặc danh sách câu rỗng [].
 // =====================================================
 
 import type { WishTopic } from '../live/chatter';
 
-export const GAME = {
-  title: 'TÊN GAME',
-  subtitle: 'Gõ "join" để tham gia',
+export type Level = 'de' | 'vua' | 'kho' | 'chuong' | 'phu';
 
-  // Tên kênh mặc định, tới khi chủ kênh lưu tên ở trang điều khiển
+export interface Vong {
+  ten: string; // đọc + hiện ở bảng
+  nhan: string; // nhãn ngắn trên tab
+  cau: number; // số câu
+  giay: number; // thời gian trả lời mỗi câu
+  diem: number; // điểm tối đa khi đúng ngay giây đầu
+  levels: Level[]; // nhóm câu trong trac-nghiem.txt, lấy lần lượt
+}
+
+export const GAME = {
+  title: 'Ai Là Trạng Nguyên',
   defaultChannelName: 'kênh mình',
 
-  // Từ khóa trong comment để tham gia (so sánh không dấu, không hoa thường)
-  joinKeywords: ['join', 'thamgia'],
+  // ---------- Luật thi: 4 vòng, 20 câu ----------
+  vong: [
+    { ten: 'Khảo hạch trường làng', nhan: 'KHẢO HẠCH', cau: 5, giay: 10, diem: 100, levels: ['de'] },
+    { ten: 'Thi Hương', nhan: 'THI HƯƠNG', cau: 5, giay: 15, diem: 200, levels: ['vua'] },
+    { ten: 'Thi Hội', nhan: 'THI HỘI', cau: 5, giay: 20, diem: 300, levels: ['kho'] },
+    { ten: 'Thi Đình', nhan: 'THI ĐÌNH', cau: 5, giay: 25, diem: 500, levels: ['chuong', 'kho'] },
+  ] as Vong[],
+  saiTru: 0.5, // sai bị trừ nửa điểm tối đa của vòng; tổng điểm không xuống dưới 0
+  diemSan: 0.5, // đúng sát giờ vẫn được 50% điểm tối đa
+  chuoiMoi: 3, // đúng liền 3 câu thì thưởng
+  chuoiThuong: 100,
+  earlySendGraceMs: 500, // gửi trước lúc hiện đáp án quá 0,5 giây thì không tính (không mất lượt)
 
-  // Điểm
-  pointsPerComment: 1,
-  pointsPerCoin: 10, // 1 xu quà = 10 điểm
+  // ---------- Nhịp (giây) ----------
+  choSec: 15, // đếm ngược trước ván mới
+  vongSec: 5, // bảng giới thiệu vòng
+  docMaxSec: 25, // giọng đọc đề hỏng thì tối đa chừng này giây là tự hiện đáp án
+  dapAnSec: 7,
+  bangVangSec: 9, // hết mỗi vòng hiện top 20
+  vinhQuySec: 15,
 
-  // Thanh tim: đủ số tim này thì kích hoạt hiệu ứng
-  likesPerBoost: 500,
-  boostSeconds: 30,
+  // Danh hiệu theo hạng trong ván
+  danhHieu: (hang: number) =>
+    hang === 1 ? 'Trạng Nguyên'
+    : hang === 2 ? 'Bảng Nhãn'
+    : hang === 3 ? 'Thám Hoa'
+    : hang <= 10 ? 'Tiến sĩ'
+    : hang <= 15 ? 'Cử nhân'
+    : hang <= 20 ? 'Tú tài'
+    : 'Sĩ tử',
+
+  // ---------- Lời quan chủ khảo ----------
+  loi: {
+    cho: [
+      'Ván mới sắp bắt đầu. Ai muốn đỗ Trạng thì chuẩn bị gõ A, B, C hoặc D vào bình luận nhé.',
+      'Trường thi sắp mở cửa. Mọi người gõ A, B, C hoặc D để trả lời, đúng càng nhanh điểm càng cao.',
+    ],
+    vong: [
+      'Khảo hạch trường làng bắt đầu. Năm câu dễ, mỗi câu mười giây. Gõ A, B, C hoặc D vào bình luận.',
+      'Qua được làng rồi, giờ lên thi Hương. Câu khó hơn, mỗi câu mười lăm giây.',
+      'Vào thi Hội. Từ đây sai một câu là mất kha khá điểm đấy, nghĩ kỹ rồi hãy gõ.',
+      'Thi Đình, năm câu cuối cùng. Mỗi câu tối đa năm trăm điểm, ai đỗ Trạng sẽ có ngay sau đây.',
+    ],
+    dapAn: (chu: string, dap: string) => `Đáp án ${chu}, ${dap}.`,
+    dungNhieu: [
+      (n: number, name: string) => `${n} người trả lời đúng, nhanh nhất là ${name}.`,
+      (n: number, name: string) => `Có ${n} người đúng. ${name} bấm nhanh nhất câu này.`,
+    ],
+    dungMot: (name: string) => `Chỉ một mình ${name} trả lời đúng.`,
+    khongAi: ['Câu này chưa ai trả lời đúng.', 'Câu này làm khó cả trường thi rồi.'],
+    bangVang: (vong: string, name: string) => `Hết ${vong}. Đang đứng đầu bảng vàng là ${name}.`,
+    bangVangTrong: (vong: string) => `Hết ${vong}.`,
+    vinhQuy: (tn: string, bn?: string, th?: string) =>
+      `Xin chúc mừng ${tn} đỗ Trạng Nguyên!` +
+      (bn ? ` Bảng Nhãn là ${bn}.` : '') +
+      (th ? ` Thám Hoa là ${th}.` : '') +
+      ' Vinh quy bái tổ thôi!',
+    khongAiThi: 'Ván này chưa có sĩ tử nào. Ván sau mọi người vào thi cùng nhé.',
+  },
 
   // ---------- Chào người vào ----------
-  greetEveryMs: 6000, // gom người mới, 6 giây chào 1 lượt
-  namesPerGreeting: 3, // 3 tên mỗi câu
-  greeting: (names: string, kenh: string) => `${kenh} chào ${names} vừa vào chơi.`,
+  greetEveryMs: 8000,
+  namesPerGreeting: 3,
+  greeting: (names: string) => `Chào ${names} vào trường thi.`,
 
-  // ---------- Cảm ơn quà ----------
-  // Cùng 1 người tặng liên tục / combo: chỉ cảm ơn 1 lần mỗi 30 giây. Quà từ 99 xu luôn được cảm ơn.
+  // ---------- Cảm ơn quà (quà KHÔNG cho lợi thế gì trong game) ----------
   giftThanksCooldownMs: 30_000,
   bigGiftCoins: 99,
-  thankGift: (name: string, gift: string, kenh: string) => `${kenh} cảm ơn bạn ${name} đã tặng ${gift}.`,
-  // Đọc thêm 1 câu chúc ngẫu nhiên sau lời cảm ơn quà ([] = không đọc)
-  giftWishes: [
-    'Chúc bạn một ngày thật vui.',
-    'Chúc bạn làm gì cũng suôn sẻ nha.',
-    'Chúc cả nhà bạn mạnh khỏe, bình an.',
-    'Chúc bạn may mắn cả tuần luôn.',
-  ],
+  thankGift: (name: string, gift: string, kenh: string) => `${kenh} cảm ơn ${name} đã tặng ${gift}.`,
+  giftWishes: ['Chúc bạn thi đâu đỗ đó.', 'Chúc bạn một ngày thật vui.', 'Chúc bạn làm gì cũng suôn sẻ nha.'],
 
-  // ---------- Theo dõi kênh (mỗi người cảm ơn 1 lần) ----------
-  thankFollow: (name: string, kenh: string) => `${kenh} cảm ơn bạn ${name} đã theo dõi kênh nha.`,
+  thankFollow: (name: string, kenh: string) => `${kenh} cảm ơn ${name} đã theo dõi kênh nha.`,
 
-  // ---------- Comment có lời cầu chúc ----------
-  // Ai comment kiểu "mong mai thi được điểm cao" thì đọc 1 câu chúc đúng chủ đề.
-  // KHÔNG BAO GIỜ đọc nguyên văn comment. Mỗi người 1 lần / 10 phút, cả phòng tối đa 1 lần / 20 giây.
+  // Comment có lời cầu chúc: đọc 1 câu chúc soạn sẵn, KHÔNG BAO GIỜ đọc nguyên văn comment
   wishPerUserMs: 10 * 60_000,
   wishGlobalMs: 20_000,
   wishReplies: {
     exam: [
-      (name: string) => `Chúc bạn ${name} ôn bài vô đầu, vào phòng thi thật bình tĩnh, điểm cao như mong muốn.`,
-      (name: string) => `Chúc bạn ${name} học đâu nhớ đó, thi đâu đậu đó.`,
+      (name: string) => `Chúc ${name} ôn bài vô đầu, vào phòng thi thật bình tĩnh.`,
+      (name: string) => `Chúc ${name} học đâu nhớ đó, thi đâu đỗ đó.`,
     ],
-    health: [
-      (name: string) => `Chúc bạn ${name} với người nhà mau khỏe, ăn ngon ngủ yên.`,
-      (name: string) => `Chúc nhà bạn ${name} ai cũng khỏe, người đang mệt thì sớm bình phục.`,
-    ],
-    love: [
-      (name: string) => `Chúc bạn ${name} sớm gặp người thương mình thật lòng.`,
-      (name: string) => `Chúc bạn ${name} chuyện tình cảm êm đẹp, thương ai người đó cũng thương lại.`,
-    ],
-    family: [
-      (name: string) => `Chúc nhà bạn ${name} luôn êm ấm, cha mẹ khỏe, con cái ngoan.`,
-      (name: string) => `Chúc gia đình bạn ${name} lúc nào cũng vui vẻ, thương nhau.`,
-    ],
-    work: [
-      (name: string) => `Chúc bạn ${name} công việc thuận lợi, sớm được như ý.`,
-      (name: string) => `Chúc bạn ${name} tìm được việc ưng ý, làm đâu thuận đó.`,
-    ],
-    wealth: [
-      (name: string) => `Chúc bạn ${name} làm ăn phát đạt, buôn may bán đắt.`,
-      (name: string) => `Chúc bạn ${name} tiền vô đều tay, nợ nần sớm xong.`,
-    ],
-    peace: [
-      (name: string) => `Chúc bạn ${name} mọi chuyện bình an, thuận lợi.`,
-      (name: string) => `Chúc bạn ${name} gặp nhiều may mắn, đi đâu cũng bình an.`,
-    ],
+    health: [(name: string) => `Chúc ${name} với người nhà mau khỏe, ăn ngon ngủ yên.`],
+    love: [(name: string) => `Chúc ${name} sớm gặp người thương mình thật lòng.`],
+    family: [(name: string) => `Chúc nhà ${name} luôn êm ấm, ai cũng khỏe.`],
+    work: [(name: string) => `Chúc ${name} công việc thuận lợi, sớm được như ý.`],
+    wealth: [(name: string) => `Chúc ${name} làm ăn phát đạt, tiền vô đều tay.`],
+    peace: [(name: string) => `Chúc ${name} mọi chuyện bình an, thuận lợi.`],
   } as Record<WishTopic, ((name: string) => string)[]>,
 
-  // ---------- Nhắc chia sẻ live ----------
-  // Mỗi 5 phút; có người vừa tương tác thì cảm ơn tối đa 3 tên trước.
+  // Nhắc chia sẻ live mỗi 5 phút
   shareReminderEveryMs: 5 * 60_000,
-  shareWithNames: (names: string, kenh: string) =>
-    `${kenh} cảm ơn ${names} đã ghé chơi. Mọi người nhớ bấm chia sẻ live cho bạn bè cùng vào nha.`,
   shareLines: [
-    'Mọi người thấy vui thì bấm chia sẻ live cho bạn bè cùng vào chơi nha.',
-    'Thêm người là thêm vui, cả nhà bấm chia sẻ live giúp kênh nhé.',
+    'Ai thấy vui thì bấm chia sẻ live, rủ bạn bè vào thi cùng nha.',
+    'Rủ thêm bạn vào thi cho đông, bấm chia sẻ live giúp kênh nhé.',
   ],
-
-  // ---------- Live im quá lâu ----------
-  // Giọng im quá 90 giây thì đọc 1 câu cho đỡ trống.
-  idleAfterMs: 90_000,
-  idleLines: [
-    'Ai mới vào thì gõ join để tham gia nha.',
-    'Cả nhà thả tim cho đầy thanh, đủ tim là có bất ngờ.',
-  ],
-
-  boostLine: 'Đủ tim rồi, bùng nổ thôi!',
 };
