@@ -49,3 +49,4 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - Giọng quan chủ khảo: VieNeu "Adam bựa" (2026-11-07).
 - Lời ông đồ có cảm xúc (thẻ [cười] [thở dài] [hắng giọng] của VieNeu), đổi theo tỉ lệ đúng: >=75% cười, <30% trêu, 0 người thở dài; đúng trong 2 giây đầu khen thần đồng. Chủ kênh duyệt (2026-11-07).
 - Nam/nữ của tam khôi: người chơi gõ "nam"/"nữ" (nhớ cả buổi) > đoán theo tên tiếng Việt (src/game/gioiTinh.ts: Thị = nữ, Văn = nam, danh sách tên) > cố định theo tài khoản. Màn trao giải có avatar TikTok cạnh tên (2026-11-07).
+- Bộ câu hỏi (chủ kênh chốt 2026-11-07): khán giả là người thích kiến thức; bỏ hết câu mượn của Lớp Học Chữ, viết mới; mỗi kỳ 1 câu toán máy tự sinh, khó dần; Thi Đình trộn câu khó và đố mẹo. Không dùng câu đọc lên nghe giống nhau (chính tả, dấu hỏi ngã). Đáp án ngắn (≤ 22 ký tự), lịch sử theo sách giáo khoa, không dùng chi tiết còn tranh cãi. Claude viết từng đợt, chủ kênh duyệt.

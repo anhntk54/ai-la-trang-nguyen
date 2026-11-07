@@ -19,8 +19,10 @@ assert.equal(diemDung(100, 5_000, 10_000), 75);
 
 // Bộ câu đọc được, đủ câu cho 1 ván
 const errors: string[] = [];
-const bank = parseMc(fs.readFileSync(new URL('./cau-hoi/trac-nghiem.txt', import.meta.url), 'utf8'), errors);
+const dir = new URL('./cau-hoi/', import.meta.url);
+const bank = fs.readdirSync(dir).filter((f) => f.endsWith('.txt')).flatMap((f) => parseMc(fs.readFileSync(new URL(f, dir), 'utf8'), errors));
 assert.deepEqual(errors, []);
+if (bank.length < 100) { console.log('Chưa đủ câu hỏi để chạy thử ván, bỏ qua phần ván'); }
 
 // Chạy 1 ván với đồng hồ giả
 let t = 1_000_000;
@@ -118,3 +120,21 @@ k3.chat({ id: 'la', name: 'Lan Anh', avatar: '', comment: 'nam' }, t);
 assert.equal(k3.gioiCua({ id: 'la', name: 'Lan Anh' }), 'nam'); // tự chọn thắng đoán tên
 assert.equal(k3.gioiCua({ id: 'mt', name: 'Minh Tuấn' }), 'nam');
 console.log('gioiTinh: OK');
+
+// Câu toán tự sinh: 4 đáp án khác nhau, số dương, đáp án đúng tính lại khớp
+import { sinhToan } from './toan';
+for (let cap = 1; cap <= 4; cap++) {
+  for (let i = 0; i < 500; i++) {
+    const q = sinhToan(cap);
+    const opts = [q.right, ...q.wrong];
+    assert.equal(new Set(opts).size, 4, q.q);
+    assert.ok(opts.every((o) => Number(o) > 0), q.q);
+    const expr = q.q.replace(' bằng bao nhiêu?', '').replace(/ rồi /g, ' ').replace(/cộng/g, '+').replace(/trừ/g, '-').replace(/nhân/g, '*').replace(/chia/g, '/');
+    // "a nhân b rồi cộng c" / "a trừ c rồi nhân b": tính tuần tự trái sang phải
+    const tok = expr.split(' ');
+    let v = Number(tok[0]);
+    for (let j = 1; j < tok.length; j += 2) v = eval(`${v}${tok[j]}${tok[j + 1]}`);
+    assert.equal(String(v), q.right, q.q);
+  }
+}
+console.log('toan: OK');

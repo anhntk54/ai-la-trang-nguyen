@@ -5,15 +5,18 @@
 
 import type { WishTopic } from '../live/chatter';
 
-export type Level = 'de' | 'vua' | 'kho' | 'chuong' | 'phu';
+// Nhóm câu trong các file src/game/cau-hoi/*.txt:
+//   [de] khảo hạch · [vua] thi Hương · [kho] thi Hội · [dinh] thi Đình (khó, khoa cử) · [meo] đố mẹo
+export type Level = 'de' | 'vua' | 'kho' | 'dinh' | 'meo';
 
 export interface Vong {
   ten: string; // đọc + hiện ở bảng
   nhan: string; // nhãn ngắn trên tab
-  cau: number; // số câu
+  cau: number; // số câu = tổng phan + 1 câu toán
   giay: number; // thời gian trả lời mỗi câu
   diem: number; // điểm tối đa khi đúng ngay giây đầu
-  levels: Level[]; // nhóm câu trong trac-nghiem.txt, lấy lần lượt
+  phan: [Level, number][]; // lấy bao nhiêu câu mỗi nhóm
+  toan: number; // cấp câu toán tự sinh (1-4), 0 = không có
 }
 
 export const GAME = {
@@ -22,10 +25,10 @@ export const GAME = {
 
   // ---------- Luật thi: 4 vòng, 20 câu ----------
   vong: [
-    { ten: 'Khảo hạch trường làng', nhan: 'KHẢO HẠCH', cau: 5, giay: 10, diem: 100, levels: ['de'] },
-    { ten: 'Thi Hương', nhan: 'THI HƯƠNG', cau: 5, giay: 15, diem: 200, levels: ['vua'] },
-    { ten: 'Thi Hội', nhan: 'THI HỘI', cau: 5, giay: 20, diem: 300, levels: ['kho'] },
-    { ten: 'Thi Đình', nhan: 'THI ĐÌNH', cau: 5, giay: 25, diem: 500, levels: ['chuong', 'kho'] },
+    { ten: 'Khảo hạch trường làng', nhan: 'KHẢO HẠCH', cau: 5, giay: 10, diem: 100, phan: [['de', 4]], toan: 1 },
+    { ten: 'Thi Hương', nhan: 'THI HƯƠNG', cau: 5, giay: 15, diem: 200, phan: [['vua', 4]], toan: 2 },
+    { ten: 'Thi Hội', nhan: 'THI HỘI', cau: 5, giay: 20, diem: 300, phan: [['kho', 4]], toan: 3 },
+    { ten: 'Thi Đình', nhan: 'THI ĐÌNH', cau: 5, giay: 25, diem: 500, phan: [['dinh', 2], ['meo', 2]], toan: 4 },
   ] as Vong[],
   saiTru: 0.5, // sai bị trừ nửa điểm tối đa của vòng; tổng điểm không xuống dưới 0
   diemSan: 0.5, // đúng sát giờ vẫn được 50% điểm tối đa

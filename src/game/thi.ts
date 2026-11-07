@@ -2,6 +2,7 @@
 // Trang stage chạy 1 bản KyThi, trang điều khiển chỉ vẽ lại ảnh chụp view().
 import { GAME, type Level, type Vong } from './config';
 import { doanGioi, lenhGioi, type Gioi } from './gioiTinh';
+import { sinhToan } from './toan';
 
 export interface McQ {
   id: string;
@@ -11,7 +12,7 @@ export interface McQ {
   level: Level;
 }
 
-const LEVELS: Level[] = ['de', 'vua', 'kho', 'chuong', 'phu'];
+const LEVELS: Level[] = ['de', 'vua', 'kho', 'dinh', 'meo'];
 
 /** Đọc file trắc nghiệm: dòng "[de]" đổi nhóm; mỗi dòng "câu hỏi | đúng | sai | sai | sai" */
 export function parseMc(text: string, errors: string[] = []): McQ[] {
@@ -155,14 +156,23 @@ export class KyThi {
     const taken = new Set<string>();
     const out: Cau[] = [];
     GAME.vong.forEach((v, vi) => {
-      // câu lâu chưa hỏi nhất trước, cùng mức thì ngẫu nhiên
-      const pool = shuffle(
-        this.bank.filter((q) => v.levels.includes(q.level) && !taken.has(q.id)),
-        this.rand,
-      ).sort((a, b) => (this.used[a.id] ?? 0) - (this.used[b.id] ?? 0));
-      for (const q of pool.slice(0, v.cau)) {
-        taken.add(q.id);
-        this.used[q.id] = now;
+      const ds: McQ[] = [];
+      for (const [level, n] of v.phan) {
+        // câu lâu chưa hỏi nhất trước, cùng mức thì ngẫu nhiên; nhóm thiếu câu thì lấy nhóm khác
+        const lay = (cung: boolean) =>
+          shuffle(this.bank.filter((q) => (cung ? q.level === level : true) && !taken.has(q.id)), this.rand)
+            .sort((a, b) => (this.used[a.id] ?? 0) - (this.used[b.id] ?? 0));
+        let pool = lay(true);
+        if (pool.length < n) pool = [...pool, ...lay(false).filter((q) => !pool.includes(q))];
+        for (const q of pool.slice(0, n)) {
+          taken.add(q.id);
+          this.used[q.id] = now;
+          ds.push(q);
+        }
+      }
+      shuffle(ds, this.rand);
+      if (v.toan) ds.splice(Math.min(2, ds.length), 0, sinhToan(v.toan, this.rand)); // câu toán ở vị trí thứ 3
+      for (const q of ds) {
         const opts = shuffle([q.right, ...q.wrong], this.rand);
         out.push({ q, opts, ans: opts.indexOf(q.right), vong: vi });
       }

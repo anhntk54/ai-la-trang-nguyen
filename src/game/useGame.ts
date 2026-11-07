@@ -10,7 +10,9 @@ import { IS_STAGE, MUTE } from '../live/page';
 import { sfx } from './sfx';
 import { GAME } from './config';
 import { KyThi, parseMc, type Ev, type View } from './thi';
-import bankText from './cau-hoi/trac-nghiem.txt?raw';
+// Mọi file câu hỏi trong src/game/cau-hoi/ (mỗi chủ đề 1 file)
+const bankFiles = import.meta.glob<string>('./cau-hoi/*.txt', { query: '?raw', import: 'default', eager: true });
+const BANK = Object.values(bankFiles).flatMap((t) => parseMc(t));
 
 const pick = makePicker();
 const post = (url: string, body: unknown) =>
@@ -24,7 +26,7 @@ export function useGame() {
   const [status, setStatus] = useState<LiveStatus | null>(null);
   const [view, setView] = useState<View | null>(null);
   const [channelName, setChannelName] = useState(GAME.defaultChannelName);
-  const [room] = useState(() => new KyThi(parseMc(bankText)));
+  const [room] = useState(() => new KyThi(BANK));
   if (import.meta.env.DEV) (window as any).__room = room; // để thử các màn trong trình duyệt
   const [talk] = useState(() => ({
     greeter: new NameBatcher(
