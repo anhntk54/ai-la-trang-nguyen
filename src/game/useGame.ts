@@ -61,7 +61,7 @@ export function useGame() {
         return voice.say((pick(L.cho) ?? '') + them, true);
       }
       case 'vong':
-        if (ev.vong === 0) void post('/api/da-hoi', room.used); // ván mới vừa bốc câu: lưu lại để lần sau ưu tiên câu khác
+        if (ev.vong === 0 && voice.speaker) void post('/api/da-hoi', room.used); // ván mới vừa bốc câu: lưu lại để lần sau ưu tiên câu khác
         return voice.say(pick(L.vong[ev.vong] ?? []) ?? '', true);
       case 'doc': {
         const cau = room.cau;
@@ -110,7 +110,7 @@ export function useGame() {
       case 'vinhQuy': {
         // cộng điểm ván này vào bảng vàng tuần
         const ds = [...room.siTu.values()].filter((s) => s.diem > 0).map(({ id, name, avatar, diem }) => ({ id, name, avatar, diem }));
-        if (ds.length) void layTuan(post('/api/bang-tuan', { ds }));
+        if (ds.length && voice.speaker) void layTuan(post('/api/bang-tuan', { ds }));
         const [tn, bn, th] = ev.top.map(speakableName);
         voice.say(tn ? L.vinhQuy(tn, bn, th) : L.khongAiThi, true);
         if (ev.mien) voice.say(L.mienThang(TEN_MIEN[ev.mien.mien], ev.mien.diem), true);
@@ -221,9 +221,10 @@ export function useGame() {
       }
       const v = room.view(now);
       setView(v);
-      sfx.watch(prev, v, voice.busy);
+      if (voice.speaker) sfx.watch(prev, v, voice.busy);
+      else sfx.music('tat', false); // trang phụ: tắt nhạc
       prev = v;
-      if (now - lastPost >= 500) {
+      if (voice.speaker && now - lastPost >= 500) {
         lastPost = now;
         void post('/api/game/state', v);
       }

@@ -25,6 +25,13 @@ class Voice {
   rate = 1;
   volume = 1;
   enabled = IS_STAGE && !MUTE;
+  /** Trang stage này có phải trang chính không (lỡ mở 2 trang stage thì trang cũ thành trang phụ: im lặng, không gửi dữ liệu) */
+  speaker = true;
+  setSpeaker(mine: boolean) {
+    if (!mine && this.speaker) this.stop();
+    this.speaker = mine;
+    this.enabled = IS_STAGE && !MUTE && mine;
+  }
   onBlocked?: () => void;
 
   say(text: string, priority = false, done?: () => void) {

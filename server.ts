@@ -61,20 +61,36 @@ const emptyStats = (): LiveStats => ({
 
 let liveStats = emptyStats();
 let sseClients: express.Response[] = [];
+// Các trang stage đang mở (theo thứ tự mở). Chỉ trang mở SAU CÙNG được phát tiếng, tránh 2 giọng đọc đè nhau
+// khi lỡ có 2 nguồn Link trong LIVE Studio hoặc mở thêm ?view=stage ở trình duyệt khác.
+let stageIds: string[] = [];
+const announceSpeaker = () => broadcast('speaker', { id: stageIds[stageIds.length - 1] ?? null, count: stageIds.length });
 let activeConn: InstanceType<typeof TikTokLiveConnection> | null = null;
 let lastRateControl: { action: string; text: string } | null = null;
 
 // Tên kênh (giọng đọc + tiêu đề) lưu ở settings.json cạnh file này, tắt server mở lại vẫn còn
 const SETTINGS_FILE = path.join(__dirname, 'settings.json');
 let lastNameControl: { action: string; text: string } | null = null;
+// tài khoản TikTok đang cần giữ kết nối: rớt thì tự kết nối lại, tắt server bật lại cũng tự kết nối
+let wantUser = '';
+let settings: { channelName?: string; tiktokUser?: string } = {};
 try {
-  const saved = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
-  if (typeof saved.channelName === 'string' && saved.channelName.trim()) {
-    lastNameControl = { action: 'setName', text: saved.channelName.trim() };
+  settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
+  if (typeof settings.channelName === 'string' && settings.channelName.trim()) {
+    lastNameControl = { action: 'setName', text: settings.channelName.trim() };
   }
+  if (typeof settings.tiktokUser === 'string') wantUser = settings.tiktokUser;
 } catch {
   // chưa lưu tên nào: dùng tên mặc định trong config.ts
 }
+const saveSettings = (patch: typeof settings) => {
+  settings = { ...settings, ...patch };
+  try {
+    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));
+  } catch (err) {
+    console.error('Không lưu được settings.json:', err);
+  }
+};
 
 function broadcast(eventType: string, data: unknown) {
   const payload = `event: ${eventType}\ndata: ${JSON.stringify(data)}\n\n`;
@@ -96,6 +112,11 @@ app.get('/api/tiktok/events', (req, res) => {
   if (lastRateControl) res.write(`event: control\ndata: ${JSON.stringify(lastRateControl)}\n\n`);
   if (lastNameControl) res.write(`event: control\ndata: ${JSON.stringify(lastNameControl)}\n\n`);
   sseClients.push(res);
+  const stageId = typeof req.query.stage === 'string' ? req.query.stage.slice(0, 40) : '';
+  if (stageId) {
+    stageIds = [...stageIds.filter((x) => x !== stageId), stageId];
+    announceSpeaker();
+  } else res.write(`event: speaker\ndata: ${JSON.stringify({ id: stageIds[stageIds.length - 1] ?? null, count: stageIds.length })}\n\n`);
 
   const heartbeat = setInterval(() => {
     try {
@@ -108,6 +129,10 @@ app.get('/api/tiktok/events', (req, res) => {
   req.on('close', () => {
     clearInterval(heartbeat);
     sseClients = sseClients.filter((c) => c !== res);
+    if (stageId) {
+      stageIds = stageIds.filter((x) => x !== stageId);
+      announceSpeaker();
+    }
   });
 });
 
@@ -118,10 +143,48 @@ const userOf = (data: any) => data?.user?.displayId || data?.user?.uniqueId || d
 const nickOf = (data: any) => data?.user?.nickname || data?.nickname || data?.uniqueId || 'Bạn';
 const avatarOf = (data: any) => data?.user?.avatarThumb?.urlList?.[0] || '';
 
+// ---------- Tự kết nối lại (treo live cả ngày) ----------
+// Rớt kết nối / hết phiên live / chưa live: thử lại sau 15 giây, rồi 30, 60, tối đa 2 phút một lần, cho tới khi được.
+let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+let reconnectTries = 0;
+function scheduleReconnect(why: string) {
+  if (!wantUser || reconnectTimer) return;
+  const delay = Math.min(120_000, 15_000 * 2 ** reconnectTries);
+  reconnectTries++;
+  console.log(`[TikTok] ${why}. Tự kết nối lại @${wantUser} sau ${delay / 1000} giây`);
+  liveStats = { ...liveStats, isConnected: false, isConnecting: false, error: `${why}. Tự kết nối lại sau ${delay / 1000} giây` };
+  broadcast('status', liveStats);
+  reconnectTimer = setTimeout(() => {
+    reconnectTimer = null;
+    connectTikTok(wantUser).catch((err) => scheduleReconnect(`Chưa kết nối lại được (${err instanceof Error ? err.message : err})`));
+  }, delay);
+}
+const stopReconnect = () => {
+  if (reconnectTimer) clearTimeout(reconnectTimer);
+  reconnectTimer = null;
+  reconnectTries = 0;
+};
+
 app.post('/api/tiktok/connect', async (req, res) => {
   const cleanUser = String(req.body?.username || '').replace(/^@/, '').trim();
   if (!cleanUser) return res.status(400).json({ success: false, error: 'Chưa nhập username TikTok' });
+  stopReconnect();
+  wantUser = cleanUser;
+  saveSettings({ tiktokUser: cleanUser });
+  try {
+    const state = await connectTikTok(cleanUser);
+    return res.json({ success: true, roomId: state?.roomId });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    scheduleReconnect(`Không kết nối được: ${msg}`);
+    return res.status(400).json({
+      success: false,
+      error: `Không kết nối được @${cleanUser}: ${msg}. Tài khoản phải đang LIVE trên TikTok. Server sẽ tự thử lại.`,
+    });
+  }
+});
 
+async function connectTikTok(cleanUser: string) {
   if (activeConn) {
     try {
       activeConn.disconnect();
@@ -144,17 +207,23 @@ app.post('/api/tiktok/connect', async (req, res) => {
     console.log(`[TikTok] Đã kết nối @${cleanUser}, room ${state?.roomId}`);
     liveStats = { ...liveStats, isConnected: true, isConnecting: false, roomId: state?.roomId || '', error: '' };
     broadcast('status', liveStats);
+    reconnectTries = 0;
   });
 
+  // kết nối cũ bị thay bằng kết nối mới thì không tự nối lại (activeConn đã khác)
   conn.on(ControlEvent.DISCONNECTED, () => {
     console.log(`[TikTok] Mất kết nối @${cleanUser}`);
+    if (activeConn !== conn) return;
     liveStats = { ...liveStats, isConnected: false, isConnecting: false };
     broadcast('status', liveStats);
+    scheduleReconnect('Mất kết nối TikTok');
   });
 
   conn.on(WebcastEvent.STREAM_END, () => {
+    if (activeConn !== conn) return;
     liveStats = { ...liveStats, isConnected: false, isConnecting: false, error: 'Phiên live đã kết thúc' };
     broadcast('status', liveStats);
+    scheduleReconnect('Phiên live đã kết thúc');
   });
 
   conn.on(WebcastEvent.CHAT, (data: any) => {
@@ -164,7 +233,8 @@ app.post('/api/tiktok/connect', async (req, res) => {
       comment: data?.content || data?.comment || '', // proto v3: chữ nằm ở `content`
       avatar: avatarOf(data),
       timestamp: Date.now(),
-      createTime: Number(data?.common?.createTime) || Date.now(), // giờ TikTok lúc người xem gửi, để xếp ai nhanh hơn
+      // giờ TikTok gắn lúc người xem gửi (ms): xếp ai trả lời nhanh nhất theo giờ này, không theo lúc bot nhận
+      createTime: Number(data?.common?.createTime) || Date.now(),
     });
   });
 
@@ -232,20 +302,34 @@ app.post('/api/tiktok/connect', async (req, res) => {
   activeConn = conn;
 
   try {
-    const state = await conn.connect();
-    return res.json({ success: true, roomId: state?.roomId });
+    // Chưa LIVE thì thư viện có thể treo mãi ở "Đang kết nối": hỏi TikTok trước, báo lỗi ngay
+    const live = await conn.fetchIsLive().catch(() => true); // hỏi lỗi thì cứ thử kết nối
+    if (!live) throw new Error('TikTok báo tài khoản này CHƯA LIVE. Bấm Phát trực tiếp trong LIVE Studio trước rồi mới kết nối');
+    return await Promise.race([
+      conn.connect(),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error('quá 30 giây không vào được phòng live')), 30_000)),
+    ]);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     liveStats = { ...liveStats, isConnected: false, isConnecting: false, error: msg };
     broadcast('status', liveStats);
-    return res.status(400).json({
-      success: false,
-      error: `Không kết nối được @${cleanUser}: ${msg}. Tài khoản phải đang LIVE trên TikTok.`,
-    });
+    if (activeConn === conn) {
+      try {
+        conn.disconnect();
+      } catch {
+        // bỏ qua
+      }
+      activeConn = null;
+    }
+    throw err;
   }
-});
+}
 
 app.post('/api/tiktok/disconnect', (_req, res) => {
+  // chủ kênh tự ngắt: thôi tự kết nối lại, bật server lại cũng không tự kết nối
+  stopReconnect();
+  wantUser = '';
+  saveSettings({ tiktokUser: '' });
   try {
     activeConn?.disconnect();
   } catch {
@@ -274,7 +358,7 @@ app.post('/api/control', (req, res) => {
     payload.text = name;
     lastNameControl = { action, text: name };
     try {
-      fs.writeFileSync(SETTINGS_FILE, JSON.stringify({ channelName: name }, null, 2));
+      saveSettings({ channelName: name });
     } catch (err) {
       console.error('Không lưu được settings.json:', err);
     }
@@ -532,6 +616,11 @@ async function start() {
   // Chỉ nghe trên máy này: API không có đăng nhập, người cùng Wi-Fi không được điều khiển giọng đọc
   app.listen(PORT, '127.0.0.1', () => {
     console.log(`Server chạy ở http://localhost:${PORT}  |  Link LIVE Studio: http://lvh.me:${PORT}/?view=stage`);
+    // lần trước đang kết nối mà server bị tắt / bật lại: tự kết nối lại tài khoản đó
+    if (wantUser) {
+      console.log(`[TikTok] Tự kết nối lại @${wantUser} (lần trước đang kết nối)`);
+      connectTikTok(wantUser).catch((err) => scheduleReconnect(`Chưa kết nối được (${err instanceof Error ? err.message : err})`));
+    }
   });
 }
 
