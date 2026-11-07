@@ -6,10 +6,12 @@ if not exist node_modules (
   call npm install
 )
 rem Giong doc VieNeu (Adam bua): chua chay thi mo cua so rieng. Khong co VieNeu thi game tu dung giong Edge.
+rem Cai VieNeu-TTS o thu muc khac thi sua dong duoi cho dung duong dan.
+set VIENEU_DIR=E:\02_AI\VieNeu-TTS
 curl -s -m 2 http://127.0.0.1:8000/v1/voices >nul 2>&1
-if errorlevel 1 if exist "E:\02_AI\VieNeu-TTS\.venv\Scripts\python.exe" (
+if errorlevel 1 if exist "%VIENEU_DIR%\.venv\Scripts\python.exe" (
   echo Dang bat giong VieNeu, cua so rieng ten "Giong VieNeu" - dung tat cua so do khi dang live.
-  start "Giong VieNeu" /min cmd /c "cd /d E:\02_AI\VieNeu-TTS && set PYTHONIOENCODING=utf-8 && .venv\Scripts\python.exe -m apps.openai_speech"
+  start "Giong VieNeu" /min cmd /c "cd /d %VIENEU_DIR% && set PYTHONIOENCODING=utf-8 && .venv\Scripts\python.exe -m apps.openai_speech"
 )
 echo Dang bat game... Dong cua so nay la tat game.
 echo Link cho TikTok LIVE Studio: http://lvh.me:3007/?view=stage  (1080 x 1920)
