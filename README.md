@@ -1,6 +1,6 @@
 # Ai Là Trạng Nguyên
 
-Game show đố vui cho **TikTok LIVE**, theo không khí khoa cử ngày xưa. Ông đồ cầm mic đọc câu hỏi và 4 đáp án, người xem gõ **A, B, C hoặc D** vào bình luận. Mỗi ván 20 câu qua 4 kỳ thi: khảo hạch trường làng, thi Hương, thi Hội, thi Đình. Hết ván, ba người điểm cao nhất đỗ Trạng Nguyên, Bảng Nhãn, Thám Hoa và được vinh danh trên màn hình.
+Game show đố vui cho **TikTok LIVE**, lấy cảm hứng từ khoa cử ngày xưa. Ông đồ cầm mic đọc câu hỏi và 4 đáp án, người xem gõ **A, B, C hoặc D** vào bình luận. Mỗi ván 20 câu qua 4 kỳ thi: khảo hạch trường làng, thi Hương, thi Hội, thi Đình. Hết ván, ba người điểm cao nhất đỗ Trạng Nguyên, Bảng Nhãn, Thám Hoa và được vinh danh trên màn hình.
 
 Game chạy trên máy tính của bạn, gắn vào TikTok LIVE Studio như một nguồn Link. Không cần biết lập trình, chỉ cần làm theo các bước bên dưới.
 
