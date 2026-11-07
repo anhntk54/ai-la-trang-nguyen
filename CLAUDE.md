@@ -35,6 +35,7 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - `data/da-hoi.json`: câu nào hỏi lúc nào, game ưu tiên câu lâu chưa hỏi.
 - Ông đồ MC: ảnh gốc `public/assets/MC/` (nền trắng), tách nền bằng `node tools/tach-nen.mjs` ra `public/assets/nv/mc/` (mung, suy-nghi, chi, cuoi, tiec).
 - Ảnh nền gốc `ai-la-trang-nguyen.png` (1536x2752, đã xoá logo sao Gemini góc phải dưới khi xuất `nen.jpg`).
+- Giọng đọc: VieNeu-TTS giọng "Adam bựa" (E:_AIVieNeu-TTS, server cổng 8000, BAT-LIVE tự mở cửa sổ "Giọng VieNeu"). VieNeu tắt hoặc lỗi thì tự dùng giọng Edge NamMinh. Đổi giọng: biến VIENEU_VOICE; để trống = chỉ Edge.
 - Cổng **3007** (BAT-LIVE.bat). Link LIVE Studio: http://lvh.me:3007/?view=stage. Thử trong khung preview của Claude: cổng 3507, mở `?view=stage&mute=1` (không phát tiếng).
 
 ## Quyết định của chủ kênh
@@ -44,3 +45,4 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - Bộ câu hỏi bàn riêng, chưa làm (2026-11-07).
 - Màn cuối ván: tiêu đề "Hiền tài là nguyên khí của quốc gia" thay chữ Vinh quy bái tổ (2026-11-07). Tam khôi dùng ảnh public/assets/top/ (tách nền ra public/assets/nv/top/), nam hay nữ cố định theo tên tài khoản.
 - Ảnh nữ hạng 2 (ghi "Bảng Vàng") và hạng 3 (ghi "Bảng Nhãn") sai chữ trên bảng: tạm dùng ảnh nam (CO_ANH_NU trong GameStage.tsx), chờ chủ kênh vẽ lại.
+- Giọng quan chủ khảo: VieNeu "Adam bựa" (2026-11-07).

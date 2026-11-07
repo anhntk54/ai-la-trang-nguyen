@@ -382,11 +382,59 @@ async function googleTts(text: string): Promise<Buffer> {
 }
 
 const ttsCache = new Map<string, Buffer>();
+// Giọng VieNeu (E:\02_AI\VieNeu-TTS chạy server ở cổng 8000, card đồ hoạ tạo giọng).
+// Vừa tạo vừa phát nên gần như không phải chờ. VieNeu chưa bật hoặc lỗi thì tự quay về giọng Edge.
+// Đổi giọng: đặt biến VIENEU_VOICE (vd "Thiện Minh"); để trống = chỉ dùng Edge.
+const VIENEU_URL = process.env.VIENEU_URL || 'http://127.0.0.1:8000';
+const VIENEU_VOICE = process.env.VIENEU_VOICE ?? 'Adam bựa';
+const vieneuCache = new Map<string, Buffer>();
+async function vieneuTts(text: string, res: express.Response): Promise<boolean> {
+  const cached = vieneuCache.get(text);
+  if (cached) {
+    res.setHeader('Content-Type', 'audio/wav');
+    res.send(cached);
+    return true;
+  }
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 5000); // chỉ chờ tối đa 5 giây cho tới byte đầu
+  try {
+    const r = await fetch(`${VIENEU_URL}/v1/audio/speech`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'vieneu', voice: VIENEU_VOICE, input: text, response_format: 'wav' }),
+      signal: ctrl.signal,
+    });
+    clearTimeout(timer);
+    if (!r.ok || !r.body) throw new Error(`HTTP ${r.status}`);
+    res.setHeader('Content-Type', 'audio/wav');
+    res.setHeader('Cache-Control', 'no-store');
+    const parts: Buffer[] = [];
+    for await (const chunk of r.body as unknown as AsyncIterable<Uint8Array>) {
+      const b = Buffer.from(chunk);
+      parts.push(b);
+      res.write(b);
+    }
+    res.end();
+    vieneuCache.set(text, Buffer.concat(parts));
+    if (vieneuCache.size > 100) vieneuCache.delete(vieneuCache.keys().next().value!);
+    return true;
+  } catch (err) {
+    clearTimeout(timer);
+    if (res.headersSent) {
+      res.end();
+      return true;
+    }
+    console.warn('[VieNeu lỗi, dùng giọng Edge]', err instanceof Error ? err.message : err);
+    return false;
+  }
+}
+
 app.get('/api/tts', async (req, res) => {
   try {
     const text = String(req.query.text || '').trim().slice(0, 1500);
     if (!text) return res.status(400).send('Thiếu text');
     const rate = Math.min(1.5, Math.max(0.5, Number(req.query.rate) || 1));
+    if (VIENEU_VOICE && (await vieneuTts(text, res))) return;
     const key = `${rate}|${text}`;
     let audio = ttsCache.get(key);
     if (!audio) {
