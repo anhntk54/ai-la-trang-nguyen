@@ -145,9 +145,14 @@ export function useGame() {
       room.tangQua({ id: e.username, name, avatar: e.avatar, gift: e.giftName, count: e.repeatCount, coins, big: coins >= GAME.bigGiftCoins }, Date.now());
       // Quà không cho lợi thế trong game, chỉ cảm ơn (combo 1 lần / 30 giây, quà to luôn cảm ơn)
       if (talk.gifts.shouldThank(e.username, coins, voice.waitingPriority)) {
-        voice.say(GAME.thankGift(speakableName(name), e.giftName, kenh.current), true);
-        const wish = pick(GAME.giftWishes);
-        if (wish) voice.say(wish, true);
+        // quà mức nào (xu 1 món) thì ông đồ đáp lời mức đó; quà lạ dưới 1 xu thì cảm ơn chung
+        const muc = [...GAME.giftMenu].reverse().find((m) => e.diamondCount >= m.xu);
+        const loi = muc && pick(muc.cam)?.(speakableName(name));
+        voice.say(loi ?? GAME.thankGift(speakableName(name), e.giftName, kenh.current), true);
+        if (!loi) {
+          const wish = pick(GAME.giftWishes);
+          if (wish) voice.say(wish, true);
+        }
       }
     },
 

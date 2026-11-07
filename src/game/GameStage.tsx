@@ -66,9 +66,26 @@ export function GameStage({ game }: { game: GameState }) {
         )}
       </div>
 
+      <GuiTang />
       <MC v={v} />
       {(v.phase === 'vinhQuy' || v.qua?.big) && <PhaoGiay />}
       <BangQua v={v} />
+    </div>
+  );
+}
+
+/** Bảng "Gửi tặng ông đồ" trên nền gỗ cạnh ông đồ (ngoài vùng TikTok che). Chỉ mời tặng cho vui, không hứa lợi thế. */
+function GuiTang() {
+  return (
+    <div className="absolute rounded-[18px] border-[3px] px-4 py-2" style={{ left: 150, top: 1476, width: 480, borderColor: GOLD, background: 'rgba(40,14,8,.82)', color: '#fff1cc' }}>
+      <div className="text-[26px] font-extrabold" style={{ color: '#ffd977' }}>🎁 Gửi tặng ông đồ</div>
+      {GAME.giftMenu.map((m) => (
+        <div key={m.xu} className="flex items-center gap-2 text-[22px] font-semibold leading-[1.45]">
+          <span className="w-8 text-center text-[26px]">{m.icon}</span>
+          <span className="w-[140px] shrink-0 truncate font-bold">{m.ten}</span>
+          <span className="min-w-0 flex-1 truncate opacity-85">{m.viec}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -274,8 +291,8 @@ function DapAn({ v }: { v: View }) {
             animate={{ scale: 1, rotate: -8, opacity: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ type: 'spring', stiffness: 520, damping: 16 }}
-            className="absolute flex items-center justify-center rounded-[16px] border-[7px] text-[78px] font-extrabold tracking-wider"
-            style={{ left: 290, top: 1110, width: 500, height: 130, borderColor: '#c8102e', color: '#c8102e', background: 'rgba(255,243,214,.92)', boxShadow: '0 8px 30px rgba(0,0,0,.35)' }}
+            className="absolute z-10 flex items-center justify-center rounded-[16px] border-[7px] text-[64px] font-extrabold tracking-wider"
+            style={{ left: 450, top: 538, width: 420, height: 108, borderColor: '#c8102e', color: '#c8102e', background: 'rgba(255,243,214,.95)', boxShadow: '0 8px 30px rgba(0,0,0,.35)' }}
           >
             HẾT GIỜ!
           </motion.div>

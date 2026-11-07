@@ -227,6 +227,38 @@ export const GAME = {
   tuanTop: 10, // bảng vàng tuần hiện bao nhiêu người
   bigGiftCoins: 99,
   thankGift: (name: string, gift: string, kenh: string) => `${kenh} cảm ơn ${name} đã tặng ${gift}.`,
+  // Bảng "Gửi tặng ông đồ" cạnh ông đồ: mỗi mức xu 1 món đại diện (theo bảng quà TikTok VN, skill tao-game-moi/qua-tiktok.md).
+  // Quà mức nào (tính theo xu 1 món) thì ông đồ đáp lời mức đó. Viết kiểu gửi tặng cho vui: KHÔNG giục, KHÔNG hứa điểm hay lợi thế.
+  giftMenu: [
+    {
+      xu: 1, icon: '🌹', ten: 'Hoa hồng', viec: 'Tặng ông đồ bông hoa',
+      cam: [
+        (n: string) => `${n} tặng ông bông hồng. [cười] Ông cắm ngay lên nghiên mực đây.`,
+        (n: string) => `Hoa của ${n} thơm quá, ông đồ dạy học bao năm mới được tặng hoa đấy.`,
+      ],
+    },
+    {
+      xu: 5, icon: '🫰', ten: 'Bắn tim', viec: 'Bắn tim cho ông đồ',
+      cam: [
+        (n: string) => `Ối, ${n} bắn trúng tim ông rồi! [cười] Già rồi mà vẫn rung rinh.`,
+        (n: string) => `${n} bắn tim cho ông, ông nhận nhé. Thi tiếp cho vui nào!`,
+      ],
+    },
+    {
+      xu: 10, icon: '🐷', ten: 'Chú heo may mắn', viec: 'Góp heo đất trường thi',
+      cam: [
+        (n: string) => `${n} góp heo đất cho trường thi. Ông chúc ${n} học đâu nhớ đó!`,
+        (n: string) => `[cười] Chú heo của ${n} béo tròn thế này, cả trường thi được lộc rồi.`,
+      ],
+    },
+    {
+      xu: 100, icon: '🎆', ten: 'Thả tim', viec: 'Đốt pháo mừng sĩ tử',
+      cam: [
+        (n: string) => `${n} đốt pháo mừng cả trường thi! Ông đồ xin vái tạ ơn tấm lòng.`,
+        (n: string) => `Pháo của ${n} nổ vang cả làng rồi. [cười] Sĩ tử nào cũng được ăn mừng ké nhé!`,
+      ],
+    },
+  ],
   giftWishes: ['Chúc bạn thi đâu đỗ đó.', 'Chúc bạn một ngày thật vui.', 'Chúc bạn làm gì cũng suôn sẻ nha.'],
 
   thankFollow: (name: string, kenh: string) => `${kenh} cảm ơn ${name} đã theo dõi kênh nha.`,
