@@ -1,98 +1,96 @@
-import { useEffect, useRef, useState } from 'react';
+/// <reference types="vite/client" />
+import { useEffect, useState } from 'react';
 import { useLiveEvents } from '../live/useLiveEvents';
-import type { GiftEvent, LiveStatus } from '../live/types';
+import type { LiveStatus } from '../live/types';
 import { voice, speakableName } from '../live/voice';
-import { containsBanned, maskBanned } from '../live/bannedWords';
-import { addScore, NameBatcher, type Players } from '../live/scoreboard';
+import { containsBanned } from '../live/bannedWords';
+import { NameBatcher } from '../live/scoreboard';
 import { detectWish, GiftThanker, makePicker, OncePerPerson, RecentPeople, WishLimiter } from '../live/chatter';
 import { IS_STAGE } from '../live/page';
 import { GAME } from './config';
+import { KyThi, parseMc, type Ev, type View } from './thi';
+import bankText from './cau-hoi/trac-nghiem.txt?raw';
 
 const pick = makePicker();
-
-// Bỏ dấu, thường hoá, bỏ khoảng trắng: "Tham Gia" -> "thamgia"
-const compact = (s: string) =>
-  s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase().replace(/[^a-z0-9]/g, '');
-
-export interface FeedItem {
-  id: number;
-  kind: 'chat' | 'gift' | 'join' | 'follow';
-  name: string;
-  avatar: string;
-  text: string;
-}
-
-const MAX_FEED = 30;
-let feedId = 0;
+const post = (url: string, body: unknown) =>
+  fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => {});
 
 /**
- * Toàn bộ logic game nằm ở đây. Màn hình (GameStage) chỉ đọc state trả về.
- * Game mới: giữ khung này, thay phần "luật chơi" trong từng handler.
+ * Trang stage chạy game thật (KyThi) và gửi ảnh chụp lên server.
+ * Trang điều khiển chỉ vẽ lại ảnh chụp đó, không tự chạy game (tránh 2 bộ câu khác nhau).
  */
 export function useGame() {
   const [status, setStatus] = useState<LiveStatus | null>(null);
-  const [players, setPlayers] = useState<Players>({});
-  const [joined, setJoined] = useState<string[]>([]); // username đã tham gia
-  const [feed, setFeed] = useState<FeedItem[]>([]);
-  const [lastGift, setLastGift] = useState<GiftEvent | null>(null);
-  const [likeProgress, setLikeProgress] = useState(0); // 0..likesPerBoost
-  const [boostUntil, setBoostUntil] = useState(0);
-  const likeBase = useRef<number | null>(null);
-
-  // Tên kênh: trang điều khiển lưu, server nhớ, mọi trang dùng (tiêu đề + giọng đọc)
+  const [view, setView] = useState<View | null>(null);
   const [channelName, setChannelName] = useState(GAME.defaultChannelName);
-  const kenh = useRef(channelName);
-  kenh.current = channelName;
-
-  // Luật nói chuyện chung (xem src/live/chatter.ts). Tạo 1 lần, giữ nguyên suốt buổi live.
+  const [room] = useState(() => new KyThi(parseMc(bankText)));
   const [talk] = useState(() => ({
     greeter: new NameBatcher(
       GAME.greetEveryMs,
       GAME.namesPerGreeting,
-      (names) => voice.say(GAME.greeting(joinNames(names), kenh.current)),
-      () => voice.waiting >= 2, // giọng còn nhiều câu chờ thì để lượt sau
+      (names) => voice.say(GAME.greeting(joinNames(names))),
+      () => voice.waiting >= 1,
     ),
     gifts: new GiftThanker(GAME.giftThanksCooldownMs, GAME.bigGiftCoins),
     follows: new OncePerPerson(),
     wishes: new WishLimiter(GAME.wishPerUserMs, GAME.wishGlobalMs),
     recent: new RecentPeople(),
   }));
-
-  const pushFeed = (item: Omit<FeedItem, 'id'>) =>
-    setFeed((f) => [...f.slice(-(MAX_FEED - 1)), { ...item, id: ++feedId }]);
+  const [kenh] = useState(() => ({ current: GAME.defaultChannelName }));
+  kenh.current = channelName;
 
   // Tên an toàn để hiện/đọc: tên có từ cấm thì dùng username
   const safeName = (nickname: string, username: string) => (containsBanned(nickname) ? username : nickname);
 
+  // Quan chủ khảo đọc theo sự kiện của game. Câu của game đi làn ưu tiên để không bị lời chào chen trước.
+  const speak = (ev: Ev) => {
+    const L = GAME.loi;
+    switch (ev.t) {
+      case 'cho':
+        return voice.say(pick(L.cho) ?? '', true);
+      case 'vong':
+        if (ev.vong === 0) void post('/api/da-hoi', room.used); // ván mới vừa bốc câu: lưu lại để lần sau ưu tiên câu khác
+        return voice.say(L.vong[ev.vong] ?? '', true);
+      case 'doc': {
+        const cau = room.cau;
+        // Đọc xong đề mới hiện 4 đáp án và tính giờ
+        return voice.say(ev.text, true, () => room.cau === cau && room.docXong(Date.now()));
+      }
+      case 'dapAn': {
+        const nhanh = ev.nhanh ? speakableName(ev.nhanh) : 'bạn';
+        const them =
+          ev.soDung === 0 ? pick(L.khongAi) : ev.soDung === 1 ? L.dungMot(nhanh) : pick(L.dungNhieu)?.(ev.soDung, nhanh);
+        return voice.say(`${L.dapAn(ev.chu, ev.dap)} ${them ?? ''}`, true);
+      }
+      case 'bangVang':
+        return voice.say(ev.dau ? L.bangVang(ev.vong, speakableName(ev.dau)) : L.bangVangTrong(ev.vong), true);
+      case 'vinhQuy': {
+        const [tn, bn, th] = ev.top.map(speakableName);
+        return voice.say(tn ? L.vinhQuy(tn, bn, th) : L.khongAiThi, true);
+      }
+    }
+  };
+
   useLiveEvents({
     onStatus: setStatus,
+    onGameState: (s) => !IS_STAGE && setView(s),
 
     onChat: (e) => {
+      if (!IS_STAGE) return;
       const name = safeName(e.nickname, e.username);
-      setPlayers((p) => addScore(p, { ...e, nickname: name }, GAME.pointsPerComment));
-      pushFeed({ kind: 'chat', name, avatar: e.avatar, text: maskBanned(e.comment) });
+      room.chat({ id: e.username, name, avatar: e.avatar, comment: e.comment, createTime: e.createTime }, Date.now());
       talk.recent.note(e.username, speakableName(name));
-
       // Comment có lời cầu chúc -> đọc 1 câu chúc soạn sẵn (không bao giờ đọc nguyên văn comment)
       const topic = containsBanned(e.comment) ? null : detectWish(e.comment);
       const reply = topic && pick(GAME.wishReplies[topic] ?? []);
       if (reply && talk.wishes.allow(e.username)) voice.say(reply(speakableName(name)));
-
-      // --- Luật chơi: gõ từ khóa để tham gia ---
-      if (GAME.joinKeywords.some((k) => compact(e.comment).includes(k))) {
-        setJoined((j) => (j.includes(e.username) ? j : [...j, e.username]));
-      }
     },
 
     onGift: (e) => {
+      if (!IS_STAGE) return;
       const name = safeName(e.nickname, e.username);
       const coins = e.diamondCount * e.repeatCount;
-      setPlayers((p) => addScore(p, { ...e, nickname: name }, coins * GAME.pointsPerCoin, coins));
-      setLastGift({ ...e, nickname: name });
-      pushFeed({ kind: 'gift', name, avatar: e.avatar, text: `tặng ${e.repeatCount} × ${e.giftName}` });
-      talk.recent.note(e.username, speakableName(name));
-
-      // Combo / tặng liên tục chỉ cảm ơn 1 lần mỗi 30 giây; quà to luôn cảm ơn. Chen lên trước câu khác.
+      // Quà không cho lợi thế trong game, chỉ cảm ơn (combo 1 lần / 30 giây, quà to luôn cảm ơn)
       if (talk.gifts.shouldThank(e.username, coins, voice.waitingPriority)) {
         voice.say(GAME.thankGift(speakableName(name), e.giftName, kenh.current), true);
         const wish = pick(GAME.giftWishes);
@@ -101,106 +99,75 @@ export function useGame() {
     },
 
     onMember: (e) => {
-      const name = safeName(e.nickname, e.username);
-      pushFeed({ kind: 'join', name, avatar: e.avatar, text: 'vừa vào' });
-      const spoken = speakableName(name);
-      if (spoken !== 'bạn') talk.greeter.add(e.username, spoken); // mỗi người chào 1 lần; tên đọc không được thì thôi
+      if (!IS_STAGE) return;
+      const spoken = speakableName(safeName(e.nickname, e.username));
+      if (spoken !== 'bạn') talk.greeter.add(e.username, spoken);
     },
 
     onFollow: (e) => {
-      const name = safeName(e.nickname, e.username);
-      pushFeed({ kind: 'follow', name, avatar: e.avatar, text: 'đã theo dõi' });
-      if (talk.follows.first(e.username)) voice.say(GAME.thankFollow(speakableName(name), kenh.current));
-    },
-
-    onLike: (e) => {
-      // Đếm theo tổng tim của phòng; lần đầu nhận được thì lấy làm mốc
-      if (likeBase.current === null) likeBase.current = e.totalLikes - e.likeCount;
-      const since = e.totalLikes - likeBase.current;
-      if (since >= GAME.likesPerBoost) {
-        likeBase.current += GAME.likesPerBoost;
-        setBoostUntil(Date.now() + GAME.boostSeconds * 1000);
-        voice.say(GAME.boostLine, true);
-      }
-      setLikeProgress(Math.max(0, e.totalLikes - likeBase.current));
+      if (!IS_STAGE) return;
+      if (talk.follows.first(e.username)) voice.say(GAME.thankFollow(speakableName(safeName(e.nickname, e.username)), kenh.current));
     },
 
     onControl: (c) => {
-      // Tên kênh áp dụng cho mọi trang (ô nhập ở trang điều khiển + tiêu đề, giọng đọc trên stage)
       if (c.action === 'setName' && c.text) setChannelName(c.text);
       if (!IS_STAGE) return; // chỉ trang stage làm theo lệnh, tránh 2 giọng
+      const now = Date.now();
       if (c.action === 'speak' && c.text) voice.say(c.text, true);
       if (c.action === 'setRate' && c.text) voice.rate = Number(c.text) || 1;
       if (c.action === 'reset') {
         voice.stop();
-        talk.greeter.reset();
-        talk.gifts.reset();
-        talk.follows.reset();
-        talk.wishes.reset();
-        talk.recent.reset();
-        setPlayers({});
-        setJoined([]);
-        setFeed([]);
+        room.cho(now);
       }
+      if (c.action === 'custom' && c.text === 'batdau') {
+        voice.stop();
+        room.batDau(now);
+      }
+      if (c.action === 'custom' && c.text === 'bocau') room.boCau(now);
     },
   });
 
-  // Nhắc chia sẻ live định kỳ + đọc 1 câu khi live im quá lâu (chỉ trang stage có tiếng)
+  // Vòng chạy game trên trang stage
   useEffect(() => {
     if (!IS_STAGE) return;
-    const timers: ReturnType<typeof setInterval>[] = [];
-    if (GAME.shareReminderEveryMs > 0) {
-      timers.push(
-        setInterval(() => {
-          const names = talk.recent.latest(3, GAME.shareReminderEveryMs);
-          const line = names.length ? GAME.shareWithNames(joinNames(names), kenh.current) : pick(GAME.shareLines);
-          if (line) voice.say(line);
-        }, GAME.shareReminderEveryMs),
-      );
-    }
-    if (GAME.idleAfterMs > 0) {
-      timers.push(
-        setInterval(() => {
-          if (voice.quietForMs() < GAME.idleAfterMs) return;
-          const line = pick(GAME.idleLines);
-          if (line) voice.say(line);
-        }, 15_000),
-      );
-    }
-    return () => timers.forEach(clearInterval);
+    let ready = false;
+    let lastPost = 0;
+    fetch('/api/da-hoi')
+      .then((r) => r.json())
+      .then((u) => Object.assign(room.used, u))
+      .catch(() => {})
+      .finally(() => {
+        room.cho(Date.now());
+        ready = true;
+      });
+    const id = setInterval(() => {
+      if (!ready) return;
+      const now = Date.now();
+      room.tick(now);
+      room.lay().forEach(speak);
+      const v = room.view(now);
+      setView(v);
+      if (now - lastPost >= 500) {
+        lastPost = now;
+        void post('/api/game/state', v);
+      }
+    }, 250);
+    const share = setInterval(() => {
+      const line = pick(GAME.shareLines);
+      if (line) voice.say(line);
+    }, GAME.shareReminderEveryMs);
+    return () => {
+      clearInterval(id);
+      clearInterval(share);
+    };
   }, []);
 
-  // Ẩn banner quà sau 5 giây
-  useEffect(() => {
-    if (!lastGift) return;
-    const t = setTimeout(() => setLastGift(null), 5000);
-    return () => clearTimeout(t);
-  }, [lastGift]);
-
-  // Tick để boost tự tắt
-  const [, force] = useState(0);
-  useEffect(() => {
-    if (!boostUntil) return;
-    const t = setTimeout(() => force((x) => x + 1), boostUntil - Date.now() + 50);
-    return () => clearTimeout(t);
-  }, [boostUntil]);
-
-  return {
-    status,
-    channelName,
-    players,
-    joined,
-    feed,
-    lastGift,
-    likeProgress,
-    boosting: Date.now() < boostUntil,
-  };
+  return { status, channelName, view };
 }
 
 export type GameState = ReturnType<typeof useGame>;
 
-// ['bạn An', 'bạn Bình', 'bạn Chi'] -> 'bạn An, bạn Bình và bạn Chi'
+// ['An', 'Bình', 'Chi'] -> 'An, Bình và Chi'
 function joinNames(names: string[]) {
-  const spoken = names.map((n) => (n === 'bạn' ? n : `bạn ${n}`));
-  return spoken.length > 1 ? `${spoken.slice(0, -1).join(', ')} và ${spoken[spoken.length - 1]}` : spoken[0] ?? '';
+  return names.length > 1 ? `${names.slice(0, -1).join(', ')} và ${names[names.length - 1]}` : names[0] ?? '';
 }

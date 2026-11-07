@@ -1,5 +1,5 @@
 {
-  "name": "ten-game",
+  "name": "ai-la-trang-nguyen",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -27,6 +27,7 @@
     "@types/node": "^22.14.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.21.0",
     "typescript": "^5.8.3"

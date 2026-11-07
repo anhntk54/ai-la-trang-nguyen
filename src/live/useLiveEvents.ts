@@ -34,6 +34,7 @@ export function useLiveEvents(handlers: LiveHandlers) {
       on('like', (d) => ref.current.onLike?.(d));
       on('roomUser', (d) => ref.current.onViewers?.(d.viewerCount));
       on('control', (d) => ref.current.onControl?.(d));
+      on('gamestate', (d) => ref.current.onGameState?.(d));
       source.onerror = () => {
         source?.close();
         if (!closed) retry = setTimeout(connect, 3000);

@@ -3,6 +3,7 @@ import { StageFrame } from './live/StageFrame';
 import { Dashboard } from './live/Dashboard';
 import { useGame } from './game/useGame';
 import { GameStage } from './game/GameStage';
+import { GameControls } from './game/GameControls';
 
 export default function App() {
   const game = useGame();
@@ -23,6 +24,7 @@ export default function App() {
     <Dashboard
       status={game.status}
       channelName={game.channelName}
+      extra={<GameControls />}
       preview={
         <StageFrame maxHeight={720}>
           <GameStage game={game} />

@@ -13,8 +13,7 @@ body,
 
 /* Nền stage. Đổi ảnh: bỏ ảnh vào public/assets/bg/ rồi thay dòng background */
 .stage-bg {
-  background: radial-gradient(circle at 50% 30%, #4c1d95 0%, #1e1b4b 55%, #0b0a1f 100%);
-  /* background: url('/assets/bg/nen.webp') center / cover; */
+  background: url('/assets/bg/nen.jpg') top center / 1080px 1920px no-repeat #1d0d0a;
 }
 
 /* Hiệu ứng khi đủ tim */

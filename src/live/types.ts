@@ -16,6 +16,7 @@ export interface ChatEvent {
   comment: string;
   avatar: string;
   timestamp: number;
+  createTime?: number; // giờ TikTok lúc người xem gửi (ms)
 }
 
 export interface GiftEvent {
@@ -58,4 +59,5 @@ export interface LiveHandlers {
   onLike?: (e: LikeEvent) => void;
   onViewers?: (count: number) => void;
   onControl?: (c: ControlCommand) => void;
+  onGameState?: (s: any) => void; // ảnh chụp màn hình game do trang stage gửi
 }

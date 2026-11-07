@@ -164,6 +164,7 @@ app.post('/api/tiktok/connect', async (req, res) => {
       comment: data?.content || data?.comment || '', // proto v3: chữ nằm ở `content`
       avatar: avatarOf(data),
       timestamp: Date.now(),
+      createTime: Number(data?.common?.createTime) || Date.now(), // giờ TikTok lúc người xem gửi, để xếp ai nhanh hơn
     });
   });
 
@@ -294,6 +295,37 @@ app.post('/api/test/emit', (req, res) => {
   }
   broadcast(type, event);
   res.json({ success: true });
+});
+
+// ---------- Ai Là Trạng Nguyên ----------
+// Trang stage chạy game, gửi ảnh chụp lên đây; trang điều khiển vẽ lại ảnh chụp đó (xem trước luôn khớp live)
+app.post('/api/game/state', (req, res) => {
+  broadcast('gamestate', req.body || {});
+  res.json({ success: true });
+});
+
+// Câu nào hỏi lúc nào, để game ưu tiên câu lâu chưa hỏi (tắt bật server vẫn nhớ)
+const USED_FILE = path.join(__dirname, 'data', 'da-hoi.json');
+app.get('/api/da-hoi', (_req, res) => {
+  try {
+    res.json(JSON.parse(fs.readFileSync(USED_FILE, 'utf8')));
+  } catch {
+    res.json({});
+  }
+});
+app.post('/api/da-hoi', (req, res) => {
+  const body = req.body;
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return res.status(400).json({ success: false });
+  const clean: Record<string, number> = {};
+  for (const [k, v] of Object.entries(body)) if (typeof v === 'number' && k.length < 300) clean[k] = v;
+  try {
+    fs.mkdirSync(path.dirname(USED_FILE), { recursive: true });
+    fs.writeFileSync(USED_FILE, JSON.stringify(clean));
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Không lưu được data/da-hoi.json:', err);
+    res.status(500).json({ success: false });
+  }
 });
 
 // ---------- Giọng đọc ----------

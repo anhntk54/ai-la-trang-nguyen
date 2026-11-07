@@ -1,4 +1,4 @@
-import { IS_STAGE } from './page';
+import { IS_STAGE, MUTE } from './page';
 import { containsBanned } from './bannedWords';
 
 /**
@@ -10,6 +10,7 @@ import { containsBanned } from './bannedWords';
 interface Line {
   text: string;
   at: number;
+  done?: () => void; // gọi khi đọc xong, lỗi, hoặc bị bỏ
 }
 
 const MAX_WAIT_MS = 60_000;
@@ -23,17 +24,18 @@ class Voice {
   private lastSpokeAt = Date.now();
   rate = 1;
   volume = 1;
-  enabled = IS_STAGE;
+  enabled = IS_STAGE && !MUTE;
 
-  say(text: string, priority = false) {
-    if (!this.enabled || !text.trim()) return;
+  say(text: string, priority = false, done?: () => void) {
+    if (!this.enabled || !text.trim()) return done?.();
     const q = priority ? this.priority : this.normal;
-    q.push({ text: text.trim(), at: Date.now() });
-    if (q.length > MAX_QUEUE) q.shift();
+    q.push({ text: text.trim(), at: Date.now(), done });
+    if (q.length > MAX_QUEUE) q.shift()?.done?.();
     void this.next();
   }
 
   stop() {
+    [...this.normal, ...this.priority].forEach((l) => l.done?.());
     this.normal = [];
     this.priority = [];
     this.current?.pause();
@@ -66,6 +68,7 @@ class Voice {
     let line: Line | undefined;
     while ((line = this.priority.shift() ?? this.normal.shift())) {
       if (now - line.at < MAX_WAIT_MS) break;
+      line.done?.();
     }
     if (!line) return;
     this.playing = true;
@@ -79,6 +82,7 @@ class Voice {
         audio.play().catch(() => resolve());
       });
     } finally {
+      line.done?.();
       this.current = null;
       this.playing = false;
       this.lastSpokeAt = Date.now();
