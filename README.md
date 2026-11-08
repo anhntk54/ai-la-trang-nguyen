@@ -14,6 +14,7 @@ Game chạy trên máy tính của bạn, gắn vào TikTok LIVE Studio như m�
 - **Ông đồ biết nói chuyện**: đọc đề, công bố đáp án có cười có thở dài, trêu người than khó, hô tên người vừa vượt lên dẫn đầu, cảm ơn quà theo từng món. Ông **không bao giờ đọc nguyên văn bình luận**, chỉ dùng câu soạn sẵn có chèn tên, nên không ai bắt ông nói bậy được.
 - **Quà**: băng rôn có avatar và tên người tặng, quà từ 99 xu có pháo giấy. Quà **không cho lợi thế gì trong game**, đúng quy định TikTok.
 - **Âm thanh tự tạo**: nhạc nền đàn tranh, trống dồn lúc hết giờ, chiêng lúc công bố, pháo lúc vinh quy. Không dùng nhạc có bản quyền.
+- **Sân thi đầu làng**: câu hỏi viết phấn lên bảng đen dưới mái tranh. Ai nộp bài thì được ngồi một bàn, tên hiện trên đầu, điểm cao ngồi các hàng giữa. Ai chưa có ghế thì tên hiện trên đám trẻ con chạy lên chạy xuống lối giữa. Hai bên sân có các cụ ngồi xem, cây đa đung đưa, lá rơi lác đác. Chữ trên mái tranh và tên ông đồ đổi được ở trang điều khiển.
 - **Chạy cả buổi**: hết ván tự sang ván mới; mất kết nối TikTok thì tự kết nối lại.
 
 ## Cần chuẩn bị
@@ -112,7 +113,7 @@ Các file bạn hay sửa nhất đều mở được bằng Notepad. Sửa xong
   ```
   Đáp án đúng luôn để ở vị trí thứ hai, game tự xáo A B C D. Dòng `[de]`, `[vua]`, `[kho]`, `[dinh]`, `[meo]` là nhóm độ khó (khảo hạch, thi Hương, thi Hội, thi Đình, đố mẹo). Quy tắc viết câu có ở `src/game/cau-hoi/HUONG-DAN.md`. Viết xong chạy `node tools/kiem-tra-cau-hoi.mjs` để soát lỗi.
 - **Lời ông đồ, số liệu luật chơi**: `src/game/config.ts`. Mọi câu ông đồ nói, thời gian từng kỳ, điểm, số tim cứu trợ... đều ở đây.
-- **Ảnh**: nền ở `public/assets/bg/nen.jpg` (1080 × 1920). Ảnh ông đồ gốc ở `public/assets/MC/`, ảnh tam khôi ở `public/assets/top/`. Thay ảnh xong chạy `node tools/tach-nen.mjs` để tách nền trắng.
+- **Ảnh**: nền ở `public/assets/bg/nen2.jpg` (1080 × 1920). Ảnh ông đồ gốc ở `public/assets/MC/`, tam khôi ở `public/assets/top/`, sĩ tử, trẻ con và các cụ ở `public/assets/nhan-vat/`. Thay ảnh xong thì chạy `node tools/tach-nen.mjs` (ông đồ, tam khôi) hoặc `node tools/cat-nhan-vat.mjs` (nhân vật sân thi) để tách nền trắng.
 
 ## Gặp lỗi thì sao
 
