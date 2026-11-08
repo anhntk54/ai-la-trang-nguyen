@@ -146,6 +146,16 @@ export class KyThi {
   // ---------- quà: mỗi lần hiện 1 băng rôn, người khác xếp hàng (quà KHÔNG cho lợi thế trong game) ----------
   private quaCho: Qua[] = [];
   private nhacDa = false; // đã nhắc giữa giờ ở câu này chưa
+  private khach: { id: string; name: string }[] = []; // người bình luận gần đây nhất
+
+  /** Tên cho đám trẻ chạy giữa sân: người đã thi mà hết ghế, rồi tới người vừa bình luận chưa có ghế */
+  treCon(ghe: Hang[]) {
+    const coGhe = new Set(ghe.map((h) => h.id));
+    const ds: string[] = [];
+    for (const h of this.bxh(GAME.soGhe + GAME.soTre, true).slice(GAME.soGhe)) ds.push(h.name);
+    for (const k of this.khach) if (!coGhe.has(k.id) && !ds.includes(k.name)) ds.push(k.name);
+    return ds.slice(0, GAME.soTre);
+  }
   qua: (Qua & { den: number }) | null = null;
 
   /** Có người tặng quà. Cùng người tặng liên tục thì gộp vào băng rôn đang chờ. */
@@ -316,6 +326,8 @@ export class KyThi {
    * Trả về true nếu được tính là bài nộp.
    */
   chat(e: { id: string; name: string; avatar: string; comment: string; createTime?: number }, now: number) {
+    // ai bình luận cũng được nhớ tên (để chạy trên sân thành đám trẻ nếu chưa có ghế)
+    this.khach = [{ id: e.id, name: e.name }, ...this.khach.filter((k) => k.id !== e.id)].slice(0, 12);
     if (e.createTime) {
       const d = now - e.createTime;
       this.skew = this.skewN ? Math.min(this.skew + 5, d) : d;
@@ -522,6 +534,7 @@ export class KyThi {
         : null,
       // chỗ ngồi trong sân thi: ai đã nộp bài đều được ngồi (kể cả 0 điểm), điểm cao ngồi chỗ đẹp
       ghe: this.bxh(GAME.soGhe, true),
+      treCon: this.treCon(this.bxh(GAME.soGhe, true)),
       top: this.bxh(this.phase === 'bangVang' || this.phase === 'vinhQuy' ? 20 : 10),
     };
   }

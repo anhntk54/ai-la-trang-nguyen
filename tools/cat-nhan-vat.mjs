@@ -16,6 +16,8 @@ const TEN = {
   'Gemini_Generated_Image_p0eplsp0eplsp0ep.png': ['si-tu-nu'],
   'Gemini_Generated_Image_pxliikpxliikpxli.png': ['si-tu-nam'],
   'nu-tre-con.png': ['tre-nu'],
+  'Gemini_Generated_Image_1fn9tf1fn9tf1fn9.png': ['lung-nam'], // sĩ tử nhìn sau lưng
+  'Gemini_Generated_Image_jtwrlojtwrlojtwr.png': ['lung-nu'],
 };
 const OUT_H = 600;
 

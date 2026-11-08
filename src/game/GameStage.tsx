@@ -24,7 +24,7 @@ export function GameStage({ game }: { game: GameState }) {
       <CayDa />
       <DanLang />
       <SanThi v={v} />
-      <TreCon />
+      <TreCon ten={v.treCon} />
 
       {!bigBoard && <DongCau v={v} tieuDe={game.caiDat.tieuDe} />}
       {!bigBoard && <BangDen v={v} />}
@@ -62,6 +62,9 @@ const HANG: [number, number, number[]][] = [
   [1293, 110, [395, 714, 253, 866, 105]],
   [1575, 165, [369, 838, 159]],
   [1195, 100, [401, 691, 276, 820, 154, 947]],
+  // các hàng sát bảng đen: bàn nhỏ, sĩ tử nhỏ theo phối cảnh; ngồi sau cùng khi các hàng trên đã đủ
+  [1118, 88, [405, 672, 290, 790, 180, 905]],
+  [1055, 80, [410, 655, 305, 760, 205, 865]],
 ];
 const GHE = HANG.flatMap(([y, w, xs]) => xs.map((x) => ({ x, y, w }))).slice(0, GAME.soGhe);
 
@@ -84,7 +87,7 @@ function SanThi({ v }: { v: View }) {
 function SiTu({ h, x, y, w, lo }: { h: Hang; x: number; y: number; w: number; lo: boolean }) {
   const full = w * 1.65; // chiều cao cả người
   const hien = full * 0.56; // chỉ lộ nửa người trên khỏi mặt bàn
-  const rong = full * 0.42;
+  const rong = full * 0.46; // ảnh vật lưng rộng ~0,46 chiều cao
   const lat = bam(h.id) % 2 === 1;
   const top3 = h.hang <= 3 && h.diem > 0;
   // chữ tên tự thu nhỏ cho vừa bảng tên (rộng tối đa w*1.25); tên quá dài thì nhỏ tới 11px rồi mới cắt bớt
@@ -124,31 +127,40 @@ function SiTu({ h, x, y, w, lo }: { h: Hang; x: number; y: number; w: number; lo
           </motion.div>
         )}
       </AnimatePresence>
-      <div style={{ height: hien, overflow: 'hidden' }}>
-        <img
-          src={`/assets/nv/lang/si-tu-${h.gioi}.webp`}
-          style={{ height: full, width: rong, objectFit: 'contain', transform: lat ? 'scaleX(-1)' : undefined, filter: 'drop-shadow(0 4px 4px rgba(0,0,0,.35))' }}
-          draggable={false}
-        />
+      {/* quay lưng ra khán giả, mặt hướng lên bảng đen; chỉ lộ nửa người trên khỏi mặt bàn */}
+      <div className="overflow-hidden" style={{ height: hien }}>
+        <img src={`/assets/nv/lang/lung-${h.gioi === 'nu' ? 'nu' : 'nam'}.webp`} draggable={false} className="mx-auto block max-w-none"
+          style={{ height: full, transform: lat ? 'scaleX(-1)' : undefined, filter: 'drop-shadow(0 3px 3px rgba(0,0,0,.35))' }} />
       </div>
     </motion.div>
   );
 }
 
 /** Đám trẻ nghịch ngợm chạy quanh sân (chỉ dùng transform cho nhẹ máy) */
-function TreCon() {
+// mỗi đứa chạy một nhịp riêng (thời gian, độ lệch, chỗ xuất phát) cho thành một đám lộn xộn tự nhiên
+const DAM_TRE = [
+  { left: 470, dur: 13, delay: 0, nu: false },
+  { left: 530, dur: 15.5, delay: -5, nu: true },
+  { left: 500, dur: 11.5, delay: -8, nu: false },
+  { left: 560, dur: 14, delay: -2.5, nu: true },
+  { left: 485, dur: 16.5, delay: -11, nu: true },
+  { left: 545, dur: 12.5, delay: -6.5, nu: false },
+];
+function TreCon({ ten }: { ten: string[] }) {
   return (
     <div className="pointer-events-none absolute inset-0" style={{ zIndex: 1500 }}>
-      <div className="tre-chay absolute" style={{ left: 482, top: 880 }}>
-        <div className="tre-lat">
-          <img className="tre-nhun" src="/assets/nv/lang/tre-nam.webp" style={{ height: 150 }} draggable={false} />
+      {DAM_TRE.map((t, i) => (
+        <div key={i} className="tre-chay absolute" style={{ left: t.left, top: 880, animationDuration: `${t.dur}s`, animationDelay: `${t.delay}s` }}>
+          {ten[i] && (
+            <div className="absolute bottom-full left-1/2 mb-1 max-w-[150px] -translate-x-1/2 truncate whitespace-nowrap rounded-full border-2 px-2 text-[17px] font-bold leading-[24px]" style={{ background: 'rgba(30,14,6,.82)', borderColor: 'rgba(217,164,65,.7)', color: CREAM }}>
+              {ten[i]}
+            </div>
+          )}
+          <div className="tre-lat" style={{ animationDuration: `${t.dur}s`, animationDelay: `${t.delay}s` }}>
+            <img className="tre-nhun" src={`/assets/nv/lang/${t.nu ? 'tre-nu' : 'tre-nam'}.webp`} style={{ height: t.nu ? 118 : 128, animationDelay: `${i * -0.13}s` }} draggable={false} />
+          </div>
         </div>
-      </div>
-      <div className="tre-dao absolute" style={{ left: 250, top: 905 }}>
-        <div className="tre-lat-cham">
-          <img className="tre-nhun-cham" src="/assets/nv/lang/tre-nu.webp" style={{ height: 120 }} draggable={false} />
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
@@ -184,6 +196,11 @@ function DanLang() {
     <div className="pointer-events-none absolute inset-0">
       <img className="cu-ngoi absolute" src="/assets/nv/lang/ong-quat.webp" style={{ left: 958, top: 872, height: 140 }} draggable={false} />
       <img className="cu-ngoi absolute" src="/assets/nv/lang/gia-lang.webp" style={{ left: 870, top: 862, height: 158, animationDelay: '1.3s' }} draggable={false} />
+      {/* thêm các cụ đứng xem dọc mép sân, hai bên dãy bàn */}
+      <img className="cu-ngoi absolute" src="/assets/nv/lang/ba-non.webp" style={{ left: 985, top: 1010, height: 130, animationDelay: '0.6s' }} draggable={false} />
+      <img className="cu-ngoi absolute" src="/assets/nv/lang/ba-cuoc.webp" style={{ left: 990, top: 1140, height: 150, animationDelay: '2s' }} draggable={false} />
+      <img className="cu-ngoi absolute" src="/assets/nv/lang/ong-gay.webp" style={{ left: 6, top: 930, height: 140, animationDelay: '0.9s' }} draggable={false} />
+      <img className="cu-ngoi absolute" src="/assets/nv/lang/ba-om-goi.webp" style={{ left: 0, top: 1080, height: 140, animationDelay: '1.7s' }} draggable={false} />
     </div>
   );
 }
@@ -217,14 +234,14 @@ function DongCau({ v, tieuDe }: { v: View; tieuDe: string }) {
         {v.phase === 'cho' ? 'SẮP THI' : v.latKeo ? 'LẬT KÈO ×2' : v.vongNhan}
       </div>
       {/* tên game treo giữa mái tranh */}
-      <div className="absolute flex items-center justify-center gap-3 whitespace-nowrap rounded-[18px] px-3 text-center font-extrabold leading-none" style={{
+      <div className="absolute flex items-center justify-center gap-3 whitespace-nowrap rounded-[18px] px-3 text-center font-extrabold" style={{
         left: 372, top: 352, width: 540, height: 96, fontSize: Math.max(22, Math.min(42, Math.floor(410 / ([...tieuDe].length * (tieuDe === tieuDe.toUpperCase() ? 0.74 : 0.6))))), // tự co cho vừa khung (chữ in hoa rộng hơn)
         border: `4px double ${GOLD}`, outline: '2px solid #3a0d05',
         background: 'linear-gradient(#8a2a14,#4f1309)', color: '#ffd977', textShadow: '0 3px 0 #3a0d05, 0 0 16px rgba(255,211,77,.55)',
         boxShadow: '0 8px 22px rgba(0,0,0,.5), inset 0 0 18px rgba(255,200,90,.25)',
       }}>
         <span className="text-[34px]">🏮</span>
-        <span className="truncate">{tieuDe}</span>
+        <span className="truncate py-2" style={{ lineHeight: 1.45 }}>{tieuDe}</span>
         <span className="text-[34px]">🏮</span>
       </div>
       {showTimer && (

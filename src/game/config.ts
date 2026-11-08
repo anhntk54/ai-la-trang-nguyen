@@ -228,7 +228,8 @@ export const GAME = {
   quaSec: 4, // băng rôn cảm ơn quà nhỏ hiện bao lâu
   quaToSec: 8, // quà to (từ bigGiftCoins xu)
   tuanTop: 10, // bảng vàng tuần hiện bao nhiêu người
-  soGhe: 19, // số chỗ ngồi sĩ tử trong sân thi (toạ độ bàn ở HANG trong GameStage.tsx)
+  soTre: 6, // số đứa trẻ chạy lên chạy xuống lối giữa sân (mang tên người chưa có ghế)
+  soGhe: 31, // số chỗ ngồi sĩ tử trong sân thi (toạ độ bàn ở HANG trong GameStage.tsx)
   bigGiftCoins: 99,
   thankGift: (name: string, gift: string, kenh: string) => `${kenh} cảm ơn ${name} đã tặng ${gift}.`,
   // Bảng "Gửi tặng ông đồ" cạnh ông đồ: mỗi mức xu 1 món đại diện (theo bảng quà TikTok VN, skill tao-game-moi/qua-tiktok.md).
