@@ -182,7 +182,7 @@ console.log('toan: OK');
   console.log('qua: OK');
 }
 
-// Thi đua miền, cứu trợ bằng tim, câu lật kèo, dấu hiệu trên tên
+// Thi đua miền, cứu trợ bằng tim, câu nước rút, dấu hiệu trên tên
 {
   let t4 = 20_000_000;
   const k6 = new KyThi(bank, {}, () => 0.3);

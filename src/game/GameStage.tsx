@@ -232,7 +232,7 @@ function DongCau({ v, tieuDe }: { v: View; tieuDe: string }) {
           boxShadow: v.latKeo ? '0 0 30px rgba(255,211,77,.9)' : undefined,
         }}
       >
-        {v.phase === 'cho' ? 'SẮP THI' : v.latKeo ? 'LẬT KÈO ×2' : v.vongNhan}
+        {v.phase === 'cho' ? 'SẮP THI' : v.latKeo ? 'NƯỚC RÚT ×2' : v.vongNhan}
       </div>
       {/* tên game treo giữa mái tranh */}
       <div className="absolute flex items-center justify-center gap-3 whitespace-nowrap rounded-[18px] px-3 text-center font-extrabold" style={{

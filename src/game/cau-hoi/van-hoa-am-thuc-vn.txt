@@ -45,14 +45,13 @@ Dân tộc nào chiếm số đông nhất ở Việt Nam? | Kinh | Tày | Thái
 Người Thái, người Tày ở miền núi phía Bắc thường ở kiểu nhà nào? | Nhà sàn | Nhà rông | Nhà ống | Nhà mái bằng
 Lễ vật không thể thiếu trong lễ ăn hỏi truyền thống là gì? | Trầu cau | Bánh chưng | Hoa đào | Bánh trung thu
 Theo dân gian, ông Tơ bà Nguyệt lo việc gì? | Se duyên vợ chồng | Giữ của cải | Coi bếp núc | Làm mưa gió
-Tết Đoan ngọ, nhiều nơi ăn gì để "giết sâu bọ"? | Rượu nếp | Bánh chưng | Bánh dẻo | Chè kho
 Tết Hàn thực mùng 3 tháng 3, người miền Bắc làm bánh gì? | Bánh trôi | Bánh chưng | Bánh dẻo | Bánh tét
 Lễ Vu Lan gắn với tấm lòng gì? | Báo hiếu cha mẹ | Tình bạn | Tình yêu đôi lứa | Kính thầy
 Lễ Vu Lan diễn ra vào ngày nào âm lịch? | Rằm tháng Bảy | Rằm tháng Tám | Rằm tháng Giêng | Mùng 5 tháng 5
 Nhạc cụ nào làm từ ống trúc, thổi bằng hơi? | Sáo trúc | Đàn bầu | Trống cơm | Đàn nguyệt
 Gỏi cuốn thường được cuốn bằng gì? | Bánh tráng | Lá chuối | Lá lốt | Lá sen
 Loại nước chấm làm từ cá ủ với muối gọi là gì? | Nước mắm | Xì dầu | Tương ớt | Giấm gạo
-Phú Quốc và Phan Thiết nổi tiếng với đặc sản gì? | Nước mắm | Cà phê | Chè xanh | Rượu vang
+Phú Quốc và Phan Thiết nổi tiếng với đặc sản gì? | Nước mắm | Cà phê | Chè xanh | Gạo nếp
 Buôn Ma Thuột được gọi là thủ phủ của cây gì? | Cà phê | Chè | Lúa | Mía
 Thái Nguyên nổi tiếng với đặc sản nào? | Chè | Cà phê | Nước mắm | Vải thiều
 Lục Ngạn nổi tiếng với loại quả nào? | Vải thiều | Thanh long | Sầu riêng | Măng cụt
@@ -68,7 +67,7 @@ Bánh mì Việt Nam chịu ảnh hưởng từ ẩm thực nước nào? | Phá
 Bún chả là món ăn nổi tiếng của thành phố nào? | Hà Nội | Huế | Đà Nẵng | Cần Thơ
 Cá lóc nướng trui là món dân dã của vùng nào? | Nam Bộ | Tây Bắc | Bắc Bộ | Tây Nguyên
 Cơm lam là cơm được nấu trong gì? | Ống tre, nứa | Nồi đất | Lá chuối | Nồi đồng
-Rượu cần là đồ uống quen thuộc của đồng bào vùng nào? | Tây Nguyên | Nam Bộ | Đồng bằng sông Hồng | Huế
+Đàn đá là nhạc cụ cổ của đồng bào vùng nào? | Tây Nguyên | Nam Bộ | Đồng bằng sông Hồng | Huế
 Xôi gấc có màu gì? | Đỏ cam | Xanh lá | Tím | Trắng
 Lễ cúng tưởng nhớ người thân vào ngày mất hằng năm gọi là gì? | Đám giỗ | Ăn hỏi | Đầy tháng | Thôi nôi
 Lễ mừng em bé tròn một tuổi thường gọi là gì? | Thôi nôi | Đầy tháng | Ăn hỏi | Mừng thọ
@@ -365,7 +364,7 @@ Thùng đàn của đàn đáy có hình gì? | Hình thang | Hình tròn | Hìn
 Tiếng đàn bầu chủ yếu được tạo ra từ loại âm nào? | Bồi âm | Âm gõ | Âm hơi | Âm rè
 Bánh tráng phơi sương nổi tiếng ở vùng đất nào? | Trảng Bàng | Đồng Văn | Mộc Châu | Sa Pa
 Nem Lai Vung là đặc sản của vùng nào? | Đồng Tháp | Lạng Sơn | Hà Giang | Huế
-Rượu Bàu Đá là đặc sản của vùng nào? | Bình Định | Lạng Sơn | Cà Mau | Thái Bình
+Nón ngựa Phú Gia là nghề truyền thống của tỉnh nào? | Bình Định | Lạng Sơn | Cà Mau | Thái Bình
 Làng Quảng Phú Cầu nổi tiếng với nghề gì? | Làm hương | Làm gốm | Dệt lụa | Đúc đồng
 Làng Phước Kiều nổi tiếng với nghề gì? | Đúc đồng | Làm gốm | Dệt chiếu | Làm nón
 Làng Thổ Hà nổi tiếng với nghề gì? | Làm gốm | Đúc đồng | Làm nón | Khảm trai

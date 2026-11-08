@@ -35,7 +35,7 @@ export const GAME = {
   ] as Vong[],
   saiTru: 0.5, // sai bị trừ nửa điểm tối đa của vòng; tổng điểm không xuống dưới 0
   diemSan: 0.5, // đúng sát giờ vẫn được 50% điểm tối đa
-  latKeoNhan: 2, // câu cuối ván (câu lật kèo): điểm cộng và trừ đều nhân đôi
+  latKeoNhan: 2, // câu cuối ván (câu nước rút): điểm cộng và trừ đều nhân đôi
   cuuTroTim: 200,
   thachTiLe: 0.4, // bao nhiêu phần câu hỏi ông đồ thách thức trước khi đọc đề
   dauBangCach: 3, // đổi ngôi đầu bảng: cách ít nhất 3 câu mới hô lại
@@ -87,7 +87,7 @@ export const GAME = {
       ],
       [
         '[hắng giọng] Thi Đình! Năm câu cuối, mỗi câu năm trăm điểm. Trạng Nguyên hôm nay là ai, sắp biết rồi!',
-        'Đây là thi Đình rồi. Ai đang thua thì vẫn lật được kèo, chỉ cần trả lời nhanh và đúng. Bắt đầu!',
+        'Đây là thi Đình rồi. Ai đang thua thì vẫn lội ngược dòng được, chỉ cần trả lời nhanh và đúng. Bắt đầu!',
       ],
     ],
     // hết giờ, trống dồn: câu chung nên giọng được tạo sẵn từ đầu buổi, nói ngay không phải chờ
@@ -130,7 +130,7 @@ export const GAME = {
     // cổ vũ người xếp sau, đọc thêm ở bảng vàng
     coVuSau: [
       'Ai đang xếp sau đừng nản, câu phía sau điểm cao lắm!',
-      'Còn cơ hội lật kèo, cố lên các sĩ tử!',
+      'Còn cơ hội lội ngược dòng, cố lên các sĩ tử!',
       'Bảng vàng còn đổi chỗ dài dài, chưa ai chắc đỗ đâu.',
     ],
     // gần như cả trường đúng
@@ -176,8 +176,8 @@ export const GAME = {
       (name: string) => `Bảng vàng tuần vẫn gọi tên ${name}. [cười] Có ai dám tranh ngôi không?`,
     ],
     latKeo: [
-      '[hắng giọng] Câu cuối cùng, câu lật kèo! Điểm nhân đôi, ai đang thua vẫn còn cơ hội đấy!',
-      'Đây là câu lật kèo! Đúng được gấp đôi điểm, sai cũng mất gấp đôi. Cẩn thận nhé!',
+      '[hắng giọng] Câu cuối cùng, câu nước rút! Điểm nhân đôi, ai đang thua vẫn còn cơ hội đấy!',
+      'Đây là câu nước rút! Đúng được gấp đôi điểm, sai cũng mất gấp đôi. Cẩn thận nhé!',
     ],
     cuuTro: [
       '[cười] Cả trường thả tim đủ rồi! Ông bỏ giúp hai đáp án sai nhé.',
@@ -257,10 +257,10 @@ export const GAME = {
       ],
     },
     {
-      xu: 100, icon: '🎆', ten: 'Thả tim', viec: 'Đốt pháo mừng sĩ tử',
+      xu: 100, icon: '🎆', ten: 'Thả tim', viec: 'Bắn pháo hoa mừng sĩ tử',
       cam: [
-        (n: string) => `${n} đốt pháo mừng cả trường thi! Ông đồ xin vái tạ ơn tấm lòng.`,
-        (n: string) => `Pháo của ${n} nổ vang cả làng rồi. [cười] Sĩ tử nào cũng được ăn mừng ké nhé!`,
+        (n: string) => `${n} bắn pháo hoa mừng cả trường thi! Ông đồ xin vái tạ ơn tấm lòng.`,
+        (n: string) => `Pháo hoa của ${n} sáng rực cả làng rồi. [cười] Sĩ tử nào cũng được ăn mừng ké nhé!`,
       ],
     },
   ],
