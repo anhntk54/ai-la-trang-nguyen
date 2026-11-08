@@ -386,11 +386,11 @@ function CuuTro({ v }: { v: View }) {
 
 // ---------------- bảng vàng, quà, vinh quy ----------------
 
-/** Bảng "Tặng ông đồ" bên phải bảng đen: chỉ biểu tượng quà + hướng dẫn. Chỉ mời tặng cho vui, không hứa lợi thế. */
+/** Bảng "Quà tri ân" bên phải bảng đen: chỉ biểu tượng quà + hướng dẫn. Chỉ mời tặng cho vui, không hứa lợi thế. */
 function GuiTang() {
   return (
-    <div className="absolute rounded-[16px] border-[3px] px-2 py-2" style={{ left: 905, top: 476, width: 160, zIndex: 1600, borderColor: GOLD, background: PANEL, color: CREAM }}>
-      <div className="text-center text-[21px] font-extrabold leading-tight" style={{ color: '#ffd977' }}>🎁 Tặng ông đồ</div>
+    <div className="absolute rounded-[16px] border-[3px] px-2 py-2" style={{ left: 905, top: 392, width: 160, zIndex: 1600, borderColor: GOLD, background: PANEL, color: CREAM }}>
+      <div className="whitespace-nowrap text-center text-[21px] font-extrabold leading-tight" style={{ color: '#ffd977' }}>🎁 Quà tri ân</div>
       {GAME.giftMenu.map((m) => (
         <div key={m.xu} className="mt-1.5 flex flex-col items-center text-center">
           <span className="text-[36px] leading-none">{m.icon}</span>
