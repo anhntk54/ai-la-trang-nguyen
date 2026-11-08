@@ -29,17 +29,19 @@ export function GameStage({ game }: { game: GameState }) {
       {!bigBoard && <DongCau v={v} tieuDe={game.caiDat.tieuDe} />}
       {!bigBoard && <BangDen v={v} />}
       {!bigBoard && <DapAn v={v} />}
-      {!bigBoard && (v.cuu ? <CuuTro v={v} /> : <DongNhac v={v} />)}
+      {!bigBoard && (v.cuu && !v.ketQua ? <CuuTro v={v} /> : <DongNhac v={v} />)}
       {!bigBoard && <BangNho v={v} />}
 
       <MC v={v} ten={game.caiDat.tenOngDo} />
       <GuiTang />
 
-      {/* Màn bảng lớn: tờ giấy dó phủ giữa sân */}
+      {/* Màn bảng lớn: tờ giấy dó phủ giữa sân, nằm trên sĩ tử (zIndex 1000-1600) và dưới băng rôn quà */}
       {bigBoard && (
-        <div className="absolute rounded-[14px] border-4" style={{ left: 60, top: 120, width: 960, height: 1340, borderColor: GOLD, background: 'radial-gradient(ellipse at 50% 40%,#fbf0d6 0%,#f3e2bb 75%,#ead39f 100%)' }} />
+        <div className="absolute inset-0" style={{ zIndex: 2000 }}>
+          <div className="absolute overflow-hidden rounded-[14px] border-4" style={{ left: 60, top: 120, width: 960, height: 1340, borderColor: GOLD, background: 'radial-gradient(ellipse at 50% 40%,#fbf0d6 0%,#f3e2bb 75%,#ead39f 100%)' }} />
+          <BangVang v={v} />
+        </div>
       )}
-      {bigBoard && <BangVang v={v} />}
 
       {(v.phase === 'vinhQuy' || v.qua?.big) && <PhaoGiay />}
       <BangQua v={v} />
@@ -312,16 +314,10 @@ function BangDen({ v }: { v: View }) {
       </motion.div>
     );
   }
-  const kq = v.ketQua;
   return (
     <div className="absolute flex flex-col items-center justify-center px-3 text-center" style={{ left: 232, top: 532, width: 524, height: 162, ...phan }}>
       <div className={`${v.q.length > 90 ? 'text-[30px]' : v.q.length > 55 ? 'text-[35px]' : 'text-[41px]'} font-extrabold leading-snug`}>{v.q}</div>
       {v.phase === 'doc' && <div className="mt-2 text-[24px] font-semibold opacity-75">Nghe ông đồ đọc đề…</div>}
-      {kq && (
-        <div className="mt-2 text-[24px] font-bold" style={{ color: '#ffe27a' }}>
-          {kq.soDung > 0 ? `${kq.soDung} người đúng · nhanh nhất ${kq.nhanh[0].name} ${(kq.nhanh[0].ms / 1000).toFixed(2).replace('.', ',')}s` : 'Chưa ai đúng câu này'}
-        </div>
-      )}
     </div>
   );
 }
@@ -376,11 +372,14 @@ function DapAn({ v }: { v: View }) {
 
 /** Dải dưới chân bảng đen: cách chơi, số người đã nộp, tên vừa nộp */
 function DongNhac({ v }: { v: View }) {
-  const noi = v.phase === 'hoi'
+  const kq = v.ketQua;
+  const noi = kq
+    ? kq.soDung > 0 ? `✅ ${kq.soDung} người đúng · nhanh nhất ${kq.nhanh[0].name} ${(kq.nhanh[0].ms / 1000).toFixed(2).replace('.', ',')}s` : '😮 Chưa ai đúng câu này'
+    : v.phase === 'hoi'
     ? `📜 ${v.recent.length ? `${v.recent.slice(0, 3).join(', ')} vừa nộp · ` : ''}${v.soNop} sĩ tử đã nộp`
     : 'Gõ A, B, C, D trả lời · Bắc, Trung, Nam chọn phe';
   return (
-    <div className="absolute flex items-center justify-center" style={{ left: 432, top: 868, width: 430, height: 46 }}>
+    <div className="absolute flex items-center justify-center" style={{ left: 432, top: 868, width: 430, height: 46, zIndex: 1700 }}>
       <div className="max-w-full truncate rounded-full border-2 px-4 text-[21px] font-bold leading-[40px]" style={{ background: PANEL, borderColor: GOLD }}>{noi}</div>
     </div>
   );
@@ -391,7 +390,7 @@ function CuuTro({ v }: { v: View }) {
   const c = v.cuu!;
   const xong = c.loai.length > 0;
   return (
-    <div className="absolute flex items-center gap-3 rounded-full border-2 px-5" style={{ left: 432, top: 868, width: 428, height: 46, background: PANEL, borderColor: GOLD }}>
+    <div className="absolute flex items-center gap-3 rounded-full border-2 px-5" style={{ left: 432, top: 868, width: 428, height: 46, zIndex: 1700, background: PANEL, borderColor: GOLD }}>
       <span className="shrink-0 text-[22px] font-bold">{xong ? '✂️ Đã loại 2 câu sai!' : '❤️ Thả tim cứu trợ'}</span>
       <div className="h-4 flex-1 overflow-hidden rounded-full bg-black/40">
         <motion.div className="h-full rounded-full" style={{ background: xong ? 'linear-gradient(90deg,#2f7d3a,#7dff9a)' : 'linear-gradient(90deg,#c8102e,#ff6f91)' }} animate={{ width: `${(c.tim / c.can) * 100}%` }} />
