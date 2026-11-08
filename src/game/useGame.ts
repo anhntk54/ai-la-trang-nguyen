@@ -29,6 +29,8 @@ export function useGame() {
   const [status, setStatus] = useState<LiveStatus | null>(null);
   const [view, setView] = useState<View | null>(null);
   const [channelName, setChannelName] = useState(GAME.defaultChannelName);
+  const [caiDatGoc, setCaiDat] = useState({ tieuDe: '', tenOngDo: '' });
+  const caiDat = { tieuDe: caiDatGoc.tieuDe || GAME.tieuDeMacDinh, tenOngDo: caiDatGoc.tenOngDo || GAME.tenOngDoMacDinh };
   const [room] = useState(() => new KyThi(BANK));
   if (import.meta.env.DEV) Object.assign(window as any, { __room: room, __sfx: sfx }); // để thử các màn trong trình duyệt
   const [talk] = useState(() => ({
@@ -122,6 +124,7 @@ export function useGame() {
   useLiveEvents({
     onStatus: setStatus,
     onGameState: (s) => !IS_STAGE && setView(s),
+    onCaiDat: setCaiDat,
 
     onChat: (e) => {
       if (!IS_STAGE) return;
@@ -254,7 +257,7 @@ export function useGame() {
     }
   }
 
-  return { status, channelName, view };
+  return { status, channelName, view, caiDat };
 }
 
 export type GameState = ReturnType<typeof useGame>;

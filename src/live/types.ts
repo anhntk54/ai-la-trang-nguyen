@@ -60,4 +60,5 @@ export interface LiveHandlers {
   onViewers?: (count: number) => void;
   onControl?: (c: ControlCommand) => void;
   onGameState?: (s: any) => void; // ảnh chụp màn hình game do trang stage gửi
+  onCaiDat?: (c: { tieuDe: string; tenOngDo: string }) => void; // tên game, tên ông đồ (trang điều khiển sửa)
 }

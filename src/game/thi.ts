@@ -466,9 +466,9 @@ export class KyThi {
   }
 
   /** Bảng vàng: điểm cao trước; bằng điểm thì tổng thời gian đúng ngắn hơn, rồi ai vào trước */
-  bxh(n = 20): Hang[] {
+  bxh(n = 20, caNguoiChuaDiem = false): Hang[] {
     return [...this.siTu.values()]
-      .filter((s) => s.diem > 0 || s.gain !== 0)
+      .filter((s) => caNguoiChuaDiem || s.diem > 0 || s.gain !== 0)
       .sort((a, b) => b.diem - a.diem || a.msDung - b.msDung || a.vaoLuc - b.vaoLuc)
       .slice(0, n)
       .map((s, i) => ({ hang: i + 1, id: s.id, name: s.name, avatar: s.avatar, diem: s.diem, danhHieu: GAME.danhHieu(i + 1), gain: s.gain, gioi: this.gioiCua(s),
@@ -520,7 +520,9 @@ export class KyThi {
       cuu: c && c.vong === GAME.vong.length - 1 && ['doc', 'hoi', 'chot', 'dapAn'].includes(this.phase)
         ? { tim: Math.min(this.cuu.tim, GAME.cuuTroTim), can: GAME.cuuTroTim, loai: this.cuu.loai }
         : null,
-      top: this.bxh(this.phase === 'bangVang' || this.phase === 'vinhQuy' ? 20 : lo ? 10 : 5),
+      // chỗ ngồi trong sân thi: ai đã nộp bài đều được ngồi (kể cả 0 điểm), điểm cao ngồi chỗ đẹp
+      ghe: this.bxh(GAME.soGhe, true),
+      top: this.bxh(this.phase === 'bangVang' || this.phase === 'vinhQuy' ? 20 : 10),
     };
   }
 }

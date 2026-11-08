@@ -13,7 +13,7 @@ body,
 
 /* Nền stage. Đổi ảnh: bỏ ảnh vào public/assets/bg/ rồi thay dòng background */
 .stage-bg {
-  background: url('/assets/bg/nen.jpg') top center / 1080px 1920px no-repeat #1d0d0a;
+  background: url('/assets/bg/nen2.jpg') top center / 1080px 1920px no-repeat #1d0d0a;
 }
 
 /* Hiệu ứng khi đủ tim */
@@ -57,4 +57,65 @@ body,
   0%, 25%, 50%, 75% { opacity: 1; }
   12.5%, 37.5%, 62.5%, 87.5% { opacity: 0; }
   100% { opacity: 0; }
+}
+
+/* Sân thi đầu làng: trẻ con chạy dọc lối đi giữa, quay đầu rồi chạy ngược lại */
+.tre-chay {
+  animation: tre-chay 14s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+@keyframes tre-chay {
+  0%, 100% { transform: translate(0, 0) scale(0.8); }
+  45%, 50% { transform: translate(60px, 520px) scale(1.25); }
+  95% { transform: translate(0, 0) scale(0.8); }
+}
+.tre-lat { animation: tre-lat 14s steps(1, end) infinite; }
+@keyframes tre-lat {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+}
+.tre-nhun { animation: tre-nhun 0.32s ease-in-out infinite alternate; }
+@keyframes tre-nhun {
+  from { transform: translateY(0); }
+  to { transform: translateY(-12px); }
+}
+/* cô bé đi dạo trước bảng đen */
+.tre-dao { animation: tre-dao 12s ease-in-out infinite; }
+@keyframes tre-dao {
+  0%, 100% { transform: translateX(0); }
+  45%, 55% { transform: translateX(180px); }
+}
+.tre-lat-cham { animation: tre-lat 12s steps(1, end) infinite; }
+.tre-nhun-cham { animation: tre-nhun 0.6s ease-in-out infinite alternate; }
+/* các cụ ngồi xem: thở nhẹ */
+.cu-ngoi {
+  animation: cu-ngoi 2.6s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+@keyframes cu-ngoi {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(1.025); }
+}
+
+/* Tán đa lắc nhẹ theo gió */
+.cay-rung {
+  animation: cay-rung 5.5s ease-in-out infinite alternate;
+  transform-origin: 50% 100%;
+}
+@keyframes cay-rung {
+  from { transform: skewX(-0.7deg) translateX(-2px); }
+  to { transform: skewX(0.7deg) translateX(2px); }
+}
+/* Lá đa rơi lác đác, vừa rơi vừa lượn */
+.la-roi {
+  animation: la-roi linear infinite;
+  opacity: 0;
+}
+@keyframes la-roi {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.95; }
+  30% { transform: translate3d(50px, 330px, 0) rotate(120deg); }
+  55% { transform: translate3d(-30px, 620px, 0) rotate(240deg); }
+  80% { transform: translate3d(40px, 880px, 0) rotate(330deg); opacity: 0.9; }
+  100% { transform: translate3d(0, 1080px, 0) rotate(420deg); opacity: 0; }
 }

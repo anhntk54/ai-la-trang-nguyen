@@ -73,7 +73,7 @@ const SETTINGS_FILE = path.join(__dirname, 'settings.json');
 let lastNameControl: { action: string; text: string } | null = null;
 // tài khoản TikTok đang cần giữ kết nối: rớt thì tự kết nối lại, tắt server bật lại cũng tự kết nối
 let wantUser = '';
-let settings: { channelName?: string; tiktokUser?: string } = {};
+let settings: { channelName?: string; tiktokUser?: string; tieuDe?: string; tenOngDo?: string } = {};
 try {
   settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
   if (typeof settings.channelName === 'string' && settings.channelName.trim()) {
@@ -109,6 +109,7 @@ app.get('/api/tiktok/events', (req, res) => {
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders?.();
   res.write(`event: status\ndata: ${JSON.stringify(liveStats)}\n\n`);
+  res.write(`event: caiDat\ndata: ${JSON.stringify(caiDat())}\n\n`);
   if (lastRateControl) res.write(`event: control\ndata: ${JSON.stringify(lastRateControl)}\n\n`);
   if (lastNameControl) res.write(`event: control\ndata: ${JSON.stringify(lastNameControl)}\n\n`);
   sseClients.push(res);
@@ -382,6 +383,18 @@ app.post('/api/test/emit', (req, res) => {
 });
 
 // ---------- Ai Là Trạng Nguyên ----------
+// Cài đặt hiển thị ở trang điều khiển: tên game trên mái tranh, tên ông đồ trên bảng tên. Trống = dùng mặc định trong config.ts
+const caiDat = () => ({ tieuDe: settings.tieuDe ?? '', tenOngDo: settings.tenOngDo ?? '' });
+app.get('/api/cai-dat', (_req, res) => res.json(caiDat()));
+app.post('/api/cai-dat', (req, res) => {
+  const sach = (x: unknown) => (typeof x === 'string' ? x.replace(/\s+/g, ' ').trim().slice(0, 30) : undefined);
+  const tieuDe = sach(req.body?.tieuDe);
+  const tenOngDo = sach(req.body?.tenOngDo);
+  saveSettings({ ...(tieuDe !== undefined && { tieuDe }), ...(tenOngDo !== undefined && { tenOngDo }) });
+  broadcast('caiDat', caiDat());
+  res.json({ success: true, ...caiDat() });
+});
+
 // Trang stage chạy game, gửi ảnh chụp lên đây; trang điều khiển vẽ lại ảnh chụp đó (xem trước luôn khớp live)
 app.post('/api/game/state', (req, res) => {
   broadcast('gamestate', req.body || {});
